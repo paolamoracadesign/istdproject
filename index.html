@@ -68,6 +68,8 @@
       max-width: 900px;
       margin: 0;
       word-wrap: break-word;
+      opacity: 1;
+      transition: opacity 0.5s ease-out; /* Transizione per dissolvenza */
     }
 
     /* Aggiungi le due colonne per testi lunghi */
@@ -114,22 +116,31 @@
 
     // Cambia il font e il contenuto del testo ogni volta che si clicca sul testo
     document.getElementById('text').addEventListener('click', function() {
-      // Cambia il font
-      currentFontIndex = (currentFontIndex + 1) % fonts.length;
-      document.getElementById('text').style.fontFamily = fonts[currentFontIndex];
+      // Dissolvi il testo
+      document.getElementById('text').style.opacity = 0;
 
-      // Cambia il testo in modo ciclico
-      currentTextIndex = (currentTextIndex + 1) % texts.length;
-      const currentText = texts[currentTextIndex];
+      // Aspetta che l'animazione di dissolvenza finisca prima di cambiare il testo
+      setTimeout(function() {
+        // Cambia il font
+        currentFontIndex = (currentFontIndex + 1) % fonts.length;
+        document.getElementById('text').style.fontFamily = fonts[currentFontIndex];
 
-      // Aggiungi la classe long-text per il testo lungo
-      if (currentText.length > 100) {
-        document.getElementById('text').classList.add('long-text');
-      } else {
-        document.getElementById('text').classList.remove('long-text');
-      }
+        // Cambia il testo in modo ciclico
+        currentTextIndex = (currentTextIndex + 1) % texts.length;
+        const currentText = texts[currentTextIndex];
 
-      document.getElementById('text').innerText = currentText;
+        // Aggiungi la classe long-text per il testo lungo
+        if (currentText.length > 100) {
+          document.getElementById('text').classList.add('long-text');
+        } else {
+          document.getElementById('text').classList.remove('long-text');
+        }
+
+        document.getElementById('text').innerText = currentText;
+
+        // Fai riapparire il testo
+        document.getElementById('text').style.opacity = 1;
+      }, 500); // Tempo che coincide con la durata della dissolvenza
     });
   </script>
 </body>
