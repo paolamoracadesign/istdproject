@@ -20,32 +20,39 @@
       height: 100vh;
       font-family: 'PPRightGrotesk', sans-serif;
       overflow: hidden;
+      position: relative;
     }
 
-    #text {
+    .text-block {
       font-size: 18pt;
       width: 80%;
       max-width: 1000px;
-      text-align: left;
       line-height: 1.5;
+      text-align: left;
       user-select: none;
       cursor: pointer;
       transition: opacity 0.6s ease;
+      position: absolute;
     }
 
-    #text.center {
+    .center {
       text-align: center;
       font-size: 54pt;
       line-height: 1.2;
     }
 
-    #text.twocol {
+    .twocol {
       column-count: 2;
       column-gap: 40px;
     }
 
     .fade-out {
       animation: disintegrate 0.6s forwards;
+    }
+
+    .final-show {
+      animation: disintegrate 2s forwards;
+      animation-delay: 2s;
     }
 
     @keyframes disintegrate {
@@ -56,14 +63,14 @@
       }
       100% {
         opacity: 0;
-        transform: scale(0.9) translateY(-40px);
+        transform: scale(0.9) translateY(-60px);
         filter: blur(10px);
       }
     }
   </style>
 </head>
 <body>
-  <div id="text">YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.</div>
+  <div id="text" class="text-block"></div>
 
   <script>
     const textEl = document.getElementById('text');
@@ -77,11 +84,11 @@
     ];
 
     let index = 0;
+    let shownCount = 0;
 
     function updateText() {
-      textEl.className = '';
-      textEl.style.opacity = 1;
-      let current = texts[index];
+      textEl.className = 'text-block';
+      const current = texts[index];
 
       if (current === "I am no one") {
         textEl.classList.add('center');
@@ -92,15 +99,46 @@
       textEl.innerHTML = current;
     }
 
+    function showFinalExplosion() {
+      document.body.innerHTML = ""; // clear page
+      texts.forEach((txt, i) => {
+        const div = document.createElement('div');
+        div.className = 'text-block';
+        div.innerHTML = txt;
+
+        if (txt === "I am no one") {
+          div.classList.add('center');
+        } else if (txt.startsWith("No name") || txt.startsWith("What annoyed")) {
+          div.classList.add('twocol');
+        }
+
+        div.style.top = `${Math.random() * 60 + 20}%`;
+        div.style.left = `${Math.random() * 60 + 20}%`;
+        div.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 10 - 5}deg)`;
+        div.classList.add('final-show');
+
+        document.body.appendChild(div);
+      });
+    }
+
     updateText();
 
     textEl.addEventListener('click', () => {
       textEl.classList.add('fade-out');
 
       setTimeout(() => {
-        index = (index + 1) % texts.length;
-        updateText();
-        textEl.classList.remove('fade-out');
+        index++;
+        if (index >= texts.length) {
+          index = 0;
+          shownCount++;
+        }
+
+        if (shownCount >= 2) {
+          showFinalExplosion();
+        } else {
+          updateText();
+          textEl.classList.remove('fade-out');
+        }
       }, 600);
     });
   </script>
