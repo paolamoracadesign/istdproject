@@ -1,36 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Text Change with p5.js</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>No One</title>
   <style>
+    @font-face {
+      font-family: 'PPRightGrotesk';
+      src: url('PPRightGroteskText-Regular.otf') format('opentype');
+    }
+
     body {
       margin: 0;
       padding: 0;
-      background-color: white;
-      font-family: 'Roboto', sans-serif;
+      background: white;
+      font-family: 'PPRightGrotesk', sans-serif;
       overflow: hidden;
+      position: relative;
     }
-    canvas {
-      display: block;
+
+    .text-block {
+      position: absolute;
+      font-size: 18pt;
+      width: 80%;
+      max-width: 1000px;
+      line-height: 1.5;
+      user-select: none;
+      cursor: pointer;
+      opacity: 1;
+      left: 50%;
+      transform: translateX(-50%);
+      transition: opacity 0.6s ease;
     }
-    #no-one {
-      font-size: 150px;
+
+    .center {
       text-align: center;
+      font-size: 54pt;
+      line-height: 1.2;
+    }
+
+    .twocol {
+      column-count: 2;
+      column-gap: 40px;
+      text-align: left;
+    }
+
+    .fade-out {
+      animation: disintegrate 0.6s forwards;
+    }
+
+    .final-show {
+      animation: disintegrate 1.5s forwards;
+      animation-delay: 0.5s;
+    }
+
+    .fade-in {
+      animation: appear 0.6s ease-out;
+    }
+
+    @keyframes disintegrate {
+      0% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0.9) translateY(-60px);
+        filter: blur(8px);
+      }
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -20%);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, 0%);
+      }
+    }
+
+    .final-no-one {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      color: black;
-      visibility: hidden;
+      font-size: 160pt;
+      text-align: center;
+      opacity: 0;
+      animation: appear 1s ease-out forwards;
+      animation-delay: 1s;
     }
   </style>
 </head>
 <body>
-  <div id="no-one">I am no one</div>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-  <script src="sketch.js"></script>
+  <div id="text" class="text-block"></div>
+
+  <script>
+    const textEl = document.getElementById('text');
+
+    const texts = [
+      "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
+      "One's aim should be never to see one's self. For the reason that,<br>however much you may try, you can never know yourself as others see you.",
+      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; <br>whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
+      "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in.",
+      "I am no one"
+    ];
+
+    let index = 0;
+    let shownCount = 0;
+    let showAllPhase = false;
+    let showAllIndex = 0;
+    let allDisplayed = [];
+
+    function updateText() {
+      textEl.className = 'text-block';
+      const current = texts[index];
+
+      if (current === "I am no one") {
+        textEl.classList.add('center');
+      } else if (current.startsWith("No name") || current.startsWith("What annoyed")) {
+        textEl.classList.add('twocol');
+      }
+
+      textEl.innerHTML = current;
+    }
+
+    function beginOverlayPhase() {
+      showAllPhase = true;
+      textEl.remove();
+    }
+
+    function showNextOverlayText() {
+      if (showAllIndex >= texts.length) {
+        disintegrateAll();
+        return;
+      }
+
+      const div = document.createElement('div');
+      div.className = 'text-block fade-in';
+      const txt = texts[showAllIndex];
+
+      div.innerHTML = txt;
+
+      if (txt === "I am no one") {
+        div.classList.add('center');
+        div.style.fontSize = '54pt';
+      } else if (txt.startsWith("No name") || txt.startsWith("What annoyed")) {
+        div.classList.add('twocol');
+      }
+
+      div.style.top = `${20 + Math.random() * 60}%`;
+      allDisplayed.push(div);
+      document.body.appendChild(div);
+      showAllIndex++;
+    }
+
+    function disintegrateAll() {
+      allDisplayed.forEach(div => {
+        div.classList.add('final-show');
+      });
+
+      setTimeout(() => {
+        allDisplayed.forEach(div => div.remove());
+
+        const finalText = document.createElement('div');
+        finalText.className = 'final-no-one';
+        finalText.innerText = 'no one';
+        document.body.appendChild(finalText);
+      }, 2000);
+    }
+
+    updateText();
+
+    document.body.addEventListener('click', () => {
+      if (!showAllPhase) {
+        textEl.classList.add('fade-out');
+        setTimeout(() => {
+          index++;
+          if (index >= texts.length) {
+            index = 0;
+            shownCount++;
+          }
+
+          if (shownCount >= 2) {
+            beginOverlayPhase();
+          } else {
+            updateText();
+            textEl.classList.remove('fade-out');
+          }
+        }, 600);
+      } else {
+        showNextOverlayText();
+      }
+    });
+  </script>
 </body>
 </html>
