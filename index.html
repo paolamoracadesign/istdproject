@@ -5,6 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Font Changer</title>
   <style>
+    /* Carica tutte le varianti del font PPRightGroteskText */
+    @font-face {
+      font-family: 'PPRightGroteskText-CompactMedium';
+      src: url('PPRightGroteskText-CompactMedium.otf') format('opentype');
+    }
+
+    @font-face {
+      font-family: 'PPRightGroteskText-CompactMediumItalic';
+      src: url('PPRightGroteskText-CompactMediumItalic.otf') format('opentype');
+    }
+
+    @font-face {
+      font-family: 'PPRightGroteskText-Regular';
+      src: url('PPRightGroteskText-Regular.otf') format('opentype');
+    }
+
+    @font-face {
+      font-family: 'PPRightGroteskText-RegularItalic';
+      src: url('PPRightGroteskText-RegularItalic.otf') format('opentype');
+    }
+
+    @font-face {
+      font-family: 'PPRightGroteskText-SpatialLight';
+      src: url('PPRightGroteskText-SpatialLight.otf') format('opentype');
+    }
+
+    @font-face {
+      font-family: 'PPRightGroteskText-SpatialLightItalic';
+      src: url('PPRightGroteskText-SpatialLightItalic.otf') format('opentype');
+    }
+
+    @font-face {
+      font-family: 'PPRightGroteskText-WideBold';
+      src: url('PPRightGroteskText-WideBold.otf') format('opentype');
+    }
+
+    @font-face {
+      font-family: 'PPRightGroteskText-WideBoldItalic';
+      src: url('PPRightGroteskText-WideBoldItalic.otf') format('opentype');
+    }
+
     body {
       background-color: white;
       font-family: 'Arial', sans-serif; /* Default font */
@@ -28,15 +69,26 @@
   <div id="text">Click me to change the font!</div>
 
   <script>
-    // Array of fonts to cycle through
-    const fonts = ['"Arial"', '"Courier New"', '"Georgia"', '"Times New Roman"'];  // Add your custom fonts here
+    // Array di font da ciclare
+    const fonts = [
+      'PPRightGroteskText-CompactMedium',
+      'PPRightGroteskText-CompactMediumItalic',
+      'PPRightGroteskText-Regular',
+      'PPRightGroteskText-RegularItalic',
+      'PPRightGroteskText-SpatialLight',
+      'PPRightGroteskText-SpatialLightItalic',
+      'PPRightGroteskText-WideBold',
+      'PPRightGroteskText-WideBoldItalic'
+    ];
+
     let currentFontIndex = 0;
 
-    // Change the font on click
+    // Cambia il font ogni volta che si clicca sul testo
     document.getElementById('text').addEventListener('click', function() {
-      currentFontIndex = (currentFontIndex + 1) % fonts.length;  // This ensures it cycles
+      currentFontIndex = (currentFontIndex + 1) % fonts.length;  // Questo garantisce che cicli
       document.getElementById('text').style.fontFamily = fonts[currentFontIndex];
     });
   </script>
 </body>
 </html>
+
