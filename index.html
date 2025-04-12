@@ -4,11 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Font Changer</title>
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&family=Roboto&family=Lora&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: white;
+      font-family: 'Open Sans', sans-serif; /* Default font */
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #text {
+      font-size: 24px;
+      text-align: center;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <div id="text" class="text-container">Click to Change Font</div>
+  <div id="text">Click me to change the font!</div>
 
-  <script src="script.js"></script>
+  <script>
+    // Array of fonts to cycle through
+    const fonts = ['"Open Sans"', '"Roboto"', '"Lora"'];  // You can add more fonts here
+    let currentFontIndex = 0;
+
+    // Change the font on click
+    document.getElementById('text').addEventListener('click', function() {
+      currentFontIndex = (currentFontIndex + 1) % fonts.length;  // This ensures it cycles
+      document.getElementById('text').style.fontFamily = fonts[currentFontIndex];
+    });
+  </script>
 </body>
 </html>
