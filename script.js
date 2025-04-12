@@ -1,19 +1,13 @@
-// Array con i nomi dei font che hai caricato
-const fonts = [
-  'PPRightGrotesk-Medium',
-  'PPRightGrotesk-MediumItalic',
-  'PPRightGrotesk-Regular',
-  'PPRightGrotesk-RegularItalic',
-  'PPRightGrotesk-SpatialLight',
-  'PPRightGrotesk-SpatialLightItalic',
-  'PPRightGrotesk-WideBold',
-  'PPRightGrotesk-WideBoldItalic'
-];
+// Array di font da usare
+const fonts = ['MyFont1', 'MyFont2'];
 
-let currentFontIndex = 0; // Indice del font corrente
+// Indice corrente del font
+let currentFontIndex = 0;
 
-// Cambia il font ogni volta che il testo viene cliccato
+// Funzione che cambia il font ad ogni clic
 document.getElementById('text').addEventListener('click', function() {
-  currentFontIndex = (currentFontIndex + 1) % fonts.length;
+  // Incrementa l'indice del font
+  currentFontIndex = (currentFontIndex + 1) % fonts.length;  // Modulo per tornare al primo font quando arriva alla fine
+  // Cambia il font
   document.getElementById('text').style.fontFamily = fonts[currentFontIndex];
 });
