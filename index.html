@@ -1,146 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>I am no one</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Change with p5.js</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
   <style>
-    @font-face {
-      font-family: 'PPRightGrotesk';
-      src: url('PPRightGroteskText-Regular.otf') format('opentype');
-    }
-
     body {
       margin: 0;
       padding: 0;
-      background: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      font-family: 'PPRightGrotesk', sans-serif;
+      background-color: white;
+      font-family: 'Roboto', sans-serif;
       overflow: hidden;
-      position: relative;
     }
-
-    .text-block {
-      font-size: 18pt;
-      width: 80%;
-      max-width: 1000px;
-      line-height: 1.5;
-      text-align: left;
-      user-select: none;
-      cursor: pointer;
-      transition: opacity 0.6s ease;
-      position: absolute;
+    canvas {
+      display: block;
     }
-
-    .center {
+    #no-one {
+      font-size: 150px;
       text-align: center;
-      font-size: 54pt;
-      line-height: 1.2;
-    }
-
-    .twocol {
-      column-count: 2;
-      column-gap: 40px;
-    }
-
-    .fade-out {
-      animation: disintegrate 0.6s forwards;
-    }
-
-    .final-show {
-      animation: disintegrate 2s forwards;
-      animation-delay: 2s;
-    }
-
-    @keyframes disintegrate {
-      0% {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-        filter: blur(0);
-      }
-      100% {
-        opacity: 0;
-        transform: scale(0.9) translateY(-60px);
-        filter: blur(10px);
-      }
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: black;
+      visibility: hidden;
     }
   </style>
 </head>
 <body>
-  <div id="text" class="text-block"></div>
-
-  <script>
-    const textEl = document.getElementById('text');
-
-    const texts = [
-      "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
-      "One's aim should be never to see one's self. For the reason that,<br>however much you may try, you can never know yourself as others see you.",
-      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; <br>whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
-      "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
-      "I am no one"
-    ];
-
-    let index = 0;
-    let shownCount = 0;
-
-    function updateText() {
-      textEl.className = 'text-block';
-      const current = texts[index];
-
-      if (current === "I am no one") {
-        textEl.classList.add('center');
-      } else if (current.startsWith("No name") || current.startsWith("What annoyed")) {
-        textEl.classList.add('twocol');
-      }
-
-      textEl.innerHTML = current;
-    }
-
-    function showFinalExplosion() {
-      document.body.innerHTML = ""; // clear page
-      texts.forEach((txt, i) => {
-        const div = document.createElement('div');
-        div.className = 'text-block';
-        div.innerHTML = txt;
-
-        if (txt === "I am no one") {
-          div.classList.add('center');
-        } else if (txt.startsWith("No name") || txt.startsWith("What annoyed")) {
-          div.classList.add('twocol');
-        }
-
-        div.style.top = `${Math.random() * 60 + 20}%`;
-        div.style.left = `${Math.random() * 60 + 20}%`;
-        div.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 10 - 5}deg)`;
-        div.classList.add('final-show');
-
-        document.body.appendChild(div);
-      });
-    }
-
-    updateText();
-
-    textEl.addEventListener('click', () => {
-      textEl.classList.add('fade-out');
-
-      setTimeout(() => {
-        index++;
-        if (index >= texts.length) {
-          index = 0;
-          shownCount++;
-        }
-
-        if (shownCount >= 2) {
-          showFinalExplosion();
-        } else {
-          updateText();
-          textEl.classList.remove('fade-out');
-        }
-      }, 600);
-    });
-  </script>
+  <div id="no-one">I am no one</div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  <script src="sketch.js"></script>
 </body>
 </html>
