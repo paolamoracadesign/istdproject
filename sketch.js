@@ -5,7 +5,7 @@ let textContent = "For you can only know yourself when you strike an attitude: a
 function setup() {
   createCanvas(windowWidth, windowHeight);
   textSize(18);
-  textAlign(CENTER, CENTER);
+  textAlign(CENTER, TOP);  // Align text to the top of the text box
   textLeading(26);
 
   fonts = ['Arial', 'Georgia', 'Courier New', 'Times New Roman'];
@@ -16,10 +16,13 @@ function draw() {
   textFont(fonts[currentFontIndex]);
 
   let boxWidth = width * 0.8;
-  let x = width / 2;
-  let y = height / 2 - 50;
+  let boxHeight = height * 0.8;  // We keep a large enough box height
 
-  text(textContent, x, y, boxWidth, height);
+  let x = width / 2;
+  let y = height / 2 - boxHeight / 2;  // Adjust y to center vertically
+
+  // Draw the text, wrapping inside the box
+  text(textContent, x, y, boxWidth, boxHeight);
 }
 
 function mousePressed() {
