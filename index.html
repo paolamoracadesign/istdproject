@@ -67,6 +67,18 @@
       width: 80%;
       max-width: 900px;
       margin: 0;
+      word-wrap: break-word;
+    }
+
+    /* Aggiungi le due colonne per testi lunghi */
+    #text.long-text {
+      column-count: 2;
+      column-gap: 20px;
+    }
+
+    /* Rimuovi il grassetto per i testi lunghi */
+    #text.long-text {
+      font-weight: normal;
     }
   </style>
 </head>
@@ -108,7 +120,16 @@
 
       // Cambia il testo in modo ciclico
       currentTextIndex = (currentTextIndex + 1) % texts.length;
-      document.getElementById('text').innerText = texts[currentTextIndex];
+      const currentText = texts[currentTextIndex];
+
+      // Aggiungi la classe long-text per il testo lungo
+      if (currentText.length > 100) {
+        document.getElementById('text').classList.add('long-text');
+      } else {
+        document.getElementById('text').classList.remove('long-text');
+      }
+
+      document.getElementById('text').innerText = currentText;
     });
   </script>
 </body>
