@@ -1,14 +1,45 @@
-/* Carica i font personalizzati */
+/* Carica i tuoi font .otf (OpenType) */
 @font-face {
-  font-family: 'MyFont1';
-  src: url('assets/fonts/MyFont1.ttf') format('truetype');
+  font-family: 'PPRightGrotesk-Medium';
+  src: url('assets/fonts/PPRightGroteskText-CompactMedium.otf') format('opentype');
 }
 
 @font-face {
-  font-family: 'MyFont2';
-  src: url('assets/fonts/MyFont2.ttf') format('truetype');
+  font-family: 'PPRightGrotesk-MediumItalic';
+  src: url('assets/fonts/PPRightGroteskText-CompactMediumItalic.otf') format('opentype');
 }
 
+@font-face {
+  font-family: 'PPRightGrotesk-Regular';
+  src: url('assets/fonts/PPRightGroteskText-Regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'PPRightGrotesk-RegularItalic';
+  src: url('assets/fonts/PPRightGroteskText-RegularItalic.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'PPRightGrotesk-SpatialLight';
+  src: url('assets/fonts/PPRightGroteskText-SpatialLight.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'PPRightGrotesk-SpatialLightItalic';
+  src: url('assets/fonts/PPRightGroteskText-SpatialLightItalic.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'PPRightGrotesk-WideBold';
+  src: url('assets/fonts/PPRightGroteskText-WideBold.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'PPRightGrotesk-WideBoldItalic';
+  src: url('assets/fonts/PPRightGroteskText-WideBoldItalic.otf') format('opentype');
+}
+
+/* Stili generali */
 body {
   display: flex;
   justify-content: center;
@@ -31,3 +62,4 @@ body {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 }
+
