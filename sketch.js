@@ -29,4 +29,3 @@ function mousePressed() {
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight); // Rende la canvas responsive alla dimensione della finestra
 }
-
