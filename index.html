@@ -16,19 +16,13 @@
       background: white;
       font-family: 'PPRightGrotesk', sans-serif;
       overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh; /* Centra verticalmente */
-      text-align: center; /* Centra orizzontalmente */
       position: relative;
+      height: 100vh;
     }
 
     .text-block {
       position: absolute;
       font-size: 18pt;
-      width: 80%;
-      max-width: 1000px;
       line-height: 1.5;
       user-select: none;
       cursor: pointer;
@@ -92,7 +86,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 40pt; /* Ho reso più piccolo "no one" */
+      font-size: 40pt; /* Più piccolo rispetto a prima */
       text-align: center;
       opacity: 0;
       animation: appear 1s ease-out forwards;
@@ -157,8 +151,9 @@
         div.classList.add('twocol');
       }
 
-      div.style.top = `${Math.random() * 100}%`; // Posiziona randomicamente
-      div.style.left = `${Math.random() * 100}%`; // Posiziona randomicamente
+      // Posizionamento dei testi per riempire il monitor
+      div.style.top = `${Math.random() * 80}%`;
+      div.style.left = `${Math.random() * 80}%`;
       allDisplayed.push(div);
       document.body.appendChild(div);
       showAllIndex++;
@@ -177,7 +172,7 @@
         finalText.innerText = 'no one';
         document.body.appendChild(finalText);
 
-        // Ricomincia il ciclo dopo il click su "no one"
+        // Aggiungi un listener al click di "no one" per far ricominciare il ciclo
         finalText.addEventListener('click', function () {
           location.reload(); // Ricarica la pagina e ricomincia il ciclo
         });
