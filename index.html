@@ -63,14 +63,15 @@
       cursor: pointer;
       user-select: none; /* Impedisce la selezione del testo */
       white-space: pre-wrap; /* Permette al testo di andare a capo */
-      text-align: center; /* Allinea il testo al centro */
+      text-align: left; /* Allinea il testo a sinistra */
       width: 80%; /* Imposta la larghezza del testo */
+      max-width: 900px; /* Imposta una larghezza massima per il testo */
     }
   </style>
 </head>
 <body>
   <div id="text">
-    For you can only know yourself when you strike an attitude: a statue: not alive. When one is alive, one lives and does not see himself. To know one's self is to die. The reason you spend so much time looking at yourself in that mirror, in all mirrors, is that you are not alive; you do not know how to live, you cannot, or you do not want to live.
+    YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.
   </div>
 
   <script>
@@ -86,7 +87,17 @@
       'PPRightGroteskText-WideBoldItalic'
     ];
 
+    // Array con tutti i testi che vuoi mostrare
+    const texts = [
+      "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
+      "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
+      "The thing to do is to make an effort to detach from one's self the conditions which make for the reality of those who pass down below, and who live for a moment in your wide-sweeping vision as tiny transients in a street.",
+      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
+      "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond."
+    ];
+
     let currentFontIndex = 0;
+    let currentTextIndex = 0;
 
     // Cambia il font e il contenuto del testo ogni volta che si clicca sul testo
     document.getElementById('text').addEventListener('click', function() {
@@ -94,17 +105,9 @@
       currentFontIndex = (currentFontIndex + 1) % fonts.length;
       document.getElementById('text').style.fontFamily = fonts[currentFontIndex];
 
-      // Cambia il contenuto del testo (opzionale, se vuoi che il testo cambi ogni volta)
-      const texts = [
-        "For you can only know yourself when you strike an attitude: a statue: not alive.",
-        "When one is alive, one lives and does not see himself.",
-        "To know one's self is to die.",
-        "The reason you spend so much time looking at yourself in that mirror, in all mirrors, is that you are not alive; you do not know how to live, you cannot, or you do not want to live."
-      ];
-
-      // Cambia il testo in modo casuale
-      const randomText = texts[Math.floor(Math.random() * texts.length)];
-      document.getElementById('text').innerText = randomText;
+      // Cambia il testo in modo ciclico
+      currentTextIndex = (currentTextIndex + 1) % texts.length;
+      document.getElementById('text').innerText = texts[currentTextIndex];
     });
   </script>
 </body>
