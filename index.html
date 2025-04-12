@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -33,7 +33,7 @@
       cursor: pointer;
       position: absolute;
       opacity: 0;
-      animation: fadeInOut 6s infinite;
+      transition: opacity 1s ease;
     }
 
     .center {
@@ -47,15 +47,44 @@
       column-gap: 40px;
     }
 
-    @keyframes fadeInOut {
-      0%, 100% {
-        opacity: 0;
-      }
-      10%, 90% {
+    /* Animazione dissolvenza senza spostamenti */
+    .fade-out {
+      animation: disintegrate 1.5s forwards;
+    }
+
+    @keyframes disintegrate {
+      0% {
         opacity: 1;
       }
-      50% {
+      100% {
         opacity: 0;
+        transform: scale(0.9) translateY(-60px);
+      }
+    }
+
+    .final-show {
+      animation: disintegrate 2s forwards;
+      animation-delay: 2s;
+    }
+
+    .final-no-one {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 160pt;
+      text-align: center;
+      opacity: 0;
+      animation: fadeIn 1s ease-out forwards;
+      animation-delay: 2s;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
       }
     }
   </style>
@@ -65,7 +94,6 @@
 
   <script>
     const textContainer = document.getElementById('text-container');
-
     const texts = [
       "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
       "One's aim should be never to see one's self. For the reason that,<br>however much you may try, you can never know yourself as others see you.",
@@ -74,29 +102,69 @@
       "I am no one"
     ];
 
-    function createTextElements() {
-      texts.forEach((text, index) => {
-        const div = document.createElement('div');
-        div.className = 'text-block';
-        div.innerHTML = text;
+    let index = 0;
+    let shownCount = 0;
 
-        if (text === "I am no one") {
-          div.classList.add('center');
-        } else if (text.startsWith("No name") || text.startsWith("What annoyed")) {
-          div.classList.add('twocol');
-        }
+    // Funzione per aggiornare il testo corrente
+    function updateText() {
+      const current = texts[index];
+      const div = document.createElement('div');
+      div.className = 'text-block';
+      div.innerHTML = current;
 
-        // Posizionamento casuale per sovrapposizione
-        div.style.top = `${Math.random() * 80}%`;
-        div.style.left = `${Math.random() * 80}%`;
-        div.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 10 - 5}deg)`;
-        div.style.zIndex = index; // Assicura la sovrapposizione corretta
+      if (current === "I am no one") {
+        div.classList.add('center');
+      } else if (current.startsWith("No name") || current.startsWith("What annoyed")) {
+        div.classList.add('twocol');
+      }
 
-        textContainer.appendChild(div);
+      div.style.top = `${Math.random() * 60 + 20}%`;
+      div.style.left = `${Math.random() * 60 + 20}%`;
+
+      textContainer.appendChild(div);
+
+      // Aggiungi animazione di fade-in al nuovo testo
+      setTimeout(() => {
+        div.style.opacity = 1;
+      }, 50);
+    }
+
+    // Funzione che mostra la "esplosione finale"
+    function showFinalExplosion() {
+      const finalText = document.createElement('div');
+      finalText.className = 'final-no-one';
+      finalText.innerText = 'no one';
+      textContainer.appendChild(finalText);
+      
+      finalText.addEventListener('click', () => {
+        // Svuota il contenuto e ricomincia
+        textContainer.innerHTML = '';
+        index = 0;
+        shownCount = 0;
+        createTexts();
       });
     }
 
-    createTextElements();
+    // Funzione per iniziare il ciclo dei testi
+    function createTexts() {
+      updateText();
+      setTimeout(() => {
+        index++;
+        if (index >= texts.length) {
+          index = 0;
+          shownCount++;
+        }
+
+        if (shownCount >= 2) {
+          showFinalExplosion();
+        } else {
+          createTexts();
+        }
+      }, 3000);
+    }
+
+    // Avvia il ciclo iniziale
+    createTexts();
   </script>
 </body>
 </html>
