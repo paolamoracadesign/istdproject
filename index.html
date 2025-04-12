@@ -67,6 +67,7 @@
       user-select: none; /* Impedisce la selezione del testo */
       white-space: pre-wrap; /* Permette al testo di andare a capo */
       width: 90%; /* Imposta la larghezza del testo */
+      word-wrap: break-word; /* Impedisce che il testo esca dalla larghezza */
     }
   </style>
 </head>
@@ -90,10 +91,23 @@
 
     let currentFontIndex = 0;
 
-    // Cambia il font ogni volta che si clicca sul testo
+    // Cambia il font e il contenuto del testo ogni volta che si clicca sul testo
     document.getElementById('text').addEventListener('click', function() {
-      currentFontIndex = (currentFontIndex + 1) % fonts.length;  // Ciclo attraverso i font
-      document.getElementById('text').style.fontFamily = fonts[currentFontIndex];  // Cambia il font
+      // Cambia il font
+      currentFontIndex = (currentFontIndex + 1) % fonts.length;
+      document.getElementById('text').style.fontFamily = fonts[currentFontIndex];
+
+      // Cambia il contenuto del testo (opzionale, se vuoi che il testo cambi ogni volta)
+      const texts = [
+        "For you can only know yourself when you strike an attitude: a statue: not alive.",
+        "When one is alive, one lives and does not see himself.",
+        "To know one's self is to die.",
+        "The reason you spend so much time looking at yourself in that mirror, in all mirrors, is that you are not alive; you do not know how to live, you cannot, or you do not want to live."
+      ];
+
+      // Cambia il testo in modo casuale
+      const randomText = texts[Math.floor(Math.random() * texts.length)];
+      document.getElementById('text').innerText = randomText;
     });
   </script>
 </body>
