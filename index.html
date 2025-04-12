@@ -21,6 +21,7 @@
       align-items: center;
       height: 100vh; /* Centra verticalmente */
       text-align: center; /* Centra orizzontalmente */
+      position: relative;
     }
 
     .text-block {
@@ -70,7 +71,7 @@
       }
       100% {
         opacity: 0;
-        transform: scale(0.9) translateY(-60px);
+        transform: scale(0.9) translateY(0);
         filter: blur(8px);
       }
     }
@@ -91,7 +92,7 @@
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      font-size: 160pt;
+      font-size: 40pt; /* Ho reso più piccolo "no one" */
       text-align: center;
       opacity: 0;
       animation: appear 1s ease-out forwards;
@@ -156,7 +157,8 @@
         div.classList.add('twocol');
       }
 
-      div.style.top = `${20 + Math.random() * 60}%`;
+      div.style.top = `${Math.random() * 100}%`; // Posiziona randomicamente
+      div.style.left = `${Math.random() * 100}%`; // Posiziona randomicamente
       allDisplayed.push(div);
       document.body.appendChild(div);
       showAllIndex++;
@@ -174,6 +176,11 @@
         finalText.className = 'final-no-one';
         finalText.innerText = 'no one';
         document.body.appendChild(finalText);
+
+        // Ricomincia il ciclo dopo il click su "no one"
+        finalText.addEventListener('click', function () {
+          location.reload(); // Ricarica la pagina e ricomincia il ciclo
+        });
       }, 2000);
     }
 
