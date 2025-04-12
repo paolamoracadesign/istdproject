@@ -62,6 +62,7 @@
       text-align: center;
       cursor: pointer;
       padding: 20px;
+      user-select: none; /* Prevent text selection */
     }
   </style>
 </head>
@@ -69,7 +70,7 @@
   <div id="text">Click me to change the font!</div>
 
   <script>
-    // Array di font da ciclare
+    // Array con tutte le varianti dei font
     const fonts = [
       'PPRightGroteskText-CompactMedium',
       'PPRightGroteskText-CompactMediumItalic',
@@ -85,10 +86,9 @@
 
     // Cambia il font ogni volta che si clicca sul testo
     document.getElementById('text').addEventListener('click', function() {
-      currentFontIndex = (currentFontIndex + 1) % fonts.length;  // Questo garantisce che cicli
-      document.getElementById('text').style.fontFamily = fonts[currentFontIndex];
+      currentFontIndex = (currentFontIndex + 1) % fonts.length;  // Ciclo attraverso i font
+      document.getElementById('text').style.fontFamily = fonts[currentFontIndex];  // Cambia il font
     });
   </script>
 </body>
 </html>
-
