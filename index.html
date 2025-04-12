@@ -17,6 +17,10 @@
       font-family: 'PPRightGrotesk', sans-serif;
       overflow: hidden;
       position: relative;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .text-block {
@@ -30,11 +34,11 @@
       opacity: 1;
       left: 50%;
       transform: translateX(-50%);
-      transition: opacity 0.6s ease;
+      transition: opacity 0.6s ease, transform 0.6s ease;  /* Fixed transform on fading */
+      text-align: center;
     }
 
     .center {
-      text-align: center;
       font-size: 54pt;
       line-height: 1.2;
     }
@@ -54,10 +58,6 @@
       animation-delay: 0.5s;
     }
 
-    .fade-in {
-      animation: appear 0.6s ease-out;
-    }
-
     @keyframes disintegrate {
       0% {
         opacity: 1;
@@ -68,17 +68,6 @@
         opacity: 0;
         transform: scale(0.9) translateY(-60px);
         filter: blur(8px);
-      }
-    }
-
-    @keyframes appear {
-      from {
-        opacity: 0;
-        transform: translate(-50%, -20%);
-      }
-      to {
-        opacity: 1;
-        transform: translate(-50%, 0%);
       }
     }
 
