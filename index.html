@@ -3,37 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Font Changer</title>
+  <title>Pirandello Text</title>
   <style>
-    /* Carica i font */
-    @font-face {
-      font-family: 'PPRightGroteskText-CompactMedium';
-      src: url('PPRightGroteskText-CompactMedium.otf') format('opentype');
-    }
-
-    @font-face {
-      font-family: 'PPRightGroteskText-CompactMediumItalic';
-      src: url('PPRightGroteskText-CompactMediumItalic.otf') format('opentype');
-    }
-
     @font-face {
       font-family: 'PPRightGroteskText-Regular';
       src: url('PPRightGroteskText-Regular.otf') format('opentype');
-    }
-
-    @font-face {
-      font-family: 'PPRightGroteskText-RegularItalic';
-      src: url('PPRightGroteskText-RegularItalic.otf') format('opentype');
-    }
-
-    @font-face {
-      font-family: 'PPRightGroteskText-SpatialLight';
-      src: url('PPRightGroteskText-SpatialLight.otf') format('opentype');
-    }
-
-    @font-face {
-      font-family: 'PPRightGroteskText-SpatialLightItalic';
-      src: url('PPRightGroteskText-SpatialLightItalic.otf') format('opentype');
     }
 
     @font-face {
@@ -41,112 +15,105 @@
       src: url('PPRightGroteskText-WideBold.otf') format('opentype');
     }
 
-    @font-face {
-      font-family: 'PPRightGroteskText-WideBoldItalic';
-      src: url('PPRightGroteskText-WideBoldItalic.otf') format('opentype');
-    }
-
     body {
       margin: 0;
       padding: 0;
       height: 100vh;
       display: flex;
-      justify-content: center; /* Centra orizzontalmente */
-      align-items: center; /* Centra verticalmente */
-      background-color: white;
-      font-family: 'Arial', sans-serif;
+      justify-content: center;
+      align-items: center;
+      background: white;
     }
 
     #text {
+      font-family: 'PPRightGroteskText-Regular', sans-serif;
       font-size: 16pt;
-      font-family: 'Arial', sans-serif;
-      cursor: pointer;
-      user-select: none;
-      white-space: pre-wrap;
-      text-align: left;
       width: 80%;
       max-width: 900px;
-      margin: 0;
-      word-wrap: break-word;
+      text-align: left;
+      user-select: none;
+      cursor: pointer;
       opacity: 1;
-      transition: opacity 0.5s ease-out; /* Transizione per dissolvenza */
+      transition: opacity 0.5s ease;
+      line-height: 1.5;
+      word-break: break-word;
     }
 
-    /* Aggiungi le due colonne per i due testi lunghi specifici */
-    #text.long-text {
+    #text.centered {
+      text-align: center;
+      font-size: 48pt;
+      font-family: 'PPRightGroteskText-WideBold', sans-serif;
+      line-height: 1.2;
+    }
+
+    #text.twocol {
       column-count: 2;
-      column-gap: 20px;
-    }
-
-    /* Rimuovi il grassetto per i testi lunghi */
-    #text.long-text {
+      column-gap: 40px;
       font-weight: normal;
-    }
-
-    /* Rimuovi indentazione */
-    #text {
-      text-indent: 0;
     }
   </style>
 </head>
 <body>
+
   <div id="text">
     YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.
   </div>
 
   <script>
-    // Array con tutte le varianti dei font
     const fonts = [
-      'PPRightGroteskText-CompactMedium',
-      'PPRightGroteskText-CompactMediumItalic',
       'PPRightGroteskText-Regular',
-      'PPRightGroteskText-RegularItalic',
-      'PPRightGroteskText-SpatialLight',
-      'PPRightGroteskText-SpatialLightItalic',
-      'PPRightGroteskText-WideBold',
-      'PPRightGroteskText-WideBoldItalic'
+      'PPRightGroteskText-WideBold'
     ];
 
-    // Array con tutti i testi che vuoi mostrare
     const texts = [
       "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
       "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
       "The thing to do is to make an effort to detach from one's self the conditions which make for the reality of those who pass down below, and who live for a moment in your wide-sweeping vision as tiny transients in a street.",
       "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
       "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
-      "I am no one" // Aggiunto il testo "I am no one"
+      "I am no one"
     ];
 
-    let currentFontIndex = 0;
-    let currentTextIndex = 0;
+    let fontIndex = 0;
+    let textIndex = 0;
 
-    // Cambia il font e il contenuto del testo ogni volta che si clicca sul testo
-    document.getElementById('text').addEventListener('click', function() {
-      // Dissolvi il testo
-      document.getElementById('text').style.opacity = 0;
+    function splitText(text) {
+      const words = text.split(" ");
+      if (words.length > 10 && text.length < 150) {
+        // Split in half if it's a long single-line
+        const half = Math.floor(words.length / 2);
+        return words.slice(0, half).join(" ") + "\n" + words.slice(half).join(" ");
+      }
+      return text;
+    }
 
-      // Aspetta che l'animazione di dissolvenza finisca prima di cambiare il testo
-      setTimeout(function() {
-        // Cambia il font
-        currentFontIndex = (currentFontIndex + 1) % fonts.length;
-        document.getElementById('text').style.fontFamily = fonts[currentFontIndex];
+    document.getElementById('text').addEventListener('click', () => {
+      const textEl = document.getElementById('text');
+      textEl.style.opacity = 0;
 
-        // Cambia il testo in modo ciclico
-        currentTextIndex = (currentTextIndex + 1) % texts.length;
-        const currentText = texts[currentTextIndex];
+      setTimeout(() => {
+        fontIndex = (fontIndex + 1) % fonts.length;
+        textIndex = (textIndex + 1) % texts.length;
+        const currentText = texts[textIndex];
 
-        // Aggiungi la classe long-text solo per i testi specifici
-        if (currentText === "No name. No memory today of yesterday's name; of today's name tomorrow." || currentText.startsWith("What annoyed me")) {
-          document.getElementById('text').classList.add('long-text');
-        } else {
-          document.getElementById('text').classList.remove('long-text');
+        // Reset styles
+        textEl.classList.remove('twocol', 'centered');
+        textEl.style.fontFamily = fonts[fontIndex];
+        textEl.style.fontSize = "16pt";
+
+        // Long 2-column texts
+        if (currentText.startsWith("No name") || currentText.startsWith("What annoyed")) {
+          textEl.classList.add('twocol');
         }
 
-        document.getElementById('text').innerText = currentText;
+        // Special "I am no one" display
+        if (currentText === "I am no one") {
+          textEl.classList.add('centered');
+        }
 
-        // Fai riapparire il testo
-        document.getElementById('text').style.opacity = 1;
-      }, 500); // Tempo che coincide con la durata della dissolvenza
+        textEl.textContent = splitText(currentText);
+        textEl.style.opacity = 1;
+      }, 400);
     });
   </script>
 </body>
