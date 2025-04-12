@@ -51,6 +51,16 @@
       font-family: 'PPRightGroteskText-Regular', sans-serif !important;
       font-weight: normal !important;
     }
+
+    .disintegrate {
+      animation: explode 0.6s forwards ease-in;
+    }
+
+    @keyframes explode {
+      0% { opacity: 1; transform: scale(1) rotate(0deg); }
+      50% { opacity: 0.5; transform: scale(1.2) rotate(10deg); }
+      100% { opacity: 0; transform: scale(2) rotate(45deg) translateY(-200px); }
+    }
   </style>
 </head>
 <body>
@@ -78,19 +88,25 @@
 
     const textEl = document.getElementById('text');
 
-    document.getElementById('text').addEventListener('click', () => {
-      textEl.style.opacity = 0;
+    textEl.addEventListener('click', () => {
+      // Add disintegration effect if "I am no one"
+      if (textEl.innerText === "I am no one") {
+        textEl.classList.add('disintegrate');
+      } else {
+        textEl.style.opacity = 0;
+      }
 
       setTimeout(() => {
+        textEl.className = "";
         fontIndex = (fontIndex + 1) % fonts.length;
         textIndex = (textIndex + 1) % texts.length;
         const currentText = texts[textIndex];
 
         // Reset styles
-        textEl.className = "";
         textEl.style.fontFamily = fonts[fontIndex];
         textEl.style.fontSize = "16pt";
         textEl.style.textAlign = "left";
+        textEl.style.opacity = 1;
 
         // Handle special cases
         if (currentText.startsWith("What annoyed")) {
@@ -103,11 +119,12 @@
 
         if (currentText === "I am no one") {
           textEl.classList.add("centered");
+          textEl.style.fontSize = "144pt";
         }
 
         textEl.innerText = currentText;
-        textEl.style.opacity = 1;
-      }, 400);
+        textEl.classList.remove('disintegrate');
+      }, 700);
     });
   </script>
 </body>
