@@ -53,21 +53,27 @@
       padding: 0;
       height: 100vh;
       display: flex;
-      justify-content: center;
-      align-items: center;
+      justify-content: flex-start; /* Align text to the left */
+      align-items: flex-start; /* Align text to the top */
+      padding-left: 30px; /* Padding for the left margin */
+      padding-top: 30px; /* Padding for the top margin */
+      line-height: 1.5; /* Set line height to make the text more readable */
     }
 
     #text {
-      font-size: 24px;
-      text-align: center;
+      font-size: 16pt; /* Fixed text size in points */
+      font-family: 'Arial', sans-serif;
       cursor: pointer;
-      padding: 20px;
       user-select: none; /* Prevent text selection */
+      white-space: pre-wrap; /* Allow text to wrap properly */
+      width: 90%; /* Allow text to use most of the screen */
     }
   </style>
 </head>
 <body>
-  <div id="text">Click me to change the font!</div>
+  <div id="text">
+    For you can only know yourself when you strike an attitude: a statue: not alive. When one is alive, one lives and does not see himself. To know one's self is to die. The reason you spend so much time looking at yourself in that mirror, in all mirrors, is that you are not alive; you do not know how to live, you cannot, or you do not want to live.
+  </div>
 
   <script>
     // Array con tutte le varianti dei font
