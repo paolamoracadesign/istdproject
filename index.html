@@ -19,6 +19,7 @@
       align-items: center;
       height: 100vh;
       font-family: 'PPRightGrotesk', sans-serif;
+      overflow: hidden;
     }
 
     #text {
@@ -44,11 +45,20 @@
     }
 
     .fade-out {
-      opacity: 0;
+      animation: disintegrate 0.6s forwards;
     }
 
-    .hidden {
-      display: none;
+    @keyframes disintegrate {
+      0% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0.9) translateY(-40px);
+        filter: blur(10px);
+      }
     }
   </style>
 </head>
@@ -60,8 +70,8 @@
 
     const texts = [
       "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
-      "One's aim should be never to see one's self. For the reason that,\nhowever much you may try, you can never know yourself as others see you.",
-      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; \nwhereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
+      "One's aim should be never to see one's self. For the reason that,<br>however much you may try, you can never know yourself as others see you.",
+      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; <br>whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
       "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
       "I am no one"
     ];
@@ -73,15 +83,11 @@
       textEl.style.opacity = 1;
       let current = texts[index];
 
-      // Special styles
       if (current === "I am no one") {
         textEl.classList.add('center');
       } else if (current.startsWith("No name") || current.startsWith("What annoyed")) {
         textEl.classList.add('twocol');
       }
-
-      // Line break fix
-      current = current.replace(/\n/g, '<br/>');
 
       textEl.innerHTML = current;
     }
