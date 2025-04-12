@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pirandello Text</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pirandello Project</title>
   <style>
     @font-face {
       font-family: 'PPRightGroteskText-Regular';
       src: url('PPRightGroteskText-Regular.otf') format('opentype');
     }
-
     @font-face {
       font-family: 'PPRightGroteskText-WideBold';
       src: url('PPRightGroteskText-WideBold.otf') format('opentype');
@@ -42,19 +41,19 @@
     #text.centered {
       text-align: center;
       font-size: 48pt;
-      font-family: 'PPRightGroteskText-WideBold', sans-serif;
+      font-family: 'PPRightGroteskText-Regular', sans-serif;
       line-height: 1.2;
     }
 
     #text.twocol {
       column-count: 2;
       column-gap: 40px;
-      font-weight: normal;
+      font-family: 'PPRightGroteskText-Regular', sans-serif !important;
+      font-weight: normal !important;
     }
   </style>
 </head>
 <body>
-
   <div id="text">
     YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.
   </div>
@@ -67,9 +66,9 @@
 
     const texts = [
       "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
-      "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
+      "One's aim should be never to see one's self. For the reason that,\nhowever much you may try, you can never know yourself as others see you.",
       "The thing to do is to make an effort to detach from one's self the conditions which make for the reality of those who pass down below, and who live for a moment in your wide-sweeping vision as tiny transients in a street.",
-      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
+      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; \nwhereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
       "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
       "I am no one"
     ];
@@ -77,18 +76,9 @@
     let fontIndex = 0;
     let textIndex = 0;
 
-    function splitText(text) {
-      const words = text.split(" ");
-      if (words.length > 10 && text.length < 150) {
-        // Split in half if it's a long single-line
-        const half = Math.floor(words.length / 2);
-        return words.slice(0, half).join(" ") + "\n" + words.slice(half).join(" ");
-      }
-      return text;
-    }
+    const textEl = document.getElementById('text');
 
     document.getElementById('text').addEventListener('click', () => {
-      const textEl = document.getElementById('text');
       textEl.style.opacity = 0;
 
       setTimeout(() => {
@@ -97,21 +87,25 @@
         const currentText = texts[textIndex];
 
         // Reset styles
-        textEl.classList.remove('twocol', 'centered');
+        textEl.className = "";
         textEl.style.fontFamily = fonts[fontIndex];
         textEl.style.fontSize = "16pt";
+        textEl.style.textAlign = "left";
 
-        // Long 2-column texts
-        if (currentText.startsWith("No name") || currentText.startsWith("What annoyed")) {
-          textEl.classList.add('twocol');
+        // Handle special cases
+        if (currentText.startsWith("What annoyed")) {
+          textEl.classList.add("twocol");
         }
 
-        // Special "I am no one" display
+        if (currentText.startsWith("No name")) {
+          textEl.classList.add("twocol");
+        }
+
         if (currentText === "I am no one") {
-          textEl.classList.add('centered');
+          textEl.classList.add("centered");
         }
 
-        textEl.textContent = splitText(currentText);
+        textEl.innerText = currentText;
         textEl.style.opacity = 1;
       }, 400);
     });
