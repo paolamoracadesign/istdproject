@@ -1,189 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>No One</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Font Changer</title>
   <style>
+    /* Carica i font */
     @font-face {
-      font-family: 'PPRightGrotesk';
+      font-family: 'PPRightGroteskText-CompactMedium';
+      src: url('PPRightGroteskText-CompactMedium.otf') format('opentype');
+    }
+
+    @font-face {
+      font-family: 'PPRightGroteskText-CompactMediumItalic';
+      src: url('PPRightGroteskText-CompactMediumItalic.otf') format('opentype');
+    }
+
+    @font-face {
+      font-family: 'PPRightGroteskText-Regular';
       src: url('PPRightGroteskText-Regular.otf') format('opentype');
+    }
+
+    @font-face {
+      font-family: 'PPRightGroteskText-RegularItalic';
+      src: url('PPRightGroteskText-RegularItalic.otf') format('opentype');
+    }
+
+    @font-face {
+      font-family: 'PPRightGroteskText-SpatialLight';
+      src: url('PPRightGroteskText-SpatialLight.otf') format('opentype');
+    }
+
+    @font-face {
+      font-family: 'PPRightGroteskText-SpatialLightItalic';
+      src: url('PPRightGroteskText-SpatialLightItalic.otf') format('opentype');
+    }
+
+    @font-face {
+      font-family: 'PPRightGroteskText-WideBold';
+      src: url('PPRightGroteskText-WideBold.otf') format('opentype');
+    }
+
+    @font-face {
+      font-family: 'PPRightGroteskText-WideBoldItalic';
+      src: url('PPRightGroteskText-WideBoldItalic.otf') format('opentype');
     }
 
     body {
       margin: 0;
       padding: 0;
-      background: white;
-      font-family: 'PPRightGrotesk', sans-serif;
-      overflow: hidden;
-      position: relative;
       height: 100vh;
       display: flex;
-      justify-content: center;
-      align-items: center;
+      justify-content: center; /* Centra orizzontalmente */
+      align-items: center; /* Centra verticalmente */
+      background-color: white;
+      font-family: 'Arial', sans-serif;
     }
 
-    .text-block {
-      position: absolute;
-      font-size: 18pt;
-      width: 80%;
-      max-width: 1000px;
-      line-height: 1.5;
-      user-select: none;
+    #text {
+      font-size: 16pt;
+      font-family: 'Arial', sans-serif;
       cursor: pointer;
-      opacity: 1;
-      left: 50%;
-      transform: translateX(-50%);
-      transition: opacity 0.6s ease, transform 0.6s ease;  /* Fixed transform on fading */
-      text-align: center;
-    }
-
-    .center {
-      font-size: 54pt;
-      line-height: 1.2;
-    }
-
-    .twocol {
-      column-count: 2;
-      column-gap: 40px;
+      user-select: none;
+      white-space: pre-wrap;
       text-align: left;
+      width: 80%;
+      max-width: 900px;
+      margin: 0;
+      word-wrap: break-word;
+      opacity: 1;
+      transition: opacity 0.5s ease-out; /* Transizione per dissolvenza */
     }
 
-    .fade-out {
-      animation: disintegrate 0.6s forwards;
+    /* Aggiungi le due colonne per testi lunghi */
+    #text.long-text {
+      column-count: 2;
+      column-gap: 20px;
     }
 
-    .final-show {
-      animation: disintegrate 1.5s forwards;
-      animation-delay: 0.5s;
-    }
-
-    @keyframes disintegrate {
-      0% {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-        filter: blur(0);
-      }
-      100% {
-        opacity: 0;
-        transform: scale(0.9) translateY(-60px);
-        filter: blur(8px);
-      }
-    }
-
-    .final-no-one {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 160pt;
-      text-align: center;
-      opacity: 0;
-      animation: appear 1s ease-out forwards;
-      animation-delay: 1s;
+    /* Rimuovi il grassetto per i testi lunghi */
+    #text.long-text {
+      font-weight: normal;
     }
   </style>
 </head>
 <body>
-  <div id="text" class="text-block"></div>
+  <div id="text">
+    YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.
+  </div>
 
   <script>
-    const textEl = document.getElementById('text');
-
-    const texts = [
-      "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
-      "One's aim should be never to see one's self. For the reason that,<br>however much you may try, you can never know yourself as others see you.",
-      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; <br>whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
-      "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in.",
-      "I am no one"
+    // Array con tutte le varianti dei font
+    const fonts = [
+      'PPRightGroteskText-CompactMedium',
+      'PPRightGroteskText-CompactMediumItalic',
+      'PPRightGroteskText-Regular',
+      'PPRightGroteskText-RegularItalic',
+      'PPRightGroteskText-SpatialLight',
+      'PPRightGroteskText-SpatialLightItalic',
+      'PPRightGroteskText-WideBold',
+      'PPRightGroteskText-WideBoldItalic'
     ];
 
-    let index = 0;
-    let shownCount = 0;
-    let showAllPhase = false;
-    let showAllIndex = 0;
-    let allDisplayed = [];
+    // Array con tutti i testi che vuoi mostrare
+    const texts = [
+      "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
+      "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
+      "The thing to do is to make an effort to detach from one's self the conditions which make for the reality of those who pass down below, and who live for a moment in your wide-sweeping vision as tiny transients in a street.",
+      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
+      "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond."
+    ];
 
-    function updateText() {
-      textEl.className = 'text-block';
-      const current = texts[index];
+    let currentFontIndex = 0;
+    let currentTextIndex = 0;
 
-      if (current === "I am no one") {
-        textEl.classList.add('center');
-      } else if (current.startsWith("No name") || current.startsWith("What annoyed")) {
-        textEl.classList.add('twocol');
-      }
+    // Cambia il font e il contenuto del testo ogni volta che si clicca sul testo
+    document.getElementById('text').addEventListener('click', function() {
+      // Dissolvi il testo
+      document.getElementById('text').style.opacity = 0;
 
-      textEl.innerHTML = current;
-    }
+      // Aspetta che l'animazione di dissolvenza finisca prima di cambiare il testo
+      setTimeout(function() {
+        // Cambia il font
+        currentFontIndex = (currentFontIndex + 1) % fonts.length;
+        document.getElementById('text').style.fontFamily = fonts[currentFontIndex];
 
-    function beginOverlayPhase() {
-      showAllPhase = true;
-      textEl.remove();
-    }
+        // Cambia il testo in modo ciclico
+        currentTextIndex = (currentTextIndex + 1) % texts.length;
+        const currentText = texts[currentTextIndex];
 
-    function showNextOverlayText() {
-      if (showAllIndex >= texts.length) {
-        disintegrateAll();
-        return;
-      }
+        // Aggiungi la classe long-text per il testo lungo
+        if (currentText.length > 100) {
+          document.getElementById('text').classList.add('long-text');
+        } else {
+          document.getElementById('text').classList.remove('long-text');
+        }
 
-      const div = document.createElement('div');
-      div.className = 'text-block fade-in';
-      const txt = texts[showAllIndex];
+        document.getElementById('text').innerText = currentText;
 
-      div.innerHTML = txt;
-
-      if (txt === "I am no one") {
-        div.classList.add('center');
-        div.style.fontSize = '54pt';
-      } else if (txt.startsWith("No name") || txt.startsWith("What annoyed")) {
-        div.classList.add('twocol');
-      }
-
-      div.style.top = `${20 + Math.random() * 60}%`;
-      allDisplayed.push(div);
-      document.body.appendChild(div);
-      showAllIndex++;
-    }
-
-    function disintegrateAll() {
-      allDisplayed.forEach(div => {
-        div.classList.add('final-show');
-      });
-
-      setTimeout(() => {
-        allDisplayed.forEach(div => div.remove());
-
-        const finalText = document.createElement('div');
-        finalText.className = 'final-no-one';
-        finalText.innerText = 'no one';
-        document.body.appendChild(finalText);
-      }, 2000);
-    }
-
-    updateText();
-
-    document.body.addEventListener('click', () => {
-      if (!showAllPhase) {
-        textEl.classList.add('fade-out');
-        setTimeout(() => {
-          index++;
-          if (index >= texts.length) {
-            index = 0;
-            shownCount++;
-          }
-
-          if (shownCount >= 2) {
-            beginOverlayPhase();
-          } else {
-            updateText();
-            textEl.classList.remove('fade-out');
-          }
-        }, 600);
-      } else {
-        showNextOverlayText();
-      }
+        // Fai riapparire il testo
+        document.getElementById('text').style.opacity = 1;
+      }, 500); // Tempo che coincide con la durata della dissolvenza
     });
   </script>
 </body>
