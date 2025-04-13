@@ -1,9 +1,7 @@
 <script>
-  const fonts = [
-    'serif', 'sans-serif', 'monospace', 'Georgia', 'Courier New', 'Times New Roman', 'Arial', 'Verdana', 'Tahoma'
-  ];
+  const textEl = document.getElementById('text');
 
-  const texts = [
+  const baseTexts = [
     "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
     "One's aim should be never to see one's self. For the reason that,<br>however much you may try, you can never know yourself as others see you.",
     "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; <br>whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
@@ -11,37 +9,41 @@
     "I am no one"
   ];
 
-  // Fisher–Yates shuffle
-  function shuffle(array) {
-    let a = [...array];
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a;
-  }
+  const fonts = [
+    'serif', 'sans-serif', 'monospace', 'Georgia', 'Courier New', 'Times New Roman', 'Arial', 'Verdana', 'Tahoma'
+  ];
 
-  let shuffled = shuffle(texts);
   let index = 0;
+  let round = 0;
+  let isOverlayMode = false;
+
+  function updateText() {
+    textEl.className = 'text-block'; // reset styles
+
+    const current = baseTexts[index];
+
+    if (current === "I am no one") {
+      textEl.classList.add('center');
+    } else if (current.startsWith("No name") || current.startsWith("What annoyed")) {
+      textEl.classList.add('twocol');
+    }
+
+    textEl.innerHTML = current;
+  }
 
   function createOverlayText(content) {
     const div = document.createElement('div');
     div.className = 'text-block';
     div.innerHTML = content;
 
-    // Apply styles
     div.style.position = 'absolute';
     div.style.top = `${Math.random() * 80 + 10}%`;
     div.style.left = `${Math.random() * 80 + 10}%`;
     div.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 10 - 5}deg)`;
     div.style.opacity = '0.85';
     div.style.pointerEvents = 'none';
+    div.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
 
-    // Random font
-    const randomFont = fonts[Math.floor(Math.random() * fonts.length)];
-    div.style.fontFamily = randomFont;
-
-    // Special styling based on content
     if (content === "I am no one") {
       div.classList.add('center');
     } else if (content.startsWith("No name") || content.startsWith("What annoyed")) {
@@ -51,14 +53,33 @@
     document.body.appendChild(div);
   }
 
-  document.addEventListener('click', () => {
-    const current = shuffled[index];
-    createOverlayText(current);
-    index++;
+  // Initial display
+  updateText();
 
-    if (index >= shuffled.length) {
-      index = 0;
-      shuffled = shuffle(texts); // re-shuffle for next cycle
+  textEl.addEventListener('click', () => {
+    if (!isOverlayMode) {
+      textEl.classList.add('fade-out');
+
+      setTimeout(() => {
+        index++;
+        if (index >= baseTexts.length) {
+          index = 0;
+          round++;
+        }
+
+        if (round >= 2) {
+          isOverlayMode = true;
+          textEl.style.display = 'none'; // hide main text block
+        } else {
+          updateText();
+          textEl.classList.remove('fade-out');
+        }
+      }, 600);
+    } else {
+      // OVERLAY MODE: layered chaotic text
+      const shuffled = baseTexts.slice().sort(() => Math.random() - 0.5);
+      const next = shuffled[Math.floor(Math.random() * shuffled.length)];
+      createOverlayText(next);
     }
   });
 </script>
