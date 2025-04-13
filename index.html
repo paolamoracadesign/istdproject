@@ -72,7 +72,7 @@
       transition: opacity 0.5s ease-out; /* Transizione per dissolvenza */
     }
 
-    /* Aggiungi le due colonne per testi lunghi */
+    /* Aggiungi le due colonne per i due testi lunghi specifici */
     #text.long-text {
       column-count: 2;
       column-gap: 20px;
@@ -81,6 +81,11 @@
     /* Rimuovi il grassetto per i testi lunghi */
     #text.long-text {
       font-weight: normal;
+    }
+
+    /* Rimuovi indentazione */
+    #text {
+      text-indent: 0;
     }
   </style>
 </head>
@@ -108,7 +113,8 @@
       "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
       "The thing to do is to make an effort to detach from one's self the conditions which make for the reality of those who pass down below, and who live for a moment in your wide-sweeping vision as tiny transients in a street.",
       "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
-      "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond."
+      "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
+      "I am no one" // Aggiunto il testo "I am no one"
     ];
 
     let currentFontIndex = 0;
@@ -129,8 +135,8 @@
         currentTextIndex = (currentTextIndex + 1) % texts.length;
         const currentText = texts[currentTextIndex];
 
-        // Aggiungi la classe long-text per il testo lungo
-        if (currentText.length > 100) {
+        // Aggiungi la classe long-text solo per i testi specifici
+        if (currentText === "No name. No memory today of yesterday's name; of today's name tomorrow." || currentText.startsWith("What annoyed me")) {
           document.getElementById('text').classList.add('long-text');
         } else {
           document.getElementById('text').classList.remove('long-text');
