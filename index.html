@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>I am no one</title>
+  <title>NO ONE</title>
   <style>
     @font-face {
       font-family: 'PPRightGrotesk';
@@ -73,7 +73,7 @@
       "One's aim should be never to see one's self. For the reason that,<br>however much you may try, you can never know yourself as others see you.",
       "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; <br>whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
       "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
-      "I am no one"
+      "NO ONE"
     ];
 
     const fonts = [
@@ -92,7 +92,7 @@
       const current = texts[index];
       textEl.innerHTML = current;
 
-      if (current === "I am no one") {
+      if (current === "NO ONE") {
         textEl.classList.add('center');
       } else if (current.startsWith("No name") || current.startsWith("What annoyed")) {
         textEl.classList.add('twocol');
@@ -111,7 +111,7 @@
       div.style.pointerEvents = 'none';
       div.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
 
-      if (content === "I am no one") {
+      if (content === "NO ONE") {
         div.classList.add('center');
       } else if (content.startsWith("No name") || content.startsWith("What annoyed")) {
         div.classList.add('twocol');
@@ -124,9 +124,8 @@
 
     textEl.addEventListener('click', () => {
       if (inOverlayMode) {
-        const content = texts[index];
+        const content = texts[Math.floor(Math.random() * texts.length)];
         createOverlayText(content);
-        index = (index + 1) % texts.length;
         return;
       }
 
@@ -142,8 +141,7 @@
         if (rounds >= 2) {
           inOverlayMode = true;
           textEl.remove(); // remove main text block
-          createOverlayText(texts[index]); // start with one
-          index = (index + 1) % texts.length;
+          createOverlayText(texts[Math.floor(Math.random() * texts.length)]); // start with one
         } else {
           updateText();
           textEl.classList.remove('fade-out');
