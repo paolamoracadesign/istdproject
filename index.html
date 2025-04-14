@@ -31,8 +31,9 @@
       text-align: left;
       user-select: none;
       cursor: pointer;
-      transition: opacity 0.6s ease;
       position: absolute;
+      opacity: 1;
+      transition: opacity 0.6s ease;
     }
 
     .center {
@@ -88,27 +89,34 @@
     ];
 
     let index = 0;
-    let shownCount = 0;
+    let rounds = 0;
 
     function updateText() {
       textEl.className = 'text-block';
+
       const current = texts[index];
+      textEl.innerHTML = current;
 
       if (current === "I am no one") {
         textEl.classList.add('center');
       } else if (current.startsWith("No name") || current.startsWith("What annoyed")) {
         textEl.classList.add('twocol');
       }
-
-      textEl.innerHTML = current;
     }
 
     function showFinalExplosion() {
-      document.body.innerHTML = ""; // clear page
-      texts.forEach((txt) => {
+      document.body.innerHTML = ''; // clear screen
+
+      texts.forEach(txt => {
         const div = document.createElement('div');
         div.className = 'text-block';
         div.innerHTML = txt;
+
+        div.style.top = `${Math.random() * 60 + 20}%`;
+        div.style.left = `${Math.random() * 60 + 20}%`;
+        div.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 10 - 5}deg)`;
+        div.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
+        div.classList.add('final-show');
 
         if (txt === "I am no one") {
           div.classList.add('center');
@@ -116,22 +124,13 @@
           div.classList.add('twocol');
         }
 
-        div.style.top = `${Math.random() * 60 + 20}%`;
-        div.style.left = `${Math.random() * 60 + 20}%`;
-        div.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 10 - 5}deg)`;
-        div.classList.add('final-show');
-
-        // Random font effect
-        div.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
-
         document.body.appendChild(div);
       });
 
-      // Add infinite chaotic overlay clicks
+      // Start chaotic overlay after explosion
       document.addEventListener('click', () => {
-        const shuffled = [...texts].sort(() => Math.random() - 0.5);
-        const overlayText = shuffled[Math.floor(Math.random() * shuffled.length)];
-        createOverlayText(overlayText);
+        const overlay = texts[Math.floor(Math.random() * texts.length)];
+        createOverlayText(overlay);
       });
     }
 
@@ -157,7 +156,6 @@
       document.body.appendChild(div);
     }
 
-    // Show first text
     updateText();
 
     textEl.addEventListener('click', () => {
@@ -165,19 +163,17 @@
 
       setTimeout(() => {
         index++;
+
         if (index >= texts.length) {
           index = 0;
-          shownCount++;
+          rounds++;
         }
 
-        if (shownCount >= 2) {
+        if (rounds >= 2) {
           showFinalExplosion();
         } else {
-          // 🧼 Skip showing the first text on second round to avoid overlap
-          if (!(shownCount === 1 && index === 0)) {
-            updateText();
-            textEl.classList.remove('fade-out');
-          }
+          updateText();
+          textEl.classList.remove('fade-out');
         }
       }, 600);
     });
