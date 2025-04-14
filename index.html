@@ -30,7 +30,6 @@
       line-height: 1.5;
       text-align: left;
       user-select: none;
-      cursor: pointer;
       position: absolute;
       opacity: 1;
       transition: opacity 0.6s ease;
@@ -51,11 +50,6 @@
       animation: disintegrate 0.6s forwards;
     }
 
-    .final-show {
-      animation: disintegrate 2s forwards;
-      animation-delay: 2s;
-    }
-
     @keyframes disintegrate {
       0% {
         opacity: 1;
@@ -74,8 +68,6 @@
   <div id="text" class="text-block"></div>
 
   <script>
-    const textEl = document.getElementById('text');
-
     const texts = [
       "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
       "One's aim should be never to see one's self. For the reason that,<br>however much you may try, you can never know yourself as others see you.",
@@ -85,15 +77,18 @@
     ];
 
     const fonts = [
-      'serif', 'sans-serif', 'monospace', 'Georgia', 'Courier New', 'Times New Roman', 'Arial', 'Verdana', 'Tahoma'
+      'serif', 'sans-serif', 'monospace', 'Georgia', 'Courier New',
+      'Times New Roman', 'Arial', 'Verdana', 'Tahoma'
     ];
 
     let index = 0;
     let rounds = 0;
+    let inOverlayMode = false;
+
+    const textEl = document.getElementById('text');
 
     function updateText() {
       textEl.className = 'text-block';
-
       const current = texts[index];
       textEl.innerHTML = current;
 
@@ -104,42 +99,11 @@
       }
     }
 
-    function showFinalExplosion() {
-      document.body.innerHTML = ''; // clear screen
-
-      texts.forEach(txt => {
-        const div = document.createElement('div');
-        div.className = 'text-block';
-        div.innerHTML = txt;
-
-        div.style.top = `${Math.random() * 60 + 20}%`;
-        div.style.left = `${Math.random() * 60 + 20}%`;
-        div.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 10 - 5}deg)`;
-        div.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
-        div.classList.add('final-show');
-
-        if (txt === "I am no one") {
-          div.classList.add('center');
-        } else if (txt.startsWith("No name") || txt.startsWith("What annoyed")) {
-          div.classList.add('twocol');
-        }
-
-        document.body.appendChild(div);
-      });
-
-      // Start chaotic overlay after explosion
-      document.addEventListener('click', () => {
-        const overlay = texts[Math.floor(Math.random() * texts.length)];
-        createOverlayText(overlay);
-      });
-    }
-
     function createOverlayText(content) {
       const div = document.createElement('div');
       div.className = 'text-block';
       div.innerHTML = content;
 
-      div.style.position = 'absolute';
       div.style.top = `${Math.random() * 80 + 10}%`;
       div.style.left = `${Math.random() * 80 + 10}%`;
       div.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 10 - 5}deg)`;
@@ -159,18 +123,27 @@
     updateText();
 
     textEl.addEventListener('click', () => {
+      if (inOverlayMode) {
+        const content = texts[index];
+        createOverlayText(content);
+        index = (index + 1) % texts.length;
+        return;
+      }
+
       textEl.classList.add('fade-out');
 
       setTimeout(() => {
         index++;
-
         if (index >= texts.length) {
           index = 0;
           rounds++;
         }
 
         if (rounds >= 2) {
-          showFinalExplosion();
+          inOverlayMode = true;
+          textEl.remove(); // remove main text block
+          createOverlayText(texts[index]); // start with one
+          index = (index + 1) % texts.length;
         } else {
           updateText();
           textEl.classList.remove('fade-out');
