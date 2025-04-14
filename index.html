@@ -104,20 +104,8 @@
     }
 
     function showFinalExplosion() {
-      document.body.innerHTML = ''; // 🧼 pulisce TUTTO
-
-      function shuffle(array) {
-        let a = [...array];
-        for (let i = a.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [a[i], a[j]] = [a[j], a[i]];
-        }
-        return a;
-      }
-
-      const shuffled = shuffle(texts);
-
-      shuffled.forEach((txt) => {
+      document.body.innerHTML = ""; // clear page
+      texts.forEach((txt) => {
         const div = document.createElement('div');
         div.className = 'text-block';
         div.innerHTML = txt;
@@ -131,38 +119,45 @@
         div.style.top = `${Math.random() * 60 + 20}%`;
         div.style.left = `${Math.random() * 60 + 20}%`;
         div.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 10 - 5}deg)`;
-        div.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
         div.classList.add('final-show');
+
+        // Random font effect
+        div.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
 
         document.body.appendChild(div);
       });
 
-      // Attiva il loop overlay dopo
+      // Add infinite chaotic overlay clicks
       document.addEventListener('click', () => {
+        const shuffled = [...texts].sort(() => Math.random() - 0.5);
         const overlayText = shuffled[Math.floor(Math.random() * shuffled.length)];
-        const overlay = document.createElement('div');
-        overlay.className = 'text-block';
-        overlay.innerHTML = overlayText;
-
-        overlay.style.position = 'absolute';
-        overlay.style.top = `${Math.random() * 80 + 10}%`;
-        overlay.style.left = `${Math.random() * 80 + 10}%`;
-        overlay.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 10 - 5}deg)`;
-        overlay.style.opacity = '0.85';
-        overlay.style.pointerEvents = 'none';
-        overlay.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
-
-        if (overlayText === "I am no one") {
-          overlay.classList.add('center');
-        } else if (overlayText.startsWith("No name") || overlayText.startsWith("What annoyed")) {
-          overlay.classList.add('twocol');
-        }
-
-        document.body.appendChild(overlay);
+        createOverlayText(overlayText);
       });
     }
 
-    // Init
+    function createOverlayText(content) {
+      const div = document.createElement('div');
+      div.className = 'text-block';
+      div.innerHTML = content;
+
+      div.style.position = 'absolute';
+      div.style.top = `${Math.random() * 80 + 10}%`;
+      div.style.left = `${Math.random() * 80 + 10}%`;
+      div.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 10 - 5}deg)`;
+      div.style.opacity = '0.85';
+      div.style.pointerEvents = 'none';
+      div.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
+
+      if (content === "I am no one") {
+        div.classList.add('center');
+      } else if (content.startsWith("No name") || content.startsWith("What annoyed")) {
+        div.classList.add('twocol');
+      }
+
+      document.body.appendChild(div);
+    }
+
+    // Show first text
     updateText();
 
     textEl.addEventListener('click', () => {
@@ -178,8 +173,11 @@
         if (shownCount >= 2) {
           showFinalExplosion();
         } else {
-          updateText();
-          textEl.classList.remove('fade-out');
+          // 🧼 Skip showing the first text on second round to avoid overlap
+          if (!(shownCount === 1 && index === 0)) {
+            updateText();
+            textEl.classList.remove('fade-out');
+          }
         }
       }, 600);
     });
