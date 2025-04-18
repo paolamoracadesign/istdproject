@@ -149,17 +149,17 @@
       const current = texts[index];
 
       if (current === "NO\nLONGER\nMYSELF") {
-        container.innerHTML = 
+        container.innerHTML = `
           <div class="centered-block">
             <div class="huge">${current}</div>
-          </div>;
+          </div>`;
       } else if (current === "NO ONE") {
-        container.innerHTML = 
+        container.innerHTML = `
           <div class="centered-block">
             <div class="small">NO ONE</div>
-          </div>;
+          </div>`;
       } else {
-        container.innerHTML = <div id="text" class="text-block">${current}</div>;
+        container.innerHTML = `<div id="text" class="text-block">${current}</div>`;
       }
     }
 
@@ -171,12 +171,12 @@
       const font = fonts[Math.floor(Math.random() * fonts.length)];
 
       div.innerHTML = content;
-      div.style.top = ${Math.random() * 90}%;
-      div.style.left = ${Math.random() * 90}%;
+      div.style.top = `${Math.random() * 90}%`;
+      div.style.left = `${Math.random() * 90}%`;
       div.style.transform = isVertical
-        ? translate(-50%, -50%) rotate(90deg)
-        : translate(-50%, -50%) rotate(${Math.random() * 20 - 10}deg);
-      div.style.fontSize = ${Math.random() * 14 + 14}px;
+        ? `translate(-50%, -50%) rotate(90deg)`
+        : `translate(-50%, -50%) rotate(${Math.random() * 20 - 10}deg)`;
+      div.style.fontSize = `${Math.random() * 14 + 14}px`;
       div.style.fontFamily = font;
 
       document.body.appendChild(div);
