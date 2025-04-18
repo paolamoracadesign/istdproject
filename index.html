@@ -19,25 +19,27 @@
       margin: 0;
       padding: 0;
       background: #f39777;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
       font-family: 'PPRightGrotesk', sans-serif;
+      color: white;
       overflow: hidden;
       position: relative;
-      color: white;
+      height: 100vh;
+      width: 100vw;
     }
 
     .text-block {
-      font-size: 18pt;
-      width: 80%;
-      max-width: 1000px;
-      line-height: 1.5;
-      text-align: left;
-      user-select: none;
       position: absolute;
-      opacity: 1;
+      max-width: 85vw;
+      margin: 0 auto;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      line-height: 1.4;
+      text-align: left;
+      font-size: 4.5vw;
+      user-select: none;
+      white-space: pre-wrap;
+      word-break: break-word;
       transition: opacity 0.6s ease;
     }
 
@@ -48,54 +50,54 @@
     @keyframes disintegrate {
       0% {
         opacity: 1;
-        transform: scale(1) translateY(0);
+        transform: scale(1) translate(-50%, -50%);
         filter: blur(0);
       }
       100% {
         opacity: 0;
-        transform: scale(0.9) translateY(-60px);
+        transform: scale(0.95) translate(-50%, -60%);
         filter: blur(10px);
       }
     }
 
-    .short-text {
-      font-family: 'MigraExtraBold', serif;
-      text-align: left;
-      max-width: 90%;
+    .overlay-text {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      white-space: pre-line;
+      max-width: 80vw;
+      line-height: 1.4;
+      font-size: 4vw;
+      opacity: 0.85;
+      pointer-events: none;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .migra-big {
+      font-family: 'MigraExtraBold', serif;
+      font-size: 12vw;
       line-height: 1.1;
     }
 
-    .big-text {
-      font-size: 12vw;
-    }
-
-    .small-text {
-      font-size: 3.5vw;
+    .migra-small {
+      font-family: 'MigraExtraBold', serif;
+      font-size: 4.5vw;
+      line-height: 1.1;
     }
 
     @media (max-width: 600px) {
-      body {
-        align-items: flex-start;
-        overflow-y: auto;
-        height: auto;
-        padding: 2rem;
+      .text-block {
+        font-size: 5vw;
       }
 
-      .text-block, .short-text {
-        position: relative;
-        transform: none;
-        top: auto;
-        left: auto;
-        width: 100%;
+      .overlay-text {
+        font-size: 5vw;
       }
 
-      .short-text {
-        margin-top: 50vh;
+      .migra-big {
+        font-size: 14vw;
+      }
+
+      .migra-small {
+        font-size: 5vw;
       }
     }
   </style>
@@ -105,21 +107,23 @@
 
   <script>
     const texts = [
-      "YOU WANT TOO MUCH TO KNOW YOURSELF;&nbsp;AND MEANWHILE,&nbsp;YOU ARE NOT LIVING.",
-      "One's aim should be never to see one's self. For the reason that,<br>however much you may try, you can never know yourself as others see you.",
-      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; <br>whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
-      "No name. No memory today of yesterday's name;&nbsp;of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld;&nbsp;let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud;&nbsp;tomorrow, book or breeze;&nbsp;the book I read, the breeze I drink in. Living wholly without, a vagabond.",
-      "<div class='short-text big-text'>NO<br>LONGER<br>MYSELF</div>",
-      "<div class='short-text small-text'>NO&nbsp;ONE</div>"
+      "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
+      "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
+      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
+      "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
+      "<div class='migra-big'>NO<br>LONGER<br>MYSELF</div>",
+      "<div class='migra-small'>NO&nbsp;ONE</div>"
     ];
 
     const fonts = [
-      'serif', 'sans-serif', 'monospace', 'Georgia', 'Courier New',
-      'Times New Roman', 'Arial', 'Verdana', 'Tahoma', 'PPRightGrotesk'
+      'PPRightGrotesk', 'serif', 'sans-serif', 'Georgia', 'Courier New',
+      'Times New Roman', 'Arial', 'Verdana', 'Tahoma'
     ];
 
     let index = 0;
-    let inOverlayMode = false;
+    let round = 0;
+    const maxRounds = 2;
+    let overlayMode = false;
     const textEl = document.getElementById('text');
 
     function updateText() {
@@ -129,19 +133,19 @@
 
     function createOverlayText(content) {
       const div = document.createElement('div');
+      div.className = 'overlay-text';
+      div.innerHTML = content;
 
-      if (content.includes('short-text')) {
-        div.innerHTML = content;
-      } else {
-        div.className = 'text-block';
-        div.innerHTML = content;
-        div.style.top = `${Math.random() * 90}%`;
-        div.style.left = `${Math.random() * 90}%`;
-        div.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 8 - 4}deg)`;
-        div.style.opacity = '0.85';
-        div.style.pointerEvents = 'none';
-        div.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
-      }
+      const isVertical = Math.random() > 0.5;
+
+      const top = `${Math.random() * 90}%`;
+      const left = `${Math.random() * 90}%`;
+      const rotate = `${Math.random() * 30 - 15}deg`;
+
+      div.style.top = top;
+      div.style.left = left;
+      div.style.transform = `translate(-50%, -50%) rotate(${rotate})`;
+      div.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
 
       document.body.appendChild(div);
     }
@@ -149,7 +153,7 @@
     updateText();
 
     textEl.addEventListener('click', () => {
-      if (inOverlayMode) {
+      if (overlayMode) {
         const content = texts[Math.floor(Math.random() * texts.length)];
         createOverlayText(content);
         return;
@@ -161,14 +165,18 @@
         index++;
 
         if (index >= texts.length) {
-          inOverlayMode = true;
-          textEl.remove();
-          createOverlayText(texts[texts.length - 2]); // NO LONGER MYSELF
-          createOverlayText(texts[texts.length - 1]); // NO ONE
-        } else {
-          updateText();
-          textEl.classList.remove('fade-out');
+          index = 0;
+          round++;
+
+          if (round >= maxRounds) {
+            overlayMode = true;
+            textEl.remove();
+            return;
+          }
         }
+
+        updateText();
+        textEl.classList.remove('fade-out');
       }, 600);
     });
   </script>
