@@ -20,56 +20,32 @@
       padding: 0;
       background: #f39777;
       font-family: 'PPRightGrotesk', sans-serif;
-      overflow-x: hidden;
+      color: white;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
     }
 
     .text-block {
       font-size: 18pt;
-      line-height: 1.5;
-      color: white;
-      width: 90%;
+      width: 80%;
       max-width: 1000px;
-      margin: 40px auto;
+      line-height: 1.5;
       text-align: left;
       user-select: none;
+      position: absolute;
       opacity: 1;
       transition: opacity 0.6s ease;
-      position: relative;
-      word-break: break-word;
-      hyphens: auto;
     }
 
-    .scrollable {
-      height: 100vh;
-      overflow-y: auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-    }
-
-    .centered-block {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-      height: 100vh;
-      padding: 0 20px;
-    }
-
-    .huge {
-      font-family: 'Migra', serif;
-      font-size: 9vw;
-      text-align: left;
-      white-space: pre-line;
-      line-height: 1.1;
-    }
-
-    .small {
-      font-family: 'Migra', serif;
-      font-size: 4.5vw;
-      text-align: left;
-      margin-top: 30px;
+    .centered {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      position: absolute;
     }
 
     .fade-out {
@@ -84,137 +60,120 @@
       }
       100% {
         opacity: 0;
-        transform: scale(0.95) translateY(-40px);
+        transform: scale(0.9) translateY(-60px);
         filter: blur(10px);
       }
     }
 
-    .overlay {
+    .scrollable {
       position: absolute;
-      color: white;
-      font-family: 'PPRightGrotesk', sans-serif;
-      pointer-events: none;
-      opacity: 0.9;
-      line-height: 1.4;
-      max-width: 40%;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 100vh;
+      overflow-y: scroll;
+      padding: 20px 10px;
+      box-sizing: border-box;
     }
 
-    @media (max-width: 600px) {
-      .text-block {
-        font-size: 16pt;
-        margin: 20px auto;
-      }
-      .huge {
-        font-size: 12vw;
-      }
-      .small {
-        font-size: 6vw;
-      }
-      .overlay {
-        max-width: 80%;
-      }
+    .migra {
+      font-family: 'Migra', serif;
+      text-align: center;
+    }
+
+    .migra.big {
+      font-size: 60pt;
+      line-height: 1.1;
+      white-space: pre-line;
+    }
+
+    .migra.small {
+      font-size: 24pt;
     }
   </style>
 </head>
 <body>
-  <div id="container" class="scrollable">
-    <div id="text" class="text-block"></div>
-  </div>
+  <div id="text" class="text-block centered"></div>
 
   <script>
-    const container = document.getElementById('container');
-    const textEl = document.getElementById('text');
-
     const texts = [
       "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
-      "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
-      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
+      "One's aim should be never to see one's self. For the reason that,<br>however much you may try, you can never know yourself as others see you.",
+      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; <br>whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
       "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
       "NO\nLONGER\nMYSELF",
       "NO ONE"
     ];
 
     const fonts = [
-      'PPRightGrotesk', 'Georgia', 'Courier New', 'Arial', 'Verdana', 'Tahoma'
+      'serif', 'sans-serif', 'monospace', 'Georgia', 'Courier New',
+      'Times New Roman', 'Arial', 'Verdana', 'Tahoma', 'PPRightGrotesk'
     ];
 
     let index = 0;
     let rounds = 0;
     let overlayMode = false;
 
+    const textEl = document.getElementById('text');
+
     function updateText() {
-      textEl.className = 'text-block';
-      textEl.style.opacity = 1;
-      textEl.style.position = 'relative';
+      textEl.className = 'text-block centered';
+      textEl.style.overflow = 'unset';
+      textEl.style.height = 'auto';
+      textEl.style.fontSize = '18pt';
+      textEl.style.fontFamily = 'PPRightGrotesk';
+      textEl.innerHTML = '';
 
       const current = texts[index];
 
       if (current === "NO\nLONGER\nMYSELF") {
-        container.innerHTML = `
-          <div class="centered-block">
-            <div class="huge">${current}</div>
-            <div class="small">NO ONE</div>
-          </div>`;
+        textEl.classList.add('migra', 'big');
+        textEl.innerText = current;
+      } else if (current === "NO ONE") {
+        textEl.classList.add('migra', 'small');
+        textEl.innerText = current;
+      } else if (current.length > 200) {
+        // long text with scroll
+        textEl.className = 'text-block scrollable';
+        textEl.innerHTML = current;
       } else {
-        container.innerHTML = `<div id="text" class="text-block">${current}</div>`;
+        textEl.innerHTML = current;
       }
     }
 
-    function createOverlayBlock(content) {
+    function createOverlayText(content) {
       const div = document.createElement('div');
-      div.className = 'overlay';
+      div.className = 'text-block';
+      div.style.opacity = 0.85;
+      div.style.pointerEvents = 'none';
 
-      const isVertical = Math.random() < 0.5;
-      const font = fonts[Math.floor(Math.random() * fonts.length)];
-      const fontSize = `${Math.random() * 16 + 12}px`;
+      // break into random chunks (between 20 and 60 words)
+      const words = content.split(" ");
+      const start = Math.floor(Math.random() * (words.length - 10));
+      const length = Math.floor(Math.random() * 20) + 10;
+      const chunk = words.slice(start, start + length).join(" ");
+      div.innerHTML = chunk;
 
-      div.innerHTML = content;
-      div.style.fontFamily = font;
-      div.style.fontSize = fontSize;
-      div.style.top = `${Math.random() * 95}%`;
-      div.style.left = `${Math.random() * 95}%`;
-      div.style.transform = isVertical
-        ? `translate(-50%, -50%) rotate(90deg)`
-        : `translate(-50%, -50%) rotate(${Math.random() * 15 - 7}deg)`;
+      // style
+      div.style.top = `${Math.random() * 90}%`;
+      div.style.left = `${Math.random() * 90}%`;
+      div.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 90 - 45}deg)`;
+      div.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
+      div.style.fontSize = `${Math.floor(Math.random() * 10) + 12}pt`;
 
       document.body.appendChild(div);
     }
 
-    function splitIntoChunks(text, chunkLength = 60) {
-      const words = text.split(" ");
-      const chunks = [];
-      let current = "";
-
-      for (let word of words) {
-        if ((current + word).length < chunkLength) {
-          current += word + " ";
-        } else {
-          chunks.push(current.trim());
-          current = word + " ";
-        }
-      }
-      if (current.trim()) chunks.push(current.trim());
-      return chunks;
-    }
-
-    function overlayFromText(text) {
-      const chunks = splitIntoChunks(text);
-      const chunk = chunks[Math.floor(Math.random() * chunks.length)];
-      createOverlayBlock(chunk);
-    }
-
     updateText();
 
-    document.body.addEventListener('click', () => {
+    textEl.addEventListener('click', () => {
       if (overlayMode) {
-        const current = texts[Math.floor(Math.random() * texts.length)];
-        if (current === "NO\nLONGER\nMYSELF" || current === "NO ONE") return;
-        overlayFromText(current);
+        const content = texts[Math.floor(Math.random() * texts.length)];
+        createOverlayText(content);
         return;
       }
 
-      const currentBlock = document.getElementById('text');
-      if (currentBlock) currentBlock.classList.add('fade-out');
+      textEl.classList.add('fade-out');
 
       setTimeout(() => {
         index++;
@@ -225,11 +184,12 @@
 
         if (rounds >= 2) {
           overlayMode = true;
-          container.innerHTML = '';
-          return;
+          textEl.remove();
+          createOverlayText(texts[Math.floor(Math.random() * texts.length)]);
+        } else {
+          updateText();
+          textEl.classList.remove('fade-out');
         }
-
-        updateText();
       }, 600);
     });
   </script>
