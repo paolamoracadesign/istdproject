@@ -6,12 +6,7 @@
   <title>NO ONE</title>
   <style>
     @font-face {
-      font-family: 'PPRightGrotesk';
-      src: url('PPRightGroteskText-Regular.otf') format('opentype');
-    }
-
-    @font-face {
-      font-family: 'MigraExtraBold';
+      font-family: 'Migra';
       src: url('Migra-Extrabold.otf') format('opentype');
     }
 
@@ -19,40 +14,54 @@
       margin: 0;
       padding: 0;
       background: #f39777;
-      color: white;
-      font-family: 'PPRightGrotesk', sans-serif;
-      overflow: hidden;
-      position: relative;
-      height: 100vh;
-      width: 100vw;
+      font-family: 'Migra', serif;
+      overflow-x: hidden;
     }
 
-    .text-scrollable {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      overflow-y: scroll;
-      padding: 5vh 10vw;
-      font-size: 4.5vw;
+    .text-block {
+      font-size: 18pt;
       line-height: 1.5;
+      color: white;
+      width: 90%;
+      max-width: 1000px;
+      margin: 40px auto;
       text-align: left;
+      user-select: none;
+      opacity: 1;
+      transition: opacity 0.6s ease;
+      position: relative;
       word-break: break-word;
     }
 
-    .text-fixed {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 5vw;
-      line-height: 1.4;
-      max-width: 85vw;
+    .scrollable {
+      height: 100vh;
+      overflow-y: auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .centered-block {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      height: 100vh;
+      padding: 0 20px;
+    }
+
+    .huge {
+      font-size: 8vw;
       text-align: left;
-      white-space: pre-wrap;
-      word-break: break-word;
-      user-select: none;
+      white-space: pre-line;
+      line-height: 1.1;
+    }
+
+    .small {
+      font-size: 4vw;
+      text-align: left;
+      margin-top: 30px;
     }
 
     .fade-out {
@@ -60,118 +69,139 @@
     }
 
     @keyframes disintegrate {
-      0% { opacity: 1; transform: scale(1) translate(-50%, -50%); filter: blur(0); }
-      100% { opacity: 0; transform: scale(0.95) translate(-50%, -60%); filter: blur(10px); }
+      0% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0.95) translateY(-40px);
+        filter: blur(10px);
+      }
     }
 
     .overlay {
       position: absolute;
-      font-size: 4vw;
-      opacity: 0.85;
+      color: white;
+      font-family: 'Migra', serif;
       pointer-events: none;
+      opacity: 0.9;
       line-height: 1.4;
-      max-width: 80vw;
-      word-break: break-word;
-    }
-
-    .migra-big span {
-      display: block;
-      font-family: 'MigraExtraBold';
-      font-size: 12vw;
-      line-height: 1.1;
-      text-align: left;
-    }
-
-    .migra-small {
-      font-family: 'MigraExtraBold';
-      font-size: 4.5vw;
-      line-height: 1.2;
+      max-width: 40%;
     }
 
     @media (max-width: 600px) {
-      .text-fixed { font-size: 6vw; }
-      .overlay { font-size: 5vw; }
-      .migra-big span { font-size: 14vw; }
-      .migra-small { font-size: 5vw; }
+      .text-block {
+        font-size: 16pt;
+        margin: 20px auto;
+      }
+      .huge {
+        font-size: 10vw;
+      }
+      .small {
+        font-size: 6vw;
+      }
+      .overlay {
+        max-width: 80%;
+      }
     }
   </style>
 </head>
 <body>
-  <div id="text" class="text-fixed"></div>
+  <div id="container" class="scrollable">
+    <div id="text" class="text-block"></div>
+  </div>
 
   <script>
+    const container = document.getElementById('container');
+    const textEl = document.getElementById('text');
+
     const texts = [
       "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
       "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
-      `What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.`,
-      `No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.`,
-      `<div class='migra-big'><span>NO</span><span>LONGER</span><span>MYSELF</span></div>`,
-      `<div class='migra-small'>NO&nbsp;ONE</div>`
+      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
+      "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
+      "NO\nLONGER\nMYSELF",
+      "NO ONE"
     ];
 
     let index = 0;
-    let round = 0;
-    const maxRounds = 2;
+    let rounds = 0;
     let overlayMode = false;
-    const textEl = document.getElementById('text');
 
     function updateText() {
-      const content = texts[index];
-      textEl.innerHTML = content;
+      textEl.className = 'text-block';
+      textEl.style.opacity = 1;
+      textEl.style.position = 'relative';
 
-      if (index === 2 || index === 3) {
-        // Long texts scrollable
-        textEl.className = 'text-scrollable';
+      const current = texts[index];
+
+      if (current === "NO\nLONGER\nMYSELF") {
+        container.innerHTML = `
+          <div class="centered-block">
+            <div class="huge">${current}</div>
+            <div class="small">NO ONE</div>
+          </div>`;
       } else {
-        textEl.className = 'text-fixed';
+        container.innerHTML = `<div id="text" class="text-block">${current}</div>`;
       }
     }
 
-    function createOverlayText(content) {
+    function createOverlay(content) {
       const div = document.createElement('div');
       div.className = 'overlay';
       div.innerHTML = content;
 
-      const rotate = `${Math.random() > 0.5 ? 'rotate(90deg)' : 'rotate(0deg)'}`;
-      const top = `${Math.random() * 90}%`;
-      const left = `${Math.random() * 90}%`;
+      const isVertical = Math.random() < 0.5;
 
-      div.style.top = top;
-      div.style.left = left;
-      div.style.transform = `translate(-50%, -50%) ${rotate}`;
+      div.style.top = `${Math.random() * 90}%`;
+      div.style.left = `${Math.random() * 90}%`;
+      div.style.transform = isVertical
+        ? `translate(-50%, -50%) rotate(90deg)`
+        : `translate(-50%, -50%) rotate(${Math.random() * 10 - 5}deg)`;
+
+      div.style.fontSize = `${Math.random() * 14 + 14}px`;
 
       document.body.appendChild(div);
     }
 
+    function splitAndOverlay(text) {
+      const fragments = text.split(/[.,;!?]+/).filter(f => f.trim().length > 0);
+      const fragment = fragments[Math.floor(Math.random() * fragments.length)];
+      createOverlay(fragment.trim());
+    }
+
     updateText();
 
-    textEl.addEventListener('click', () => {
+    document.body.addEventListener('click', () => {
       if (overlayMode) {
-        const randomIndex = Math.floor(Math.random() * 2); // pick from first 2
-        const split = texts[randomIndex].split(/(?<=[,.!?])\s+/);
-        const piece = split[Math.floor(Math.random() * split.length)];
-        createOverlayText(piece);
+        const current = texts[Math.floor(Math.random() * texts.length)];
+        if (current.length < 60) {
+          createOverlay(current);
+        } else {
+          splitAndOverlay(current);
+        }
         return;
       }
 
-      textEl.classList.add('fade-out');
+      const currentBlock = document.getElementById('text');
+      if (currentBlock) currentBlock.classList.add('fade-out');
 
       setTimeout(() => {
         index++;
-
         if (index >= texts.length) {
           index = 0;
-          round++;
+          rounds++;
+        }
 
-          if (round >= maxRounds) {
-            overlayMode = true;
-            textEl.remove();
-            return;
-          }
+        if (rounds >= 2) {
+          overlayMode = true;
+          container.innerHTML = '';
+          return;
         }
 
         updateText();
-        textEl.classList.remove('fade-out');
       }, 600);
     });
   </script>
