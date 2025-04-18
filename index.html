@@ -6,6 +6,11 @@
   <title>NO ONE</title>
   <style>
     @font-face {
+      font-family: 'PPRightGrotesk';
+      src: url('PPRightGroteskText-Regular.otf') format('opentype');
+    }
+
+    @font-face {
       font-family: 'Migra';
       src: url('Migra-Extrabold.otf') format('opentype');
     }
@@ -14,7 +19,7 @@
       margin: 0;
       padding: 0;
       background: #f39777;
-      font-family: 'Migra', serif;
+      font-family: 'PPRightGrotesk', sans-serif;
       overflow-x: hidden;
     }
 
@@ -31,6 +36,7 @@
       transition: opacity 0.6s ease;
       position: relative;
       word-break: break-word;
+      hyphens: auto;
     }
 
     .scrollable {
@@ -52,14 +58,16 @@
     }
 
     .huge {
-      font-size: 8vw;
+      font-family: 'Migra', serif;
+      font-size: 9vw;
       text-align: left;
       white-space: pre-line;
       line-height: 1.1;
     }
 
     .small {
-      font-size: 4vw;
+      font-family: 'Migra', serif;
+      font-size: 4.5vw;
       text-align: left;
       margin-top: 30px;
     }
@@ -84,7 +92,7 @@
     .overlay {
       position: absolute;
       color: white;
-      font-family: 'Migra', serif;
+      font-family: 'PPRightGrotesk', sans-serif;
       pointer-events: none;
       opacity: 0.9;
       line-height: 1.4;
@@ -97,7 +105,7 @@
         margin: 20px auto;
       }
       .huge {
-        font-size: 10vw;
+        font-size: 12vw;
       }
       .small {
         font-size: 6vw;
@@ -126,6 +134,10 @@
       "NO ONE"
     ];
 
+    const fonts = [
+      'PPRightGrotesk', 'Georgia', 'Courier New', 'Arial', 'Verdana', 'Tahoma'
+    ];
+
     let index = 0;
     let rounds = 0;
     let overlayMode = false;
@@ -148,28 +160,47 @@
       }
     }
 
-    function createOverlay(content) {
+    function createOverlayBlock(content) {
       const div = document.createElement('div');
       div.className = 'overlay';
-      div.innerHTML = content;
 
       const isVertical = Math.random() < 0.5;
+      const font = fonts[Math.floor(Math.random() * fonts.length)];
+      const fontSize = `${Math.random() * 16 + 12}px`;
 
-      div.style.top = `${Math.random() * 90}%`;
-      div.style.left = `${Math.random() * 90}%`;
+      div.innerHTML = content;
+      div.style.fontFamily = font;
+      div.style.fontSize = fontSize;
+      div.style.top = `${Math.random() * 95}%`;
+      div.style.left = `${Math.random() * 95}%`;
       div.style.transform = isVertical
         ? `translate(-50%, -50%) rotate(90deg)`
-        : `translate(-50%, -50%) rotate(${Math.random() * 10 - 5}deg)`;
-
-      div.style.fontSize = `${Math.random() * 14 + 14}px`;
+        : `translate(-50%, -50%) rotate(${Math.random() * 15 - 7}deg)`;
 
       document.body.appendChild(div);
     }
 
-    function splitAndOverlay(text) {
-      const fragments = text.split(/[.,;!?]+/).filter(f => f.trim().length > 0);
-      const fragment = fragments[Math.floor(Math.random() * fragments.length)];
-      createOverlay(fragment.trim());
+    function splitIntoChunks(text, chunkLength = 60) {
+      const words = text.split(" ");
+      const chunks = [];
+      let current = "";
+
+      for (let word of words) {
+        if ((current + word).length < chunkLength) {
+          current += word + " ";
+        } else {
+          chunks.push(current.trim());
+          current = word + " ";
+        }
+      }
+      if (current.trim()) chunks.push(current.trim());
+      return chunks;
+    }
+
+    function overlayFromText(text) {
+      const chunks = splitIntoChunks(text);
+      const chunk = chunks[Math.floor(Math.random() * chunks.length)];
+      createOverlayBlock(chunk);
     }
 
     updateText();
@@ -177,11 +208,8 @@
     document.body.addEventListener('click', () => {
       if (overlayMode) {
         const current = texts[Math.floor(Math.random() * texts.length)];
-        if (current.length < 60) {
-          createOverlay(current);
-        } else {
-          splitAndOverlay(current);
-        }
+        if (current === "NO\nLONGER\nMYSELF" || current === "NO ONE") return;
+        overlayFromText(current);
         return;
       }
 
