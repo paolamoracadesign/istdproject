@@ -115,38 +115,32 @@
 
     const fonts = [
       'serif', 'sans-serif', 'monospace', 'Georgia', 'Courier New',
-      'Times New Roman', 'Arial', 'Verdana', 'Tahoma'
+      'Times New Roman', 'Arial', 'Verdana', 'Tahoma', 'PPRightGrotesk'
     ];
 
     let index = 0;
-    let rounds = 0;
     let inOverlayMode = false;
-
     const textEl = document.getElementById('text');
 
     function updateText() {
       textEl.className = 'text-block';
       textEl.innerHTML = texts[index];
-
-      // Don't apply extra styles to final custom blocks
-      if (texts[index].includes('short-text')) return;
     }
 
     function createOverlayText(content) {
       const div = document.createElement('div');
-      div.className = 'text-block';
-      div.innerHTML = content;
-
-      div.style.top = `${Math.random() * 80 + 10}%`;
-      div.style.left = `${Math.random() * 80 + 10}%`;
-      div.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 10 - 5}deg)`;
-      div.style.opacity = '0.85';
-      div.style.pointerEvents = 'none';
-      div.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
 
       if (content.includes('short-text')) {
-        div.className = ''; // removes positioning to preserve layout
         div.innerHTML = content;
+      } else {
+        div.className = 'text-block';
+        div.innerHTML = content;
+        div.style.top = `${Math.random() * 90}%`;
+        div.style.left = `${Math.random() * 90}%`;
+        div.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 8 - 4}deg)`;
+        div.style.opacity = '0.85';
+        div.style.pointerEvents = 'none';
+        div.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
       }
 
       document.body.appendChild(div);
@@ -165,15 +159,12 @@
 
       setTimeout(() => {
         index++;
-        if (index >= texts.length) {
-          index = 0;
-          rounds++;
-        }
 
-        if (rounds >= 2) {
+        if (index >= texts.length) {
           inOverlayMode = true;
           textEl.remove();
-          createOverlayText(texts[Math.floor(Math.random() * texts.length)]);
+          createOverlayText(texts[texts.length - 2]); // NO LONGER MYSELF
+          createOverlayText(texts[texts.length - 1]); // NO ONE
         } else {
           updateText();
           textEl.classList.remove('fade-out');
