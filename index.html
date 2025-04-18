@@ -20,17 +20,14 @@
       padding: 0;
       background: #f39777;
       font-family: 'PPRightGrotesk', sans-serif;
-      overflow-x: hidden;
+      overflow: hidden;
       color: white;
     }
 
     .scrollable {
       height: 100vh;
       overflow-y: auto;
-      display: flex;
-      justify-content: flex-start;
-      align-items: center;
-      flex-direction: column;
+      padding: 40px 20px;
     }
 
     .text-block {
@@ -38,12 +35,11 @@
       line-height: 1.5;
       width: 90%;
       max-width: 1000px;
-      margin: 40px auto;
-      text-align: left;
+      margin: auto;
       user-select: none;
-      opacity: 1;
       transition: opacity 0.6s ease;
       position: relative;
+      opacity: 1;
       word-break: break-word;
     }
 
@@ -54,22 +50,20 @@
       align-items: flex-start;
       height: 100vh;
       padding: 0 20px;
-      width: 100%;
-      max-width: 1000px;
-      margin: 0 auto;
       text-align: left;
     }
 
     .huge {
       font-family: 'Migra', serif;
       font-size: 8vw;
-      white-space: pre-line;
       line-height: 1.1;
+      white-space: pre-line;
     }
 
     .small {
       font-family: 'Migra', serif;
       font-size: 4vw;
+      margin-top: 30px;
     }
 
     .fade-out {
@@ -89,34 +83,19 @@
       }
     }
 
-    .overlay-text {
+    .overlay {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      white-space: pre-wrap;
-      max-width: 80%;
-      word-break: break-word;
-      font-size: 18pt;
-      line-height: 1.4;
+      pointer-events: none;
+      color: white;
       opacity: 0.9;
-      text-align: left;
-      pointer-events: none;
-    }
-
-    .overlay-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 100%;
-      pointer-events: none;
+      max-width: 40%;
+      word-break: break-word;
+      line-height: 1.4;
     }
 
     @media (max-width: 600px) {
       .text-block {
         font-size: 16pt;
-        margin: 20px auto;
       }
       .huge {
         font-size: 10vw;
@@ -124,19 +103,17 @@
       .small {
         font-size: 6vw;
       }
+      .overlay {
+        max-width: 80%;
+      }
     }
   </style>
 </head>
 <body>
-  <div id="container" class="scrollable">
-    <div id="text" class="text-block"></div>
-  </div>
-  <div id="overlayContainer" class="overlay-container"></div>
+  <div id="container"></div>
 
   <script>
     const container = document.getElementById('container');
-    const textEl = document.getElementById('text');
-    const overlayContainer = document.getElementById('overlayContainer');
 
     const texts = [
       "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
@@ -151,87 +128,98 @@
     let rounds = 0;
     let overlayMode = false;
 
-    function isShort(text) {
-      return text.length < 120;
-    }
+    function createTextBlock(content, className = "text-block", scrollable = false) {
+      const wrapper = document.createElement('div');
+      wrapper.className = scrollable ? 'scrollable' : 'centered-block';
 
-    function createBlock(text) {
-      if (text === "NO\nLONGER\nMYSELF") {
-        const div = document.createElement('div');
-        div.className = 'centered-block';
-        div.innerHTML = `<div class="huge">${text}</div>`;
-        return div;
-      } else if (text === "NO ONE") {
-        const div = document.createElement('div');
-        div.className = 'centered-block';
-        div.innerHTML = `<div class="small">${text}</div>`;
-        return div;
-      } else if (isShort(text)) {
-        const div = document.createElement('div');
-        div.className = 'centered-block';
-        div.innerHTML = `<div class="text-block">${text}</div>`;
-        return div;
-      } else {
-        const div = document.createElement('div');
-        div.className = 'text-block';
-        div.innerText = text;
-        return div;
-      }
-    }
+      const text = document.createElement('div');
+      text.className = className;
+      text.innerText = content;
 
-    function showOverlay(text) {
-      const div = document.createElement('div');
-      div.className = 'overlay-text';
-      div.innerText = text;
-      overlayContainer.appendChild(div);
-    }
-
-    function updateText() {
+      wrapper.appendChild(text);
       container.innerHTML = '';
-      const block = createBlock(texts[index]);
-      if (!isShort(texts[index])) {
-        container.className = 'scrollable';
-        container.appendChild(block);
+      container.appendChild(wrapper);
+
+      return text;
+    }
+
+    function showNextText() {
+      const current = texts[index];
+
+      let el;
+      if (current === "NO\nLONGER\nMYSELF") {
+        el = createTextBlock(current, "huge", false);
+      } else if (current === "NO ONE") {
+        el = createTextBlock(current, "small", false);
+      } else if (current.length > 250) {
+        el = createTextBlock(current, "text-block", true); // long = scrollable
       } else {
-        container.className = '';
-        container.appendChild(block);
+        el = createTextBlock(current, "text-block", false); // short = centered
+      }
+
+      if (!overlayMode) {
+        el.classList.remove('fade-out');
+        setTimeout(() => {
+          el.classList.add('fade-out');
+        }, 50);
       }
     }
+
+    function createOverlayText(content) {
+      const div = document.createElement('div');
+      div.className = 'overlay';
+      div.innerText = content;
+
+      const isVertical = Math.random() < 0.5;
+      const fontSize = `${Math.random() * 14 + 16}px`;
+      const font = "'PPRightGrotesk', sans-serif";
+
+      div.style.fontFamily = font;
+      div.style.fontSize = fontSize;
+
+      div.style.top = `${Math.random() * 90}vh`;
+      div.style.left = `${Math.random() * 90}vw`;
+
+      div.style.transform = isVertical
+        ? 'translate(-50%, -50%) rotate(90deg)'
+        : 'translate(-50%, -50%) rotate(0deg)';
+
+      document.body.appendChild(div);
+    }
+
+    function handleOverlay() {
+      const text = texts[Math.floor(Math.random() * texts.length)];
+      if (text.length < 200) {
+        createOverlayText(text);
+      } else {
+        const parts = text.split(/[.,;!?]+/).filter(p => p.trim().length > 20);
+        const pick = parts[Math.floor(Math.random() * parts.length)];
+        createOverlayText(pick.trim());
+      }
+    }
+
+    showNextText();
 
     document.body.addEventListener('click', () => {
       if (overlayMode) {
-        const nextText = texts[index];
-        showOverlay(nextText);
-        index = (index + 1) % texts.length;
+        handleOverlay();
         return;
       }
 
-      const currentBlock = document.querySelector('.text-block, .huge, .small');
-      if (currentBlock && currentBlock.parentElement.classList.contains('centered-block')) {
-        currentBlock.classList.add('fade-out');
-      } else if (currentBlock) {
-        currentBlock.classList.add('fade-out');
+      index++;
+      if (index >= texts.length) {
+        index = 0;
+        rounds++;
       }
 
-      setTimeout(() => {
-        index++;
-        if (index >= texts.length) {
-          index = 0;
-          rounds++;
-        }
+      if (rounds >= 2) {
+        overlayMode = true;
+        container.innerHTML = '';
+        return;
+      }
 
-        if (rounds >= 2) {
-          overlayMode = true;
-          container.innerHTML = '';
-          container.className = '';
-          return;
-        }
-
-        updateText();
-      }, 600);
+      showNextText();
     });
-
-    updateText();
   </script>
 </body>
 </html>
