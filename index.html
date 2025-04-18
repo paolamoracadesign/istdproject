@@ -10,39 +10,39 @@
       src: url('PPRightGroteskText-Regular.otf') format('opentype');
     }
 
+    @font-face {
+      font-family: 'MigraExtraBold';
+      src: url('Migra-Extrabold.otf') format('opentype');
+    }
+
     body {
       margin: 0;
-      padding: 60px 20px;
+      padding: 0;
       background: #f39777;
-      background-attachment: fixed;
-      color: white;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
-      min-height: 100vh;
+      align-items: center;
+      height: 100vh;
       font-family: 'PPRightGrotesk', sans-serif;
-      overflow-y: auto;
-      overflow-x: hidden;
+      overflow: hidden;
       position: relative;
+      color: white;
     }
 
     .text-block {
       font-size: 18pt;
-      width: 100%;
+      width: 80%;
       max-width: 1000px;
       line-height: 1.5;
       text-align: left;
       user-select: none;
+      position: absolute;
       opacity: 1;
       transition: opacity 0.6s ease;
-      position: relative;
-      margin: 40px auto;
     }
 
     .center {
       text-align: center;
-      font-size: 54pt;
-      line-height: 1.2;
     }
 
     .fade-out {
@@ -61,6 +61,48 @@
         filter: blur(10px);
       }
     }
+
+    .short-text {
+      font-family: 'MigraExtraBold', serif;
+      text-align: center;
+      max-width: 90%;
+      margin: 0 auto;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      white-space: pre-line;
+      line-height: 1.1;
+    }
+
+    .big-text {
+      font-size: 9vw;
+    }
+
+    .small-text {
+      font-size: 3vw;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        align-items: flex-start;
+        overflow-y: auto;
+        height: auto;
+        padding: 2rem;
+      }
+
+      .text-block, .short-text {
+        position: relative;
+        transform: none;
+        top: auto;
+        left: auto;
+        width: 100%;
+      }
+
+      .short-text {
+        margin-top: 50vh;
+      }
+    }
   </style>
 </head>
 <body>
@@ -72,7 +114,8 @@
       "One's aim should be never to see one's self. For the reason that,<br>however much you may try, you can never know yourself as others see you.",
       "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; <br>whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
       "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
-      "NO ONE"
+      "<div class='short-text big-text'>NO&nbsp;LONGER&nbsp;MYSELF</div>",
+      "<div class='short-text small-text'>NO&nbsp;ONE</div>"
     ];
 
     const fonts = [
@@ -88,12 +131,12 @@
 
     function updateText() {
       textEl.className = 'text-block';
-      const current = texts[index];
-      textEl.innerHTML = current;
+      textEl.innerHTML = texts[index];
 
-      if (current === "NO ONE") {
-        textEl.classList.add('center');
-      }
+      // For the final short-texts already styled in HTML, skip extra classes
+      if (texts[index].includes('short-text')) return;
+
+      textEl.classList.add('center');
     }
 
     function createOverlayText(content) {
@@ -101,16 +144,16 @@
       div.className = 'text-block';
       div.innerHTML = content;
 
-      div.style.position = 'absolute';
-      div.style.top = `${Math.random() * 90 + 5}%`;
-      div.style.left = `${Math.random() * 90 + 5}%`;
+      div.style.top = `${Math.random() * 80 + 10}%`;
+      div.style.left = `${Math.random() * 80 + 10}%`;
       div.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 10 - 5}deg)`;
       div.style.opacity = '0.85';
       div.style.pointerEvents = 'none';
       div.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
 
-      if (content === "NO ONE") {
-        div.classList.add('center');
+      if (content.includes('short-text')) {
+        div.className = ''; // remove default positioning
+        div.innerHTML = content;
       }
 
       document.body.appendChild(div);
