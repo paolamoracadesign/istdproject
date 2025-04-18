@@ -12,38 +12,37 @@
 
     body {
       margin: 0;
-      padding: 0;
-      background: white;
+      padding: 60px 20px;
+      background: #f39777;
+      background-attachment: fixed;
+      color: white;
       display: flex;
       justify-content: center;
-      align-items: center;
-      height: 100vh;
+      align-items: flex-start;
+      min-height: 100vh;
       font-family: 'PPRightGrotesk', sans-serif;
-      overflow: hidden;
+      overflow-y: auto;
+      overflow-x: hidden;
       position: relative;
     }
 
     .text-block {
       font-size: 18pt;
-      width: 80%;
+      width: 100%;
       max-width: 1000px;
       line-height: 1.5;
       text-align: left;
       user-select: none;
-      position: absolute;
       opacity: 1;
       transition: opacity 0.6s ease;
+      position: relative;
+      margin: 40px auto;
     }
 
     .center {
       text-align: center;
       font-size: 54pt;
       line-height: 1.2;
-    }
-
-    .twocol {
-      column-count: 2;
-      column-gap: 40px;
     }
 
     .fade-out {
@@ -94,8 +93,6 @@
 
       if (current === "NO ONE") {
         textEl.classList.add('center');
-      } else if (current.startsWith("No name") || current.startsWith("What annoyed")) {
-        textEl.classList.add('twocol');
       }
     }
 
@@ -104,8 +101,9 @@
       div.className = 'text-block';
       div.innerHTML = content;
 
-      div.style.top = `${Math.random() * 80 + 10}%`;
-      div.style.left = `${Math.random() * 80 + 10}%`;
+      div.style.position = 'absolute';
+      div.style.top = `${Math.random() * 90 + 5}%`;
+      div.style.left = `${Math.random() * 90 + 5}%`;
       div.style.transform = `translate(-50%, -50%) rotate(${Math.random() * 10 - 5}deg)`;
       div.style.opacity = '0.85';
       div.style.pointerEvents = 'none';
@@ -113,8 +111,6 @@
 
       if (content === "NO ONE") {
         div.classList.add('center');
-      } else if (content.startsWith("No name") || content.startsWith("What annoyed")) {
-        div.classList.add('twocol');
       }
 
       document.body.appendChild(div);
@@ -140,8 +136,8 @@
 
         if (rounds >= 2) {
           inOverlayMode = true;
-          textEl.remove(); // remove main text block
-          createOverlayText(texts[Math.floor(Math.random() * texts.length)]); // start with one
+          textEl.remove();
+          createOverlayText(texts[Math.floor(Math.random() * texts.length)]);
         } else {
           updateText();
           textEl.classList.remove('fade-out');
