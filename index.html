@@ -19,28 +19,40 @@
       margin: 0;
       padding: 0;
       background: #f39777;
-      font-family: 'PPRightGrotesk', sans-serif;
       color: white;
+      font-family: 'PPRightGrotesk', sans-serif;
       overflow: hidden;
       position: relative;
       height: 100vh;
       width: 100vw;
     }
 
-    .text-block {
+    .text-scrollable {
       position: absolute;
-      max-width: 85vw;
-      margin: 0 auto;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      line-height: 1.4;
-      text-align: left;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow-y: scroll;
+      padding: 5vh 10vw;
       font-size: 4.5vw;
-      user-select: none;
+      line-height: 1.5;
+      text-align: left;
+      word-break: break-word;
+    }
+
+    .text-fixed {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 5vw;
+      line-height: 1.4;
+      max-width: 85vw;
+      text-align: left;
       white-space: pre-wrap;
       word-break: break-word;
-      transition: opacity 0.6s ease;
+      user-select: none;
     }
 
     .fade-out {
@@ -48,76 +60,53 @@
     }
 
     @keyframes disintegrate {
-      0% {
-        opacity: 1;
-        transform: scale(1) translate(-50%, -50%);
-        filter: blur(0);
-      }
-      100% {
-        opacity: 0;
-        transform: scale(0.95) translate(-50%, -60%);
-        filter: blur(10px);
-      }
+      0% { opacity: 1; transform: scale(1) translate(-50%, -50%); filter: blur(0); }
+      100% { opacity: 0; transform: scale(0.95) translate(-50%, -60%); filter: blur(10px); }
     }
 
-    .overlay-text {
+    .overlay {
       position: absolute;
-      max-width: 80vw;
-      line-height: 1.4;
       font-size: 4vw;
       opacity: 0.85;
       pointer-events: none;
-      white-space: pre-wrap;
+      line-height: 1.4;
+      max-width: 80vw;
       word-break: break-word;
     }
 
-    .migra-big {
-      font-family: 'MigraExtraBold', serif;
+    .migra-big span {
+      display: block;
+      font-family: 'MigraExtraBold';
       font-size: 12vw;
       line-height: 1.1;
+      text-align: left;
     }
 
     .migra-small {
-      font-family: 'MigraExtraBold', serif;
+      font-family: 'MigraExtraBold';
       font-size: 4.5vw;
-      line-height: 1.1;
+      line-height: 1.2;
     }
 
     @media (max-width: 600px) {
-      .text-block {
-        font-size: 5vw;
-      }
-
-      .overlay-text {
-        font-size: 5vw;
-      }
-
-      .migra-big {
-        font-size: 14vw;
-      }
-
-      .migra-small {
-        font-size: 5vw;
-      }
+      .text-fixed { font-size: 6vw; }
+      .overlay { font-size: 5vw; }
+      .migra-big span { font-size: 14vw; }
+      .migra-small { font-size: 5vw; }
     }
   </style>
 </head>
 <body>
-  <div id="text" class="text-block"></div>
+  <div id="text" class="text-fixed"></div>
 
   <script>
     const texts = [
       "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
       "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
-      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
-      "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
-      "<div class='migra-big'>NO<br>LONGER<br>MYSELF</div>",
-      "<div class='migra-small'>NO&nbsp;ONE</div>"
-    ];
-
-    const fonts = [
-      'PPRightGrotesk', 'serif', 'sans-serif', 'Georgia', 'Courier New',
-      'Times New Roman', 'Arial', 'Verdana', 'Tahoma'
+      `What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.`,
+      `No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.`,
+      `<div class='migra-big'><span>NO</span><span>LONGER</span><span>MYSELF</span></div>`,
+      `<div class='migra-small'>NO&nbsp;ONE</div>`
     ];
 
     let index = 0;
@@ -127,25 +116,29 @@
     const textEl = document.getElementById('text');
 
     function updateText() {
-      textEl.className = 'text-block';
-      textEl.innerHTML = texts[index];
+      const content = texts[index];
+      textEl.innerHTML = content;
+
+      if (index === 2 || index === 3) {
+        // Long texts scrollable
+        textEl.className = 'text-scrollable';
+      } else {
+        textEl.className = 'text-fixed';
+      }
     }
 
     function createOverlayText(content) {
       const div = document.createElement('div');
-      div.className = 'overlay-text';
+      div.className = 'overlay';
       div.innerHTML = content;
 
-      const isVertical = Math.random() > 0.5;
-
+      const rotate = `${Math.random() > 0.5 ? 'rotate(90deg)' : 'rotate(0deg)'}`;
       const top = `${Math.random() * 90}%`;
       const left = `${Math.random() * 90}%`;
-      const rotate = `${Math.random() * 30 - 15}deg`;
 
       div.style.top = top;
       div.style.left = left;
-      div.style.transform = `translate(-50%, -50%) rotate(${rotate})`;
-      div.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
+      div.style.transform = `translate(-50%, -50%) ${rotate}`;
 
       document.body.appendChild(div);
     }
@@ -154,8 +147,10 @@
 
     textEl.addEventListener('click', () => {
       if (overlayMode) {
-        const content = texts[Math.floor(Math.random() * texts.length)];
-        createOverlayText(content);
+        const randomIndex = Math.floor(Math.random() * 2); // pick from first 2
+        const split = texts[randomIndex].split(/(?<=[,.!?])\s+/);
+        const piece = split[Math.floor(Math.random() * split.length)];
+        createOverlayText(piece);
         return;
       }
 
