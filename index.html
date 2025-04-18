@@ -24,19 +24,6 @@
       color: white;
     }
 
-    .text-block {
-      font-size: 18pt;
-      line-height: 1.5;
-      width: 90%;
-      max-width: 1000px;
-      margin: 40px auto;
-      text-align: left;
-      user-select: none;
-      transition: opacity 0.6s ease;
-      position: relative;
-      word-break: break-word;
-    }
-
     .scrollable {
       height: 100vh;
       overflow-y: auto;
@@ -46,14 +33,31 @@
       flex-direction: column;
     }
 
+    .text-block {
+      font-size: 18pt;
+      line-height: 1.5;
+      width: 90%;
+      max-width: 1000px;
+      margin: 40px auto;
+      text-align: left;
+      user-select: none;
+      opacity: 1;
+      transition: opacity 0.6s ease;
+      position: relative;
+      word-break: break-word;
+    }
+
     .centered-block {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       height: 100vh;
-      text-align: center;
-      padding: 20px;
+      padding: 0 20px;
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: left;
     }
 
     .huge {
@@ -66,7 +70,6 @@
     .small {
       font-family: 'Migra', serif;
       font-size: 4vw;
-      margin-top: 30px;
     }
 
     .fade-out {
@@ -86,15 +89,28 @@
       }
     }
 
-    .overlay {
+    .overlay-text {
       position: absolute;
-      color: white;
-      pointer-events: none;
-      opacity: 0.9;
-      line-height: 1.4;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      white-space: pre-wrap;
+      max-width: 80%;
       word-break: break-word;
-      max-width: 40%;
-      white-space: pre-line;
+      font-size: 18pt;
+      line-height: 1.4;
+      opacity: 0.9;
+      text-align: left;
+      pointer-events: none;
+    }
+
+    .overlay-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      pointer-events: none;
     }
 
     @media (max-width: 600px) {
@@ -108,9 +124,6 @@
       .small {
         font-size: 6vw;
       }
-      .overlay {
-        max-width: 80%;
-      }
     }
   </style>
 </head>
@@ -118,22 +131,20 @@
   <div id="container" class="scrollable">
     <div id="text" class="text-block"></div>
   </div>
+  <div id="overlayContainer" class="overlay-container"></div>
 
   <script>
     const container = document.getElementById('container');
-    let textEl = document.getElementById('text');
+    const textEl = document.getElementById('text');
+    const overlayContainer = document.getElementById('overlayContainer');
 
     const texts = [
       "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
       "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
       "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
-      "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us...",
+      "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
       "NO\nLONGER\nMYSELF",
       "NO ONE"
-    ];
-
-    const overlayFonts = [
-      "'PPRightGrotesk'", "'Migra'"
     ];
 
     let index = 0;
@@ -141,68 +152,66 @@
     let overlayMode = false;
 
     function isShort(text) {
-      return text.length < 80;
+      return text.length < 120;
+    }
+
+    function createBlock(text) {
+      if (text === "NO\nLONGER\nMYSELF") {
+        const div = document.createElement('div');
+        div.className = 'centered-block';
+        div.innerHTML = `<div class="huge">${text}</div>`;
+        return div;
+      } else if (text === "NO ONE") {
+        const div = document.createElement('div');
+        div.className = 'centered-block';
+        div.innerHTML = `<div class="small">${text}</div>`;
+        return div;
+      } else if (isShort(text)) {
+        const div = document.createElement('div');
+        div.className = 'centered-block';
+        div.innerHTML = `<div class="text-block">${text}</div>`;
+        return div;
+      } else {
+        const div = document.createElement('div');
+        div.className = 'text-block';
+        div.innerText = text;
+        return div;
+      }
+    }
+
+    function showOverlay(text) {
+      const div = document.createElement('div');
+      div.className = 'overlay-text';
+      div.innerText = text;
+      overlayContainer.appendChild(div);
     }
 
     function updateText() {
-      textEl = document.createElement('div');
-      textEl.id = 'text';
-
-      const current = texts[index];
-      if (current === "NO\nLONGER\nMYSELF" || current === "NO ONE" || isShort(current)) {
-        textEl.className = 'centered-block';
-        const tag = current === "NO ONE" ? "small" : "huge";
-        textEl.innerHTML = `<div class="${tag}">${current}</div>`;
-      } else {
-        textEl.className = 'text-block';
-        textEl.textContent = current;
-      }
-
       container.innerHTML = '';
-      container.appendChild(textEl);
-    }
-
-    function createOverlay(content) {
-      const div = document.createElement('div');
-      div.className = 'overlay';
-      div.textContent = content;
-
-      div.style.top = `${Math.random() * 90}%`;
-      div.style.left = `${Math.random() * 90}%`;
-      div.style.fontSize = `${Math.random() * 10 + 14}px`;
-      div.style.fontFamily = overlayFonts[Math.floor(Math.random() * overlayFonts.length)];
-
-      const rotate = Math.random();
-      if (rotate < 0.4) {
-        div.style.transform = 'rotate(90deg)';
+      const block = createBlock(texts[index]);
+      if (!isShort(texts[index])) {
+        container.className = 'scrollable';
+        container.appendChild(block);
       } else {
-        div.style.transform = `rotate(${Math.random() * 30 - 15}deg)`;
+        container.className = '';
+        container.appendChild(block);
       }
-
-      document.body.appendChild(div);
     }
-
-    function splitAndOverlay(text) {
-      const fragments = text.split(/[.,;!?]+/).filter(f => f.trim().length > 10);
-      const fragment = fragments[Math.floor(Math.random() * fragments.length)];
-      createOverlay(fragment.trim());
-    }
-
-    updateText();
 
     document.body.addEventListener('click', () => {
       if (overlayMode) {
-        const current = texts[Math.floor(Math.random() * texts.length)];
-        if (current.length < 80) {
-          createOverlay(current);
-        } else {
-          splitAndOverlay(current);
-        }
+        const nextText = texts[index];
+        showOverlay(nextText);
+        index = (index + 1) % texts.length;
         return;
       }
 
-      const currentBlock = document.getElementById('text');
-      if (currentBlock) currentBlock.classList.add('fade-out');
+      const currentBlock = document.querySelector('.text-block, .huge, .small');
+      if (currentBlock && currentBlock.parentElement.classList.contains('centered-block')) {
+        currentBlock.classList.add('fade-out');
+      } else if (currentBlock) {
+        currentBlock.classList.add('fade-out');
+      }
 
       setTimeout(() => {
         index++;
@@ -214,12 +223,15 @@
         if (rounds >= 2) {
           overlayMode = true;
           container.innerHTML = '';
+          container.className = '';
           return;
         }
 
         updateText();
       }, 600);
     });
+
+    updateText();
   </script>
 </body>
 </html>
