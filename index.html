@@ -41,10 +41,6 @@
       transition: opacity 0.6s ease;
     }
 
-    .center {
-      text-align: center;
-    }
-
     .fade-out {
       animation: disintegrate 0.6s forwards;
     }
@@ -64,9 +60,8 @@
 
     .short-text {
       font-family: 'MigraExtraBold', serif;
-      text-align: center;
+      text-align: left;
       max-width: 90%;
-      margin: 0 auto;
       position: absolute;
       top: 50%;
       left: 50%;
@@ -76,11 +71,11 @@
     }
 
     .big-text {
-      font-size: 9vw;
+      font-size: 12vw;
     }
 
     .small-text {
-      font-size: 3vw;
+      font-size: 3.5vw;
     }
 
     @media (max-width: 600px) {
@@ -110,11 +105,11 @@
 
   <script>
     const texts = [
-      "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
+      "YOU WANT TOO MUCH TO KNOW YOURSELF;&nbsp;AND MEANWHILE,&nbsp;YOU ARE NOT LIVING.",
       "One's aim should be never to see one's self. For the reason that,<br>however much you may try, you can never know yourself as others see you.",
       "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; <br>whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
-      "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
-      "<div class='short-text big-text'>NO&nbsp;LONGER&nbsp;MYSELF</div>",
+      "No name. No memory today of yesterday's name;&nbsp;of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld;&nbsp;let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud;&nbsp;tomorrow, book or breeze;&nbsp;the book I read, the breeze I drink in. Living wholly without, a vagabond.",
+      "<div class='short-text big-text'>NO<br>LONGER<br>MYSELF</div>",
       "<div class='short-text small-text'>NO&nbsp;ONE</div>"
     ];
 
@@ -133,10 +128,8 @@
       textEl.className = 'text-block';
       textEl.innerHTML = texts[index];
 
-      // For the final short-texts already styled in HTML, skip extra classes
+      // Don't apply extra styles to final custom blocks
       if (texts[index].includes('short-text')) return;
-
-      textEl.classList.add('center');
     }
 
     function createOverlayText(content) {
@@ -152,7 +145,7 @@
       div.style.fontFamily = fonts[Math.floor(Math.random() * fonts.length)];
 
       if (content.includes('short-text')) {
-        div.className = ''; // remove default positioning
+        div.className = ''; // removes positioning to preserve layout
         div.innerHTML = content;
       }
 
