@@ -6,11 +6,6 @@
   <title>NO ONE</title>
   <style>
     @font-face {
-      font-family: 'Migra';
-      src: url('Migra-Extrabold.otf') format('opentype');
-    }
-
-    @font-face {
       font-family: 'PPRightGrotesk';
       src: url('PPRightGroteskText-Regular.otf') format('opentype');
     }
@@ -57,7 +52,6 @@
     }
 
     .huge {
-      font-family: 'Migra', serif;
       font-size: 8vw;
       text-align: left;
       white-space: pre-line;
@@ -65,7 +59,6 @@
     }
 
     .small {
-      font-family: 'Migra', serif;
       font-size: 4vw;
       text-align: left;
       margin-top: 30px;
@@ -117,7 +110,7 @@
 </head>
 <body>
   <div id="container" class="scrollable">
-    <div id="text" class="text-block"></div>
+    <div id="text" class="text-block">Click the text multiple times</div>
   </div>
 
   <script>
@@ -129,37 +122,35 @@
       "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
       "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
       "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
+      "And the air is fresh. And all, from second to second, is as it is, revived to take on appearance. I quickly turn my eyes in order not to see again anything coming to an apparitional halt and dying. So only can I go on living, henceforward. By being reborn second by second. By seeing to it that thought does not once more start working in me, and within me refashion the void that goes with the vanity of building things.",
+      "To think of death, to pray. It may be that there is one who yet has need of this, and it is to his need that the bells give voice. I no longer have any such need, for the reason that I am dying every instant, and being born anew and without memories: alive and whole, no longer in myself, but in everything outside.",
       "NO\nLONGER\nMYSELF",
       "NO ONE"
     ];
 
     const fonts = [
-      "'PPRightGrotesk'", 'Helvetica', 'Georgia', 'Arial', 'Times New Roman', 'Verdana'
+      "'PPRightGrotesk'", "'PPRightGrotesk'", "'PPRightGrotesk'"
     ];
 
     let index = 0;
-    let rounds = 0;
     let overlayMode = false;
 
     function updateText() {
-      textEl.className = 'text-block';
-      textEl.style.opacity = 1;
-      textEl.style.position = 'relative';
-
       const current = texts[index];
 
       if (current === "NO\nLONGER\nMYSELF") {
         container.innerHTML = `
           <div class="centered-block">
-            <div class="huge">${current}</div>
+            <div class="huge" style="font-family: 'PPRightGrotesk'">${current}</div>
           </div>`;
       } else if (current === "NO ONE") {
         container.innerHTML = `
           <div class="centered-block">
-            <div class="small">NO ONE</div>
+            <div class="small" style="font-family: 'PPRightGrotesk'">NO ONE</div>
           </div>`;
       } else {
-        container.innerHTML = `<div id="text" class="text-block">${current}</div>`;
+        container.innerHTML = `
+          <div id="text" class="text-block" style="font-family: 'PPRightGrotesk'">${current}</div>`;
       }
     }
 
@@ -207,16 +198,10 @@
       setTimeout(() => {
         index++;
         if (index >= texts.length) {
-          index = 0;
-          rounds++;
-        }
-
-        if (rounds >= 2) {
           overlayMode = true;
           container.innerHTML = '';
           return;
         }
-
         updateText();
       }, 600);
     });
