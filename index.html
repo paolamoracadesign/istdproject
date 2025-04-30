@@ -129,10 +129,8 @@
   </style>
 </head>
 <body>
-  <div id="container" class="scrollable">
-    <!-- Il testo apparirà qui -->
-  </div>
-  <div id="hint" class="hint">Click anywhere to continue</div>
+  <div id="container" class="scrollable"></div>
+  <div id="hint" class="hint">Click anywhere to continue until you'll see <em>NO ONE</em></div>
 
   <script>
     const container = document.getElementById('container');
@@ -152,7 +150,6 @@
     ];
 
     let index = 0;
-    let rounds = 0;
     let overlayMode = false;
 
     function updateText() {
@@ -225,18 +222,11 @@
       }
 
       const currentBlock = document.getElementById('text');
-      if (currentBlock) {
-        currentBlock.classList.add('fade-out');
-      }
+      if (currentBlock) currentBlock.classList.add('fade-out');
 
       setTimeout(() => {
         index++;
         if (index >= texts.length) {
-          index = 0;
-          rounds++;
-        }
-
-        if (rounds >= 2) {
           overlayMode = true;
           container.innerHTML = '';
           hint.classList.add('hidden');
