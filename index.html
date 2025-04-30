@@ -28,9 +28,9 @@
       height: 100vh;
       overflow-y: auto;
       display: flex;
-      justify-content: center;
-      align-items: center;
       flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
     }
 
     .text-block {
@@ -43,9 +43,7 @@
       user-select: none;
       opacity: 1;
       transition: opacity 0.6s ease;
-      position: relative;
       word-break: break-word;
-      padding: 20px;
     }
 
     .centered-content {
@@ -60,7 +58,6 @@
     .huge {
       font-family: 'Migra', serif;
       font-size: 8vw;
-      text-align: left;
       white-space: pre-line;
       line-height: 1.1;
     }
@@ -68,7 +65,6 @@
     .small {
       font-family: 'Migra', serif;
       font-size: 4vw;
-      text-align: left;
       margin-top: 30px;
     }
 
@@ -99,20 +95,20 @@
       word-break: break-word;
     }
 
-    #click-hint {
+    .hint {
       position: fixed;
-      bottom: 20px;
+      bottom: 15px;
       left: 50%;
       transform: translateX(-50%);
       font-size: 14px;
-      opacity: 0.6;
-      font-family: 'PPRightGrotesk', sans-serif;
+      opacity: 0.7;
+      user-select: none;
       pointer-events: none;
-      transition: opacity 0.4s ease;
+      z-index: 1000;
     }
 
-    #click-hint.hidden {
-      opacity: 0;
+    .hidden {
+      display: none;
     }
 
     @media (max-width: 600px) {
@@ -134,13 +130,13 @@
 </head>
 <body>
   <div id="container" class="scrollable">
-    <div id="text" class="text-block">Click on the text to continue.</div>
+    <!-- Il testo apparirà qui -->
   </div>
-  <div id="click-hint">Click to continue...</div>
+  <div id="hint" class="hint">Click anywhere to continue</div>
 
   <script>
     const container = document.getElementById('container');
-    const hint = document.getElementById('click-hint');
+    const hint = document.getElementById('hint');
 
     const texts = [
       "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
@@ -166,22 +162,28 @@
       const current = texts[index];
 
       if (current === "NO\nLONGER\nMYSELF") {
+        container.style.alignItems = 'flex-start';
         const block = document.createElement('div');
         block.className = 'centered-content';
-        block.innerHTML = `<div class="huge">${current}</div>`;
+        block.innerHTML = `<div id="text" class="huge">${current}</div>`;
         container.appendChild(block);
       } else if (current === "NO ONE") {
+        container.style.alignItems = 'flex-start';
         const block = document.createElement('div');
         block.className = 'centered-content';
-        block.innerHTML = `<div class="small">NO ONE</div>`;
+        block.innerHTML = `<div id="text" class="small">NO ONE</div>`;
         container.appendChild(block);
       } else {
+        container.style.alignItems = 'flex-start';
         const textBlock = document.createElement('div');
         textBlock.id = 'text';
         textBlock.className = 'text-block';
         textBlock.textContent = current;
+        textBlock.style.paddingBottom = '60px';
         container.appendChild(textBlock);
       }
+
+      container.scrollTop = 0;
     }
 
     function createOverlay(content) {
@@ -213,7 +215,6 @@
 
     document.body.addEventListener('click', () => {
       if (overlayMode) {
-        hint.classList.add('hidden');
         const current = texts[Math.floor(Math.random() * texts.length)];
         if (current.length < 80) {
           createOverlay(current);
@@ -224,7 +225,9 @@
       }
 
       const currentBlock = document.getElementById('text');
-      if (currentBlock) currentBlock.classList.add('fade-out');
+      if (currentBlock) {
+        currentBlock.classList.add('fade-out');
+      }
 
       setTimeout(() => {
         index++;
