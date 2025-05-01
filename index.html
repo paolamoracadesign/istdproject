@@ -173,7 +173,7 @@
         block.className = 'centered-content';
         block.innerHTML = `<div id="text" class="small">NO ONE</div>`;
         container.appendChild(block);
-        hint.classList.remove('hidden'); // Show hint again
+        hint.classList.remove('hidden');
       } else {
         container.style.alignItems = 'flex-start';
         const textBlock = document.createElement('div');
@@ -222,17 +222,32 @@
         clickCount++;
 
         const overlaysToCreate = Math.min(1 + Math.floor(clickCount / 2), 20);
-
         for (let i = 0; i < overlaysToCreate; i++) {
           const current = texts[Math.floor(Math.random() * texts.length)];
           const content =
             current.length < 80 ? current : splitAndOverlay(current);
-          const useMigra = Math.random() < 0.3; // 30% chance for big Migra
+          const useMigra = Math.random() < 0.3;
           createOverlay(content, useMigra);
         }
 
         if (clickCount > 20) {
           document.body.style.background = '#ffffff';
+
+          // Only show once
+          if (!document.getElementById('final-message')) {
+            const final = document.createElement('div');
+            final.id = 'final-message';
+            final.textContent = 'no one';
+            final.style.position = 'fixed';
+            final.style.top = '50%';
+            final.style.left = '50%';
+            final.style.transform = 'translate(-50%, -50%)';
+            final.style.fontFamily = 'Migra, serif';
+            final.style.fontSize = '3vw';
+            final.style.color = 'rgba(0, 0, 0, 0.9)';
+            final.style.zIndex = '2000';
+            document.body.appendChild(final);
+          }
         }
 
         return;
