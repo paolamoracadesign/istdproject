@@ -126,13 +126,8 @@
       .overlay {
         max-width: 80%;
       }
-      .final-text {
-        font-size: 20px;
-        max-width: 90%;
-      }
     }
 
-    /* Fading effect for the background color change */
     .background-fade {
       background-color: white;
       transition: background-color 3s ease-in-out;
@@ -141,8 +136,8 @@
     .final-text {
       display: none;
       font-family: 'Migra', serif;
-      font-size: 24px; /* Correzione qui */
-      color: #1A1A1A; /* 90% black */
+      font-size: 24px;
+      color: #1A1A1A;
       position: fixed;
       top: 50%;
       left: 50%;
@@ -152,6 +147,9 @@
       transition: opacity 2s ease-in-out;
       text-align: center;
       padding: 10px;
+      width: 100vw;
+      max-width: 90%;
+      box-sizing: border-box;
     }
   </style>
 </head>
