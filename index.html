@@ -126,6 +126,10 @@
       .overlay {
         max-width: 80%;
       }
+      .final-text {
+        font-size: 20px;
+        max-width: 90%;
+      }
     }
 
     /* Fading effect for the background color change */
@@ -137,7 +141,7 @@
     .final-text {
       display: none;
       font-family: 'Migra', serif;
-      font-size: 1.5vw;
+      font-size: 24px; /* Correzione qui */
       color: #1A1A1A; /* 90% black */
       position: fixed;
       top: 50%;
@@ -146,6 +150,8 @@
       opacity: 0;
       z-index: 1001;
       transition: opacity 2s ease-in-out;
+      text-align: center;
+      padding: 10px;
     }
   </style>
 </head>
@@ -191,7 +197,7 @@
         block.className = 'centered-content';
         block.innerHTML = `<div id="text" class="small">NO ONE</div>`;
         container.appendChild(block);
-        hint.classList.remove('hidden'); // restore hint after NO ONE
+        hint.classList.remove('hidden');
       } else {
         container.style.alignItems = 'flex-start';
         const textBlock = document.createElement('div');
@@ -227,7 +233,7 @@
     function splitAndOverlay(text) {
       const fragments = text.split(/[.,;!?]+/).filter(f => f.trim().length > 10);
       const fragment = fragments[Math.floor(Math.random() * fragments.length)];
-      const useMigra = Math.random() < 0.3; // 30% chance to use Migra
+      const useMigra = Math.random() < 0.3;
       createOverlay(fragment.trim(), useMigra);
     }
 
@@ -237,7 +243,7 @@
       if (overlayMode) {
         clickCount++;
 
-        let overlaysToAdd = Math.min(clickCount, 6); // more overlays as clicks increase
+        let overlaysToAdd = Math.min(clickCount, 6);
         for (let i = 0; i < overlaysToAdd; i++) {
           const current = texts[Math.floor(Math.random() * texts.length)];
           if (current.length < 80) {
@@ -254,7 +260,6 @@
             finalText.style.display = 'block';
             finalText.style.opacity = 1;
           }, 2000);
-
         }
 
         return;
