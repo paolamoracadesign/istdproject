@@ -22,10 +22,14 @@
       font-family: 'PPRightGrotesk', sans-serif;
       overflow: hidden;
       color: white;
+      transition: background 2s ease;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
 
     .scrollable {
-      height: 100vh;
+      height: 100%;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
@@ -112,29 +116,63 @@
     }
 
     @media (max-width: 600px) {
+      body {
+        font-size: 14px;
+        background-color: #f3f3f3;
+      }
+
       .text-block {
         font-size: 16pt;
         margin: 20px auto;
       }
+
       .huge {
         font-size: 10vw;
       }
+
       .small {
         font-size: 6vw;
       }
+
       .overlay {
         max-width: 80%;
       }
+
+      .final-text {
+        font-size: 4vw;
+      }
+    }
+
+    /* Fading effect for the background color change */
+    .background-fade {
+      background-color: white;
+      transition: background-color 3s ease-in-out;
+    }
+
+    .final-text {
+      display: none;
+      font-family: 'Migra', serif;
+      font-size: 1.5vw;
+      color: #1A1A1A; /* 90% black */
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      z-index: 1001;
+      transition: opacity 2s ease-in-out;
     }
   </style>
 </head>
 <body>
   <div id="container" class="scrollable"></div>
   <div id="hint" class="hint">Click anywhere to continue until you'll see <em>NO ONE</em></div>
+  <div id="final-text" class="final-text">no one</div>
 
   <script>
     const container = document.getElementById('container');
     const hint = document.getElementById('hint');
+    const finalText = document.getElementById('final-text');
 
     const texts = [
       "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
@@ -212,39 +250,13 @@
 
     document.body.addEventListener('click', () => {
       if (overlayMode) {
+        const current = texts[Math.floor(Math.random() * texts.length)];
+        if (current.length < 80) {
+          splitAndOverlay(current);
+        } else {
+          splitAndOverlay(current);
+        }
         clickCount++;
-
-        let overlaysToAdd = Math.min(clickCount, 6); // more overlays as clicks increase
-        for (let i = 0; i < overlaysToAdd; i++) {
-          const current = texts[Math.floor(Math.random() * texts.length)];
-          if (current.length < 80) {
-            createOverlay(current, Math.random() < 0.3);
-          } else {
-            splitAndOverlay(current);
-          }
-        }
-
-        if (clickCount > 20) {
-          document.body.style.background = '#ffffff';
-
-          requestAnimationFrame(() => {
-            if (!document.getElementById('final-message')) {
-              const final = document.createElement('div');
-              final.id = 'final-message';
-              final.textContent = 'no one';
-              final.style.position = 'fixed';
-              final.style.top = '50%';
-              final.style.left = '50%';
-              final.style.transform = 'translate(-50%, -50%)';
-              final.style.fontFamily = 'Migra, serif';
-              final.style.fontSize = '1.5vw'; // smaller than before
-              final.style.color = '#1A1A1A'; // 90% black
-              final.style.zIndex = '2000';
-              document.body.appendChild(final);
-            }
-          });
-        }
-
         return;
       }
 
@@ -256,12 +268,21 @@
         if (index >= texts.length) {
           overlayMode = true;
           container.innerHTML = '';
+          hint.classList.add('hidden');
+          document.body.classList.add('background-fade'); // make background white
           return;
         }
 
         updateText();
       }, 600);
     });
+
+    // Final step: make the "no one" appear when the page is completely white
+    setInterval(() => {
+      if (document.body.classList.contains('background-fade') && clickCount > 20) {
+        finalText.style.opacity = 1; // Show "no one" text after background is white
+      }
+    }, 2000);
   </script>
 </body>
 </html>
