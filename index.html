@@ -22,6 +22,7 @@
       font-family: 'PPRightGrotesk', sans-serif;
       overflow: hidden;
       color: white;
+      transition: background 3s ease;
     }
 
     .scrollable {
@@ -93,6 +94,7 @@
       line-height: 1.4;
       max-width: 40%;
       word-break: break-word;
+      z-index: 100;
     }
 
     .hint {
@@ -139,8 +141,8 @@
     const texts = [
       "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
       "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
-      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
-      "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
+      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others...",
+      "No name. No memory today of yesterday's name; of today's name tomorrow...",
       "NO\nLONGER\nMYSELF",
       "NO ONE"
     ];
@@ -151,6 +153,7 @@
 
     let index = 0;
     let overlayMode = false;
+    let clickCount = 0;
 
     function updateText() {
       container.innerHTML = '';
@@ -170,9 +173,7 @@
         block.className = 'centered-content';
         block.innerHTML = `<div id="text" class="small">NO ONE</div>`;
         container.appendChild(block);
-
-        // Show the hint again after "NO ONE"
-        hint.classList.remove('hidden');
+        hint.classList.remove('hidden'); // Show hint again
       } else {
         container.style.alignItems = 'flex-start';
         const textBlock = document.createElement('div');
@@ -186,20 +187,23 @@
       container.scrollTop = 0;
     }
 
-    function createOverlay(content) {
+    function createOverlay(content, useMigra = false) {
       const div = document.createElement('div');
       div.className = 'overlay';
 
       const isVertical = Math.random() < 0.4;
-      const font = fonts[Math.floor(Math.random() * fonts.length)];
+      const font = useMigra ? 'Migra' : fonts[Math.floor(Math.random() * fonts.length)];
+      const fontSize = useMigra
+        ? `${Math.random() * 20 + 28}px`
+        : `${Math.random() * 14 + 14}px`;
 
       div.innerHTML = content;
-      div.style.top = `${Math.random() * 90}%`;
-      div.style.left = `${Math.random() * 90}%`;
+      div.style.top = `${Math.random() * 100}%`;
+      div.style.left = `${Math.random() * 100}%`;
       div.style.transform = isVertical
         ? 'translate(-50%, -50%) rotate(90deg)'
         : `translate(-50%, -50%) rotate(${Math.random() * 20 - 10}deg)`;
-      div.style.fontSize = `${Math.random() * 14 + 14}px`;
+      div.style.fontSize = fontSize;
       div.style.fontFamily = font;
 
       document.body.appendChild(div);
@@ -208,22 +212,29 @@
     function splitAndOverlay(text) {
       const fragments = text.split(/[.,;!?]+/).filter(f => f.trim().length > 10);
       const fragment = fragments[Math.floor(Math.random() * fragments.length)];
-      createOverlay(fragment.trim());
+      return fragment.trim();
     }
 
     updateText();
 
     document.body.addEventListener('click', () => {
       if (overlayMode) {
-        // Add multiple overlays per click
-        for (let i = 0; i < 5; i++) {
+        clickCount++;
+
+        const overlaysToCreate = Math.min(1 + Math.floor(clickCount / 2), 20);
+
+        for (let i = 0; i < overlaysToCreate; i++) {
           const current = texts[Math.floor(Math.random() * texts.length)];
-          if (current.length < 80) {
-            createOverlay(current);
-          } else {
-            splitAndOverlay(current);
-          }
+          const content =
+            current.length < 80 ? current : splitAndOverlay(current);
+          const useMigra = Math.random() < 0.3; // 30% chance for big Migra
+          createOverlay(content, useMigra);
         }
+
+        if (clickCount > 20) {
+          document.body.style.background = '#ffffff';
+        }
+
         return;
       }
 
@@ -235,7 +246,7 @@
         if (index >= texts.length) {
           overlayMode = true;
           container.innerHTML = '';
-          hint.classList.remove('hidden'); // Keep hint visible in overlay mode
+          hint.classList.remove('hidden');
           return;
         }
 
