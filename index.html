@@ -233,7 +233,6 @@
         if (clickCount > 20) {
           document.body.style.background = '#ffffff';
 
-          // Only show once
           if (!document.getElementById('final-message')) {
             const final = document.createElement('div');
             final.id = 'final-message';
@@ -244,7 +243,7 @@
             final.style.transform = 'translate(-50%, -50%)';
             final.style.fontFamily = 'Migra, serif';
             final.style.fontSize = '3vw';
-            final.style.color = 'rgba(0, 0, 0, 0.9)';
+            final.style.color = '#1A1A1A'; // 90% black CMYK approximation
             final.style.zIndex = '2000';
             document.body.appendChild(final);
           }
