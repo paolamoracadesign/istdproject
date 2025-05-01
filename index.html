@@ -170,6 +170,9 @@
         block.className = 'centered-content';
         block.innerHTML = `<div id="text" class="small">NO ONE</div>`;
         container.appendChild(block);
+
+        // Show the hint again after "NO ONE"
+        hint.classList.remove('hidden');
       } else {
         container.style.alignItems = 'flex-start';
         const textBlock = document.createElement('div');
@@ -212,11 +215,14 @@
 
     document.body.addEventListener('click', () => {
       if (overlayMode) {
-        const current = texts[Math.floor(Math.random() * texts.length)];
-        if (current.length < 80) {
-          createOverlay(current);
-        } else {
-          splitAndOverlay(current);
+        // Add multiple overlays per click
+        for (let i = 0; i < 5; i++) {
+          const current = texts[Math.floor(Math.random() * texts.length)];
+          if (current.length < 80) {
+            createOverlay(current);
+          } else {
+            splitAndOverlay(current);
+          }
         }
         return;
       }
@@ -229,7 +235,7 @@
         if (index >= texts.length) {
           overlayMode = true;
           container.innerHTML = '';
-          hint.classList.add('hidden');
+          hint.classList.remove('hidden'); // Keep hint visible in overlay mode
           return;
         }
 
