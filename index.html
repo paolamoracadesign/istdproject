@@ -22,7 +22,6 @@
       font-family: 'PPRightGrotesk', sans-serif;
       overflow: hidden;
       color: white;
-      transition: background 3s ease;
     }
 
     .scrollable {
@@ -94,7 +93,6 @@
       line-height: 1.4;
       max-width: 40%;
       word-break: break-word;
-      z-index: 100;
     }
 
     .hint {
@@ -141,16 +139,13 @@
     const texts = [
       "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
       "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
-      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others...",
-      "No name. No memory today of yesterday's name; of today's name tomorrow...",
+      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
+      "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
       "NO\nLONGER\nMYSELF",
       "NO ONE"
     ];
 
-    const fonts = [
-      "'PPRightGrotesk'", 'Helvetica', 'Georgia', 'Arial', 'Times New Roman', 'Verdana'
-    ];
-
+    const fonts = ["'PPRightGrotesk'", 'Helvetica', 'Georgia', 'Arial', 'Times New Roman', 'Verdana'];
     let index = 0;
     let overlayMode = false;
     let clickCount = 0;
@@ -173,7 +168,7 @@
         block.className = 'centered-content';
         block.innerHTML = `<div id="text" class="small">NO ONE</div>`;
         container.appendChild(block);
-        hint.classList.remove('hidden');
+        hint.classList.remove('hidden'); // restore hint after NO ONE
       } else {
         container.style.alignItems = 'flex-start';
         const textBlock = document.createElement('div');
@@ -193,17 +188,14 @@
 
       const isVertical = Math.random() < 0.4;
       const font = useMigra ? 'Migra' : fonts[Math.floor(Math.random() * fonts.length)];
-      const fontSize = useMigra
-        ? `${Math.random() * 20 + 28}px`
-        : `${Math.random() * 14 + 14}px`;
 
       div.innerHTML = content;
-      div.style.top = `${Math.random() * 100}%`;
-      div.style.left = `${Math.random() * 100}%`;
+      div.style.top = `${Math.random() * 90}%`;
+      div.style.left = `${Math.random() * 90}%`;
       div.style.transform = isVertical
         ? 'translate(-50%, -50%) rotate(90deg)'
         : `translate(-50%, -50%) rotate(${Math.random() * 20 - 10}deg)`;
-      div.style.fontSize = fontSize;
+      div.style.fontSize = `${Math.random() * 18 + 18}px`;
       div.style.fontFamily = font;
 
       document.body.appendChild(div);
@@ -212,7 +204,8 @@
     function splitAndOverlay(text) {
       const fragments = text.split(/[.,;!?]+/).filter(f => f.trim().length > 10);
       const fragment = fragments[Math.floor(Math.random() * fragments.length)];
-      return fragment.trim();
+      const useMigra = Math.random() < 0.3; // 30% chance to use Migra
+      createOverlay(fragment.trim(), useMigra);
     }
 
     updateText();
@@ -221,32 +214,35 @@
       if (overlayMode) {
         clickCount++;
 
-        const overlaysToCreate = Math.min(1 + Math.floor(clickCount / 2), 20);
-        for (let i = 0; i < overlaysToCreate; i++) {
+        let overlaysToAdd = Math.min(clickCount, 6); // more overlays as clicks increase
+        for (let i = 0; i < overlaysToAdd; i++) {
           const current = texts[Math.floor(Math.random() * texts.length)];
-          const content =
-            current.length < 80 ? current : splitAndOverlay(current);
-          const useMigra = Math.random() < 0.3;
-          createOverlay(content, useMigra);
+          if (current.length < 80) {
+            createOverlay(current, Math.random() < 0.3);
+          } else {
+            splitAndOverlay(current);
+          }
         }
 
         if (clickCount > 20) {
           document.body.style.background = '#ffffff';
 
-          if (!document.getElementById('final-message')) {
-            const final = document.createElement('div');
-            final.id = 'final-message';
-            final.textContent = 'no one';
-            final.style.position = 'fixed';
-            final.style.top = '50%';
-            final.style.left = '50%';
-            final.style.transform = 'translate(-50%, -50%)';
-            final.style.fontFamily = 'Migra, serif';
-            final.style.fontSize = '3vw';
-            final.style.color = '#1A1A1A'; // 90% black CMYK approximation
-            final.style.zIndex = '2000';
-            document.body.appendChild(final);
-          }
+          requestAnimationFrame(() => {
+            if (!document.getElementById('final-message')) {
+              const final = document.createElement('div');
+              final.id = 'final-message';
+              final.textContent = 'no one';
+              final.style.position = 'fixed';
+              final.style.top = '50%';
+              final.style.left = '50%';
+              final.style.transform = 'translate(-50%, -50%)';
+              final.style.fontFamily = 'Migra, serif';
+              final.style.fontSize = '1.5vw'; // smaller than before
+              final.style.color = '#1A1A1A'; // 90% black
+              final.style.zIndex = '2000';
+              document.body.appendChild(final);
+            }
+          });
         }
 
         return;
@@ -260,7 +256,6 @@
         if (index >= texts.length) {
           overlayMode = true;
           container.innerHTML = '';
-          hint.classList.remove('hidden');
           return;
         }
 
