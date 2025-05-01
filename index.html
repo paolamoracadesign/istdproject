@@ -23,13 +23,10 @@
       overflow: hidden;
       color: white;
       transition: background 2s ease;
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
     }
 
     .scrollable {
-      height: 100%;
+      height: 100vh;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
@@ -116,30 +113,18 @@
     }
 
     @media (max-width: 600px) {
-      body {
-        font-size: 14px;
-        background-color: #f3f3f3;
-      }
-
       .text-block {
         font-size: 16pt;
         margin: 20px auto;
       }
-
       .huge {
         font-size: 10vw;
       }
-
       .small {
         font-size: 6vw;
       }
-
       .overlay {
         max-width: 80%;
-      }
-
-      .final-text {
-        font-size: 4vw;
       }
     }
 
@@ -250,13 +235,28 @@
 
     document.body.addEventListener('click', () => {
       if (overlayMode) {
-        const current = texts[Math.floor(Math.random() * texts.length)];
-        if (current.length < 80) {
-          splitAndOverlay(current);
-        } else {
-          splitAndOverlay(current);
-        }
         clickCount++;
+
+        let overlaysToAdd = Math.min(clickCount, 6); // more overlays as clicks increase
+        for (let i = 0; i < overlaysToAdd; i++) {
+          const current = texts[Math.floor(Math.random() * texts.length)];
+          if (current.length < 80) {
+            createOverlay(current, Math.random() < 0.3);
+          } else {
+            splitAndOverlay(current);
+          }
+        }
+
+        if (clickCount > 20) {
+          document.body.classList.add('background-fade');
+
+          setTimeout(() => {
+            finalText.style.display = 'block';
+            finalText.style.opacity = 1;
+          }, 2000);
+
+        }
+
         return;
       }
 
@@ -268,21 +268,12 @@
         if (index >= texts.length) {
           overlayMode = true;
           container.innerHTML = '';
-          hint.classList.add('hidden');
-          document.body.classList.add('background-fade'); // make background white
           return;
         }
 
         updateText();
       }, 600);
     });
-
-    // Final step: make the "no one" appear when the page is completely white
-    setInterval(() => {
-      if (document.body.classList.contains('background-fade') && clickCount > 20) {
-        finalText.style.opacity = 1; // Show "no one" text after background is white
-      }
-    }, 2000);
   </script>
 </body>
 </html>
