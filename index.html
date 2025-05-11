@@ -262,7 +262,7 @@
 
         if (clickCount > 20) {
           document.body.classList.add('background-fade');
-          hint.classList.add('hidden'); // Nasconde l'hint nella schermata bianca
+          hint.classList.add('hidden');
 
           setTimeout(() => {
             finalText.style.display = 'block';
@@ -277,13 +277,12 @@
       if (currentBlock) currentBlock.classList.add('fade-out');
 
       setTimeout(() => {
-        index++;
-        if (index >= texts.length) {
+        if (index + 1 >= texts.length) {
           overlayMode = true;
-          container.innerHTML = '';
           return;
         }
 
+        index++;
         updateText();
       }, 600);
     });
