@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NO ONE</title>
   <style>
     @font-face {
@@ -245,10 +245,11 @@
     updateText();
 
     document.body.addEventListener('click', () => {
-      if (overlayMode) {
-        clickCount++;
+      clickCount++;
 
-        let overlaysToAdd = Math.min(clickCount, 6);
+      if (overlayMode) {
+        // Aumenta progressivamente il numero di overlay in base al numero di clic
+        let overlaysToAdd = Math.min(clickCount * 2, 50); // Ad esempio, al primo clic 2, al secondo 4, etc.
         for (let i = 0; i < overlaysToAdd; i++) {
           const current = texts[Math.floor(Math.random() * texts.length)];
           if (current.length < 80) {
@@ -286,4 +287,4 @@
     });
   </script>
 </body>
-</html>
+</
