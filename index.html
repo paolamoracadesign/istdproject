@@ -54,7 +54,7 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: flex-start;
+      align-items: center;
       height: 100vh;
       padding: 0 20px;
       text-align: left;
@@ -65,6 +65,7 @@
       font-size: 8vw;
       white-space: pre-line;
       line-height: 1.1;
+      text-align: left;
     }
 
     .small {
@@ -103,19 +104,19 @@
 
     .hint {
       position: fixed;
-      bottom: 15px;
-      left: 50%;
-      transform: translateX(-50%);
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 10px 0;
       font-size: 16px;
       font-weight: bold;
-      opacity: 0.8;
+      text-align: center;
+      opacity: 0.9;
       user-select: none;
       pointer-events: none;
       z-index: 1000;
-      background: rgba(255, 255, 255, 0.15);
-      padding: 12px 24px;
-      border-radius: 20px;
-      backdrop-filter: blur(8px);
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
     }
 
     .hidden {
@@ -138,7 +139,6 @@
       }
       .hint {
         font-size: 14px;
-        padding: 10px 20px;
       }
     }
 
@@ -201,7 +201,7 @@
       const current = texts[index];
 
       if (current === "NO\nLONGER\nMYSELF") {
-        container.style.alignItems = 'flex-start';
+        container.style.alignItems = 'center';
         const block = document.createElement('div');
         block.className = 'centered-content';
         block.innerHTML = `<div id="text" class="huge">${current}</div>`;
@@ -229,14 +229,19 @@
     function createOverlay(content, useMigra = false) {
       const div = document.createElement('div');
       div.className = 'overlay';
+
       const isVertical = Math.random() < 0.4;
       const font = useMigra ? 'Migra' : fonts[Math.floor(Math.random() * fonts.length)];
+
       div.innerHTML = content;
       div.style.top = `${Math.random() * 90}%`;
       div.style.left = `${Math.random() * 90}%`;
-      div.style.transform = isVertical ? 'translate(-50%, -50%) rotate(90deg)' : `translate(-50%, -50%) rotate(${Math.random() * 20 - 10}deg)`;
+      div.style.transform = isVertical
+        ? 'translate(-50%, -50%) rotate(90deg)'
+        : `translate(-50%, -50%) rotate(${Math.random() * 20 - 10}deg)`;
       div.style.fontSize = `${Math.random() * 18 + 18}px`;
       div.style.fontFamily = font;
+
       document.body.appendChild(div);
     }
 
@@ -250,10 +255,9 @@
     updateText();
 
     document.body.addEventListener('click', () => {
-      const currentBlock = document.getElementById('text');
-
       if (overlayMode) {
         clickCount++;
+
         let overlaysToAdd = Math.min(clickCount, 6);
         for (let i = 0; i < overlaysToAdd; i++) {
           const current = texts[Math.floor(Math.random() * texts.length)];
@@ -263,17 +267,21 @@
             splitAndOverlay(current);
           }
         }
+
         if (clickCount > 20) {
           document.body.classList.add('background-fade');
           hint.classList.add('hidden');
+
           setTimeout(() => {
             finalText.style.display = 'block';
             finalText.style.opacity = 1;
           }, 2000);
         }
+
         return;
       }
 
+      const currentBlock = document.getElementById('text');
       if (currentBlock) currentBlock.classList.add('fade-out');
 
       setTimeout(() => {
@@ -281,15 +289,6 @@
         if (index >= texts.length) {
           overlayMode = true;
           container.innerHTML = '';
-          for (let i = 0; i < 5; i++) {
-            const current = texts[Math.floor(Math.random() * texts.length)];
-            if (current.length < 80) {
-              createOverlay(current, Math.random() < 0.3);
-            } else {
-              splitAndOverlay(current);
-            }
-          }
-          clickCount = 1;
           return;
         }
         updateText();
