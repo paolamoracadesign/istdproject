@@ -102,14 +102,20 @@
 
     .hint {
       position: fixed;
-      bottom: 15px;
+      bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 14px;
-      opacity: 0.7;
+      font-size: 20px;
+      font-weight: 500;
+      opacity: 1;
       user-select: none;
       pointer-events: none;
       z-index: 1000;
+      text-align: center;
+      color: white;
+      background-color: rgba(0, 0, 0, 0.3);
+      padding: 10px 20px;
+      border-radius: 8px;
     }
 
     .hidden {
@@ -156,7 +162,7 @@
 </head>
 <body>
   <div id="container" class="scrollable"></div>
-  <div id="hint" class="hint">Click anywhere to continue until you'll see <em>NO ONE</em></div>
+  <div id="hint" class="hint">Keep clicking anywhere until everything fades into the white cloud.</div>
   <div id="final-text" class="final-text">no one</div>
 
   <script>
@@ -193,7 +199,7 @@
       if (current === "NO\nLONGER\nMYSELF") {
         container.style.alignItems = 'flex-start';
         const block = document.createElement('div');
-        block.className = 'centered-content';
+        block.className = 'text-block';
         block.innerHTML = `<div id="text" class="huge">${current}</div>`;
         container.appendChild(block);
       } else if (current === "NO ONE") {
