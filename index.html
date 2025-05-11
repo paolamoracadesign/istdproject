@@ -54,10 +54,10 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: flex-start;
+      align-items: center;
       height: 100vh;
       padding: 0 20px;
-      text-align: left;
+      text-align: center;
     }
 
     .huge {
@@ -71,7 +71,6 @@
       font-family: 'Migra', serif;
       font-size: 4vw;
       margin-top: 30px;
-      text-align: center;
     }
 
     .fade-out {
@@ -106,9 +105,8 @@
       bottom: 15px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 20px;
-      font-weight: bold;
-      opacity: 0.9;
+      font-size: 14px;
+      opacity: 0.7;
       user-select: none;
       pointer-events: none;
       z-index: 1000;
@@ -158,7 +156,7 @@
 </head>
 <body>
   <div id="container" class="scrollable"></div>
-  <div id="hint" class="hint">Keep clicking anywhere until everything fades into the white cloud.</div>
+  <div id="hint" class="hint">Click anywhere to continue until you'll see <em>NO ONE</em></div>
   <div id="final-text" class="final-text">no one</div>
 
   <script>
@@ -262,7 +260,6 @@
 
         if (clickCount > 20) {
           document.body.classList.add('background-fade');
-          hint.classList.add('hidden'); // Nasconde l'hint nella schermata bianca
 
           setTimeout(() => {
             finalText.style.display = 'block';
@@ -280,7 +277,7 @@
         index++;
         if (index >= texts.length) {
           overlayMode = true;
-          container.innerHTML = '';
+          container.innerHTML = ''; // Keep final text visible
           return;
         }
 
