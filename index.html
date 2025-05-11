@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>NO ONE</title>
   <style>
     @font-face {
@@ -239,52 +239,4 @@
       const fragments = text.split(/[.,;!?]+/).filter(f => f.trim().length > 10);
       const fragment = fragments[Math.floor(Math.random() * fragments.length)];
       const useMigra = Math.random() < 0.3;
-      createOverlay(fragment.trim(), useMigra);
-    }
-
-    updateText();
-
-    document.body.addEventListener('click', () => {
-      clickCount++;
-
-      if (overlayMode) {
-        // Aumenta progressivamente il numero di overlay in base al numero di clic
-        let overlaysToAdd = Math.min(clickCount * 2, 50); // Ad esempio, al primo clic 2, al secondo 4, etc.
-        for (let i = 0; i < overlaysToAdd; i++) {
-          const current = texts[Math.floor(Math.random() * texts.length)];
-          if (current.length < 80) {
-            createOverlay(current, Math.random() < 0.3);
-          } else {
-            splitAndOverlay(current);
-          }
-        }
-
-        if (clickCount > 20) {
-          document.body.classList.add('background-fade');
-
-          setTimeout(() => {
-            finalText.style.display = 'block';
-            finalText.style.opacity = 1;
-          }, 2000);
-        }
-
-        return;
-      }
-
-      const currentBlock = document.getElementById('text');
-      if (currentBlock) currentBlock.classList.add('fade-out');
-
-      setTimeout(() => {
-        index++;
-        if (index >= texts.length) {
-          overlayMode = true;
-          container.innerHTML = ''; // Keep final text visible
-          return;
-        }
-
-        updateText();
-      }, 600);
-    });
-  </script>
-</body>
-</
+      createOverlay
