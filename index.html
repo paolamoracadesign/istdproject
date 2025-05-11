@@ -239,4 +239,51 @@
       const fragments = text.split(/[.,;!?]+/).filter(f => f.trim().length > 10);
       const fragment = fragments[Math.floor(Math.random() * fragments.length)];
       const useMigra = Math.random() < 0.3;
-      createOverlay
+      createOverlay(fragment.trim(), useMigra);
+    }
+
+    updateText();
+
+    document.body.addEventListener('click', () => {
+      if (overlayMode) {
+        clickCount++;
+
+        let overlaysToAdd = Math.min(clickCount, 3); // Aumentato più velocemente
+        for (let i = 0; i < overlaysToAdd; i++) {
+          const current = texts[Math.floor(Math.random() * texts.length)];
+          if (current.length < 80) {
+            createOverlay(current, Math.random() < 0.3);
+          } else {
+            splitAndOverlay(current);
+          }
+        }
+
+        if (clickCount > 15) {  // Ridotto il numero di clic necessari per il cambiamento
+          document.body.classList.add('background-fade');
+
+          setTimeout(() => {
+            finalText.style.display = 'block';
+            finalText.style.opacity = 1;
+          }, 2000);
+        }
+
+        return;
+      }
+
+      const currentBlock = document.getElementById('text');
+      if (currentBlock) currentBlock.classList.add('fade-out');
+
+      setTimeout(() => {
+        index++;
+        if (index >= texts.length) {
+          overlayMode = true;
+          container.innerHTML = ''; // Keep final text visible
+          return;
+        }
+
+        updateText();
+      }, 600);
+    });
+  </script>
+</body>
+</html>
