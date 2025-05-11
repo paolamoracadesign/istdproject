@@ -30,7 +30,7 @@
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
+      align-items: center;
       justify-content: flex-start;
     }
 
@@ -56,8 +56,9 @@
       justify-content: center;
       align-items: center;
       height: 100vh;
+      width: 100%;
       padding: 0 20px;
-      text-align: center;
+      text-align: left;
     }
 
     .huge {
@@ -65,13 +66,14 @@
       font-size: 8vw;
       white-space: pre-line;
       line-height: 1.1;
+      text-align: left;
     }
 
     .small {
       font-family: 'Migra', serif;
       font-size: 4vw;
-      white-space: pre-line;
-      line-height: 1.2;
+      margin-top: 30px;
+      text-align: center;
     }
 
     .fade-out {
@@ -103,23 +105,20 @@
 
     .hint {
       position: fixed;
-      bottom: 15px;
-      left: 50%;
-      transform: translateX(-50%);
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 12px 20px;
       font-size: 16px;
       font-weight: bold;
-      opacity: 0.85;
+      opacity: 0.95;
       user-select: none;
       pointer-events: none;
       z-index: 1000;
-      padding: 12px 30px;
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(12px);
-      border-radius: 30px;
+      backdrop-filter: blur(10px);
+      background: rgba(243, 151, 119, 0.3);
       color: white;
       text-align: center;
-      width: calc(100% - 40px);
-      max-width: 600px;
     }
 
     .hidden {
@@ -135,17 +134,14 @@
         font-size: 10vw;
       }
       .small {
-        font-size: 8vw;
+        font-size: 6vw;
       }
       .overlay {
         max-width: 80%;
       }
       .hint {
         font-size: 14px;
-        padding: 10px 20px;
-      }
-      .final-text {
-        font-size: 10vw;
+        padding: 10px;
       }
     }
 
@@ -184,7 +180,7 @@
     const texts = [
       "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
       "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
-      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
+      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession&nbsp;of&nbsp;something.",
       "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
       "NO\nLONGER\nMYSELF",
       "NO ONE"
@@ -208,9 +204,10 @@
       const current = texts[index];
 
       if (current === "NO\nLONGER\nMYSELF") {
-        container.style.alignItems = 'flex-start';
+        container.style.alignItems = 'center';
         const block = document.createElement('div');
         block.className = 'centered-content';
+        block.style.alignItems = 'flex-start';
         block.innerHTML = `<div id="text" class="huge">${current}</div>`;
         container.appendChild(block);
       } else if (current === "NO ONE") {
@@ -262,10 +259,9 @@
     updateText();
 
     document.body.addEventListener('click', () => {
-      const currentBlock = document.getElementById('text');
-
       if (overlayMode) {
         clickCount++;
+
         let overlaysToAdd = Math.min(clickCount, 6);
         for (let i = 0; i < overlaysToAdd; i++) {
           const current = texts[Math.floor(Math.random() * texts.length)];
@@ -279,36 +275,30 @@
         if (clickCount > 20) {
           document.body.classList.add('background-fade');
           hint.classList.add('hidden');
+
           setTimeout(() => {
             finalText.style.display = 'block';
             finalText.style.opacity = 1;
           }, 2000);
         }
+
         return;
       }
 
-      if (currentBlock) currentBlock.classList.add('fade-out');
+      const currentBlock = document.getElementById('text');
+      if (currentBlock) {
+        currentBlock.classList.add('fade-out');
 
-      setTimeout(() => {
-        index++;
-        if (index >= texts.length) return;
-
-        const next = texts[index];
-        if (next === "NO ONE") {
-          updateText(); // Show "NO ONE"
-          setTimeout(() => {
-            const block = document.getElementById('text');
-            if (block) block.classList.add('fade-out');
-
-            setTimeout(() => {
-              container.innerHTML = '';
-              overlayMode = true;
-            }, 600);
-          }, 300);
-        } else {
+        setTimeout(() => {
+          index++;
+          if (index >= texts.length) {
+            overlayMode = true;
+            container.innerHTML = '';
+            return;
+          }
           updateText();
-        }
-      }, 600);
+        }, 600);
+      }
     });
   </script>
 </body>
