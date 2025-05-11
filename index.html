@@ -1,3 +1,4 @@
+<!-- VERSIONE RISOLTA E RESPONSIVE -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -118,22 +119,6 @@
       display: none;
     }
 
-    @media (max-width: 600px) {
-      .text-block {
-        font-size: 16pt;
-        margin: 20px auto;
-      }
-      .huge {
-        font-size: 10vw;
-      }
-      .small {
-        font-size: 6vw;
-      }
-      .overlay {
-        max-width: 80%;
-      }
-    }
-
     .background-fade {
       background-color: white;
       transition: background-color 3s ease-in-out;
@@ -153,6 +138,26 @@
       transition: opacity 2s ease-in-out;
       text-align: center;
       white-space: nowrap;
+    }
+
+    @media (max-width: 600px) {
+      .text-block {
+        font-size: 16pt;
+        margin: 20px auto;
+      }
+      .huge {
+        font-size: 10vw;
+      }
+      .small {
+        font-size: 7vw;
+      }
+      .hint {
+        font-size: 14px;
+        bottom: 10px;
+      }
+      .final-text {
+        font-size: 10vw;
+      }
     }
   </style>
 </head>
@@ -204,6 +209,11 @@
         block.className = 'centered-content';
         block.innerHTML = `<div id="text" class="small">NO ONE</div>`;
         container.appendChild(block);
+
+        // AUTO-PASSA IN OVERLAY MODE SUBITO DOPO
+        setTimeout(() => {
+          overlayMode = true;
+        }, 1000);
       } else {
         container.style.alignItems = 'flex-start';
         const textBlock = document.createElement('div');
@@ -277,10 +287,7 @@
       if (currentBlock) currentBlock.classList.add('fade-out');
 
       setTimeout(() => {
-        if (index + 1 >= texts.length) {
-          overlayMode = true;
-          return;
-        }
+        if (index + 1 >= texts.length) return;
 
         index++;
         updateText();
