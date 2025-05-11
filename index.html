@@ -194,13 +194,13 @@
         container.style.alignItems = 'flex-start';
         const block = document.createElement('div');
         block.className = 'centered-content';
-        block.innerHTML = `<div id="text" class="huge">${current}</div>`;
+        block.innerHTML = <div id="text" class="huge">${current}</div>;
         container.appendChild(block);
       } else if (current === "NO ONE") {
         container.style.alignItems = 'center';
         const block = document.createElement('div');
         block.className = 'centered-content';
-        block.innerHTML = `<div id="text" class="small">NO ONE</div>`;
+        block.innerHTML = <div id="text" class="small">NO ONE</div>;
         container.appendChild(block);
       } else {
         container.style.alignItems = 'flex-start';
@@ -224,12 +224,12 @@
       const font = useMigra ? 'Migra' : fonts[Math.floor(Math.random() * fonts.length)];
 
       div.innerHTML = content;
-      div.style.top = `${Math.random() * 90}%`;
-      div.style.left = `${Math.random() * 90}%`;
+      div.style.top = ${Math.random() * 90}%;
+      div.style.left = ${Math.random() * 90}%;
       div.style.transform = isVertical
         ? 'translate(-50%, -50%) rotate(90deg)'
-        : `translate(-50%, -50%) rotate(${Math.random() * 20 - 10}deg)`;
-      div.style.fontSize = `${Math.random() * 18 + 18}px`;
+        : translate(-50%, -50%) rotate(${Math.random() * 20 - 10}deg);
+      div.style.fontSize = ${Math.random() * 18 + 18}px;
       div.style.fontFamily = font;
 
       document.body.appendChild(div);
@@ -248,7 +248,7 @@
       if (overlayMode) {
         clickCount++;
 
-        let overlaysToAdd = Math.min(clickCount, 3); // Aumentato più velocemente
+        let overlaysToAdd = Math.min(clickCount, 6);
         for (let i = 0; i < overlaysToAdd; i++) {
           const current = texts[Math.floor(Math.random() * texts.length)];
           if (current.length < 80) {
@@ -258,7 +258,7 @@
           }
         }
 
-        if (clickCount > 15) {  // Ridotto il numero di clic necessari per il cambiamento
+        if (clickCount > 20) {
           document.body.classList.add('background-fade');
 
           setTimeout(() => {
