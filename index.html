@@ -54,10 +54,10 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       height: 100vh;
       padding: 0 20px;
-      text-align: center;
+      text-align: left;
     }
 
     .huge {
@@ -71,6 +71,7 @@
       font-family: 'Migra', serif;
       font-size: 4vw;
       margin-top: 30px;
+      text-align: center;
     }
 
     .fade-out {
@@ -102,20 +103,15 @@
 
     .hint {
       position: fixed;
-      bottom: 20px;
+      bottom: 15px;
       left: 50%;
       transform: translateX(-50%);
       font-size: 20px;
-      font-weight: 500;
-      opacity: 1;
+      font-weight: bold;
+      opacity: 0.9;
       user-select: none;
       pointer-events: none;
       z-index: 1000;
-      text-align: center;
-      color: white;
-      background-color: rgba(0, 0, 0, 0.3);
-      padding: 10px 20px;
-      border-radius: 8px;
     }
 
     .hidden {
@@ -199,7 +195,7 @@
       if (current === "NO\nLONGER\nMYSELF") {
         container.style.alignItems = 'flex-start';
         const block = document.createElement('div');
-        block.className = 'text-block';
+        block.className = 'centered-content';
         block.innerHTML = `<div id="text" class="huge">${current}</div>`;
         container.appendChild(block);
       } else if (current === "NO ONE") {
@@ -266,6 +262,7 @@
 
         if (clickCount > 20) {
           document.body.classList.add('background-fade');
+          hint.classList.add('hidden'); // Nasconde l'hint nella schermata bianca
 
           setTimeout(() => {
             finalText.style.display = 'block';
