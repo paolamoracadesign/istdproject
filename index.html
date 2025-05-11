@@ -54,10 +54,10 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
       height: 100vh;
       padding: 0 20px;
-      text-align: center;
+      text-align: left;
     }
 
     .huge {
@@ -71,6 +71,7 @@
       font-family: 'Migra', serif;
       font-size: 4vw;
       margin-top: 30px;
+      text-align: center;
     }
 
     .fade-out {
@@ -105,8 +106,9 @@
       bottom: 15px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 14px;
-      opacity: 0.7;
+      font-size: 20px;
+      font-weight: bold;
+      opacity: 0.9;
       user-select: none;
       pointer-events: none;
       z-index: 1000;
@@ -156,7 +158,7 @@
 </head>
 <body>
   <div id="container" class="scrollable"></div>
-  <div id="hint" class="hint">Click anywhere to continue until you'll see <em>NO ONE</em></div>
+  <div id="hint" class="hint">Keep clicking anywhere until everything fades into the white cloud.</div>
   <div id="final-text" class="final-text">no one</div>
 
   <script>
@@ -194,13 +196,13 @@
         container.style.alignItems = 'flex-start';
         const block = document.createElement('div');
         block.className = 'centered-content';
-        block.innerHTML = <div id="text" class="huge">${current}</div>;
+        block.innerHTML = `<div id="text" class="huge">${current}</div>`;
         container.appendChild(block);
       } else if (current === "NO ONE") {
         container.style.alignItems = 'center';
         const block = document.createElement('div');
         block.className = 'centered-content';
-        block.innerHTML = <div id="text" class="small">NO ONE</div>;
+        block.innerHTML = `<div id="text" class="small">NO ONE</div>`;
         container.appendChild(block);
       } else {
         container.style.alignItems = 'flex-start';
@@ -224,12 +226,12 @@
       const font = useMigra ? 'Migra' : fonts[Math.floor(Math.random() * fonts.length)];
 
       div.innerHTML = content;
-      div.style.top = ${Math.random() * 90}%;
-      div.style.left = ${Math.random() * 90}%;
+      div.style.top = `${Math.random() * 90}%`;
+      div.style.left = `${Math.random() * 90}%`;
       div.style.transform = isVertical
         ? 'translate(-50%, -50%) rotate(90deg)'
-        : translate(-50%, -50%) rotate(${Math.random() * 20 - 10}deg);
-      div.style.fontSize = ${Math.random() * 18 + 18}px;
+        : `translate(-50%, -50%) rotate(${Math.random() * 20 - 10}deg)`;
+      div.style.fontSize = `${Math.random() * 18 + 18}px`;
       div.style.fontFamily = font;
 
       document.body.appendChild(div);
@@ -260,6 +262,7 @@
 
         if (clickCount > 20) {
           document.body.classList.add('background-fade');
+          hint.classList.add('hidden'); // Nasconde l'hint nella schermata bianca
 
           setTimeout(() => {
             finalText.style.display = 'block';
@@ -277,7 +280,7 @@
         index++;
         if (index >= texts.length) {
           overlayMode = true;
-          container.innerHTML = ''; // Keep final text visible
+          container.innerHTML = '';
           return;
         }
 
