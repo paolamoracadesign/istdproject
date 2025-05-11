@@ -54,10 +54,10 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: flex-start;
+      align-items: center;
       height: 100vh;
       padding: 0 20px;
-      text-align: left;
+      text-align: center;
     }
 
     .huge {
@@ -69,9 +69,9 @@
 
     .small {
       font-family: 'Migra', serif;
-      font-size: 6vw;
-      margin-top: 30px;
-      text-align: center;
+      font-size: 4vw;
+      white-space: pre-line;
+      line-height: 1.2;
     }
 
     .fade-out {
@@ -103,20 +103,23 @@
 
     .hint {
       position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 15px;
-      text-align: center;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
       font-size: 16px;
       font-weight: bold;
-      color: white;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
+      opacity: 0.85;
       user-select: none;
       pointer-events: none;
       z-index: 1000;
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 12px 30px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(12px);
+      border-radius: 30px;
+      color: white;
+      text-align: center;
+      width: calc(100% - 40px);
+      max-width: 600px;
     }
 
     .hidden {
@@ -128,27 +131,21 @@
         font-size: 16pt;
         margin: 20px auto;
       }
-
       .huge {
         font-size: 10vw;
       }
-
       .small {
-        font-size: 9vw;
+        font-size: 8vw;
       }
-
       .overlay {
         max-width: 80%;
       }
-
       .hint {
         font-size: 14px;
-        padding: 10px;
+        padding: 10px 20px;
       }
-
       .final-text {
-        font-size: 12vw;
-        padding: 0 20px;
+        font-size: 10vw;
       }
     }
 
@@ -187,7 +184,7 @@
     const texts = [
       "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
       "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
-      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession&nbsp;of&nbsp;something.",
+      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
       "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
       "NO\nLONGER\nMYSELF",
       "NO ONE"
@@ -222,7 +219,6 @@
         block.className = 'centered-content';
         block.innerHTML = `<div id="text" class="small">NO ONE</div>`;
         container.appendChild(block);
-        overlayMode = true; // Start overlay mode right after NO ONE
       } else {
         container.style.alignItems = 'flex-start';
         const textBlock = document.createElement('div');
@@ -266,9 +262,10 @@
     updateText();
 
     document.body.addEventListener('click', () => {
+      const currentBlock = document.getElementById('text');
+
       if (overlayMode) {
         clickCount++;
-
         let overlaysToAdd = Math.min(clickCount, 6);
         for (let i = 0; i < overlaysToAdd; i++) {
           const current = texts[Math.floor(Math.random() * texts.length)];
@@ -282,23 +279,35 @@
         if (clickCount > 20) {
           document.body.classList.add('background-fade');
           hint.classList.add('hidden');
-
           setTimeout(() => {
             finalText.style.display = 'block';
             finalText.style.opacity = 1;
           }, 2000);
         }
-
         return;
       }
 
-      const currentBlock = document.getElementById('text');
       if (currentBlock) currentBlock.classList.add('fade-out');
 
       setTimeout(() => {
         index++;
         if (index >= texts.length) return;
-        updateText();
+
+        const next = texts[index];
+        if (next === "NO ONE") {
+          updateText(); // Show "NO ONE"
+          setTimeout(() => {
+            const block = document.getElementById('text');
+            if (block) block.classList.add('fade-out');
+
+            setTimeout(() => {
+              container.innerHTML = '';
+              overlayMode = true;
+            }, 600);
+          }, 300);
+        } else {
+          updateText();
+        }
       }, 600);
     });
   </script>
