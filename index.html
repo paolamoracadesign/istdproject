@@ -26,10 +26,26 @@
     }
 
     .scrollable {
-      height: 100vh;
-      overflow-y: auto;
       padding: 40px 20px;
       display: block;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    @media (min-width: 769px) {
+      .scrollable {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow-y: auto;
+        padding: 60px;
+      }
+
+      .text-block {
+        max-height: 80vh;
+        overflow-y: auto;
+      }
     }
 
     .text-block {
@@ -198,23 +214,25 @@
 
       const current = texts[index];
 
-      if (current === "NO\nLONGER\nMYSELF" || current === "NO ONE") {
-        container.style.display = 'flex';
-        container.style.flexDirection = 'column';
-        container.style.justifyContent = 'center';
+      if (current === "NO\nLONGER\nMYSELF") {
         container.style.alignItems = 'center';
-
         const block = document.createElement('div');
         block.className = 'centered-content';
-        const contentClass = current === "NO ONE" ? 'small' : 'huge';
-        block.innerHTML = `<div id="text" class="${contentClass}">${current}</div>`;
+        block.innerHTML = `<div id="text" class="huge">${current}</div>`;
+        container.appendChild(block);
+      } else if (current === "NO ONE") {
+        container.style.alignItems = 'center';
+        const block = document.createElement('div');
+        block.className = 'centered-content';
+        block.innerHTML = `<div id="text" class="small">NO ONE</div>`;
         container.appendChild(block);
       } else {
-        container.style.display = 'block';
+        container.style.alignItems = 'flex-start';
         const textBlock = document.createElement('div');
         textBlock.id = 'text';
         textBlock.className = 'text-block';
         textBlock.innerHTML = current;
+        textBlock.style.paddingBottom = '60px';
         container.appendChild(textBlock);
       }
 
@@ -254,7 +272,7 @@
       if (overlayMode) {
         clickCount++;
 
-        let overlaysToAdd = Math.min(1 + Math.floor(clickCount / 4), 8);
+        let overlaysToAdd = Math.min(clickCount, 6);
         for (let i = 0; i < overlaysToAdd; i++) {
           const current = texts[Math.floor(Math.random() * texts.length)];
           if (current.length < 80) {
@@ -285,6 +303,8 @@
         if (index >= texts.length) {
           overlayMode = true;
           container.innerHTML = '';
+          const next = texts[0];
+          splitAndOverlay(next);
           return;
         }
         updateText();
