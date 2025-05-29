@@ -187,6 +187,7 @@
     let index = 0;
     let overlayMode = false;
     let clickCount = 0;
+    let overlayStep = 1;
 
     function fixWidows() {
       document.querySelectorAll('.text-block').forEach(block => {
@@ -258,8 +259,7 @@
       if (overlayMode) {
         clickCount++;
 
-        let overlaysToAdd = Math.min(clickCount, 6);
-        for (let i = 0; i < overlaysToAdd; i++) {
+        for (let i = 0; i < overlayStep; i++) {
           const current = texts[Math.floor(Math.random() * texts.length)];
           if (current.length < 80) {
             createOverlay(current, Math.random() < 0.3);
@@ -268,10 +268,13 @@
           }
         }
 
+        if (overlayStep < 12) {
+          overlayStep += 1;
+        }
+
         if (clickCount > 20) {
           document.body.classList.add('background-fade');
           hint.classList.add('hidden');
-
           setTimeout(() => {
             finalText.style.display = 'block';
             finalText.style.opacity = 1;
@@ -289,8 +292,20 @@
         if (index >= texts.length) {
           overlayMode = true;
           container.innerHTML = '';
+
+          // Mostra subito un primo overlay alla transizione
+          const firstText = texts[Math.floor(Math.random() * texts.length)];
+          if (firstText.length < 80) {
+            createOverlay(firstText, Math.random() < 0.3);
+          } else {
+            splitAndOverlay(firstText);
+          }
+
+          overlayStep = 2;
+          hint.classList.remove('hidden');
           return;
         }
+
         updateText();
       }, 600);
     });
