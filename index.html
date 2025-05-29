@@ -30,8 +30,15 @@
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      justify-content: flex-start;
+      align-items: center;
+      justify-content: center;
+      padding: 0 20px;
+    }
+
+    @media (max-width: 600px) {
+      .scrollable {
+        justify-content: flex-start;
+      }
     }
 
     .text-block {
@@ -177,8 +184,8 @@
     const texts = [
       "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
       "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
-      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession\u00a0of\u00a0something.",
-      "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
+      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence...",
+      "No name. No memory today of yesterday's name; of today's name tomorrow...",
       "NO\nLONGER\nMYSELF",
       "NO ONE"
     ];
@@ -187,7 +194,6 @@
     let index = 0;
     let overlayMode = false;
     let clickCount = 0;
-    let overlayStep = 1;
 
     function fixWidows() {
       document.querySelectorAll('.text-block').forEach(block => {
@@ -214,12 +220,10 @@
         block.innerHTML = `<div id="text" class="small">NO ONE</div>`;
         container.appendChild(block);
       } else {
-        container.style.alignItems = 'flex-start';
         const textBlock = document.createElement('div');
         textBlock.id = 'text';
         textBlock.className = 'text-block';
         textBlock.innerHTML = current;
-        textBlock.style.paddingBottom = '60px';
         container.appendChild(textBlock);
       }
 
@@ -259,7 +263,8 @@
       if (overlayMode) {
         clickCount++;
 
-        for (let i = 0; i < overlayStep; i++) {
+        let overlaysToAdd = Math.min(clickCount + 1, 8); // più veloce gradualmente
+        for (let i = 0; i < overlaysToAdd; i++) {
           const current = texts[Math.floor(Math.random() * texts.length)];
           if (current.length < 80) {
             createOverlay(current, Math.random() < 0.3);
@@ -268,13 +273,10 @@
           }
         }
 
-        if (overlayStep < 12) {
-          overlayStep += 1;
-        }
-
         if (clickCount > 20) {
           document.body.classList.add('background-fade');
           hint.classList.add('hidden');
+
           setTimeout(() => {
             finalText.style.display = 'block';
             finalText.style.opacity = 1;
@@ -292,20 +294,8 @@
         if (index >= texts.length) {
           overlayMode = true;
           container.innerHTML = '';
-
-          // Mostra subito un primo overlay alla transizione
-          const firstText = texts[Math.floor(Math.random() * texts.length)];
-          if (firstText.length < 80) {
-            createOverlay(firstText, Math.random() < 0.3);
-          } else {
-            splitAndOverlay(firstText);
-          }
-
-          overlayStep = 2;
-          hint.classList.remove('hidden');
           return;
         }
-
         updateText();
       }, 600);
     });
