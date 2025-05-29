@@ -28,17 +28,8 @@
     .scrollable {
       height: 100vh;
       overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 0 20px;
-    }
-
-    @media (max-width: 600px) {
-      .scrollable {
-        justify-content: flex-start;
-      }
+      padding: 40px 20px;
+      display: block;
     }
 
     .text-block {
@@ -46,7 +37,7 @@
       line-height: 1.6;
       width: 90%;
       max-width: 1000px;
-      margin: 40px auto;
+      margin: 0 auto;
       text-align: left;
       user-select: none;
       opacity: 1;
@@ -184,8 +175,8 @@
     const texts = [
       "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
       "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
-      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence...",
-      "No name. No memory today of yesterday's name; of today's name tomorrow...",
+      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession\u00a0of\u00a0something.",
+      "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
       "NO\nLONGER\nMYSELF",
       "NO ONE"
     ];
@@ -207,19 +198,19 @@
 
       const current = texts[index];
 
-      if (current === "NO\nLONGER\nMYSELF") {
+      if (current === "NO\nLONGER\nMYSELF" || current === "NO ONE") {
+        container.style.display = 'flex';
+        container.style.flexDirection = 'column';
+        container.style.justifyContent = 'center';
         container.style.alignItems = 'center';
+
         const block = document.createElement('div');
         block.className = 'centered-content';
-        block.innerHTML = `<div id="text" class="huge">${current}</div>`;
-        container.appendChild(block);
-      } else if (current === "NO ONE") {
-        container.style.alignItems = 'center';
-        const block = document.createElement('div');
-        block.className = 'centered-content';
-        block.innerHTML = `<div id="text" class="small">NO ONE</div>`;
+        const contentClass = current === "NO ONE" ? 'small' : 'huge';
+        block.innerHTML = `<div id="text" class="${contentClass}">${current}</div>`;
         container.appendChild(block);
       } else {
+        container.style.display = 'block';
         const textBlock = document.createElement('div');
         textBlock.id = 'text';
         textBlock.className = 'text-block';
@@ -263,7 +254,7 @@
       if (overlayMode) {
         clickCount++;
 
-        let overlaysToAdd = Math.min(clickCount + 1, 8); // più veloce gradualmente
+        let overlaysToAdd = Math.min(1 + Math.floor(clickCount / 4), 8);
         for (let i = 0; i < overlaysToAdd; i++) {
           const current = texts[Math.floor(Math.random() * texts.length)];
           if (current.length < 80) {
