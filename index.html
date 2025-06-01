@@ -183,10 +183,16 @@
   <div id="hint" class="hint">Keep clicking anywhere until everything fades into the white cloud.</div>
   <div id="final-text" class="final-text">no one</div>
 
+  <!-- 🔊 Audio Elements -->
+  <audio id="music" src="Ofer Ronen - Silencio a Maria.mp3" preload="auto" loop></audio>
+  <audio id="wind" src="wind-blowing-sfx-12809.mp3" preload="auto" loop></audio>
+
   <script>
     const container = document.getElementById('container');
     const hint = document.getElementById('hint');
     const finalText = document.getElementById('final-text');
+    const music = document.getElementById('music');
+    const wind = document.getElementById('wind');
 
     const texts = [
       "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
@@ -269,6 +275,16 @@
     updateText();
 
     document.body.addEventListener('click', () => {
+      // Start audio on first interaction
+      if (music.paused) {
+        music.volume = 0.4;
+        music.play();
+      }
+      if (wind.paused) {
+        wind.volume = 0.2;
+        wind.play();
+      }
+
       if (overlayMode) {
         clickCount++;
 
