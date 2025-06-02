@@ -29,7 +29,7 @@
     }
 
     .scrollable {
-      padding: 40px 20px 100px 20px; /* più padding in fondo per scrollare */
+      padding: 40px 20px 100px 20px;
       display: block;
       height: 100vh;
       overflow-y: auto;
@@ -45,7 +45,6 @@
         overflow-y: auto;
         padding: 60px;
       }
-
       .text-block {
         max-height: 80vh;
         overflow-y: auto;
@@ -68,38 +67,14 @@
       text-wrap: balance;
     }
 
-    /* Modifica: nuovo blocco per testi centrati con ragged-left solo mobile */
-    .centered-ragged-left-mobile {
+    .centered-text {
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      width: 100vw;
+      text-align: center;
       padding: 0 20px;
-      text-align: center;
-      user-select: none;
-    }
-    .centered-ragged-left-mobile > div {
-      text-align: center;
-    }
-    @media (max-width: 600px) {
-      .centered-ragged-left-mobile > div {
-        text-align: left !important;
-        width: 100%;
-        max-width: 300px;
-        margin: 0 auto;
-      }
-    }
-
-    .centered-content {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      padding: 0 20px;
-      text-align: center;
-      user-select: none;
     }
 
     .huge {
@@ -117,11 +92,10 @@
       text-align: center;
     }
 
-    /* Classe per testo ragged-left solo su mobile */
     .ragged-left-mobile {
       text-align: left !important;
       width: 100%;
-      max-width: 300px; /* mantiene blocco compatto */
+      max-width: 300px;
       margin: 0 auto;
     }
 
@@ -142,7 +116,6 @@
       }
     }
 
-    /* Nuovo fade-in */
     .fade-in {
       animation: appear 1s ease forwards;
     }
@@ -160,60 +133,11 @@
       }
     }
 
-    .overlay {
-      position: fixed;
-      color: white;
-      pointer-events: none;
-      opacity: 0.9;
-      line-height: 1.4;
-      max-width: 40%;
-      word-break: break-word;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      overflow: visible;
-      user-select: none;
-      z-index: 1000;
-      max-height: 100vh;
-    }
-
-    .overlay > div {
-      position: absolute;
-    }
-
-    .hint {
-      position: fixed;
-      top: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: fit-content;
-      max-width: 90%;
-      padding: 6px 12px;
-      font-size: 18px;
-      font-weight: bold;
-      text-align: center;
-      opacity: 0.9;
-      user-select: none;
-      pointer-events: none;
-      z-index: 1001;
-      background: rgba(255, 255, 255, 0.2);
-      backdrop-filter: blur(10px);
-      line-height: 1.2;
-      white-space: pre-line;
-      border-radius: 5px;
-      white-space: pre-line;
-    }
-
-    .hidden {
-      display: none;
-    }
-
     @media (max-width: 600px) {
       .text-block {
         font-size: 16pt;
         margin: 20px auto;
-        padding-bottom: 80px; /* lascia più spazio per scorrere */
+        padding-bottom: 80px;
       }
       .huge {
         font-size: 12vw;
@@ -221,157 +145,74 @@
       .small {
         font-size: 8vw;
       }
-      .overlay {
-        max-width: 100%;
-        max-height: 100vh;
-        position: fixed;
-      }
-      .hint {
-        font-size: 16px;
-        top: 10px; /* spostato in alto */
-        width: 90%;
-      }
-      /* Applica ragged-left solo a NO LONGER MYSELF su mobile */
       .ragged-left-mobile {
         text-align: left !important;
       }
-    }
-
-    .background-fade {
-      background-color: white;
-      transition: background-color 3s ease-in-out;
-    }
-
-    .final-text {
-      display: none;
-      font-family: 'Migra', serif;
-      font-size: 6vw;
-      color: #1A1A1A;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      opacity: 0;
-      z-index: 1001;
-      transition: opacity 2s ease-in-out;
-      text-align: center;
-      white-space: nowrap;
     }
   </style>
 </head>
 <body>
   <div id="container" class="scrollable"></div>
-  <div id="hint" class="hint">KEEP CLICKING ANYWHERE  
-UNTIL EVERYTHING FADES INTO THE WHITE CLOUD</div>
-  <div id="final-text" class="final-text">no one</div>
-
-  <!-- 🔊 Audio Elements -->
   <audio id="music" src="Ofer_Ronen_Silencio_a_Maria_instrumental.mp3" preload="auto" loop></audio>
   <audio id="wind" src="wind-blowing-sfx-12809.mp3" preload="auto" loop></audio>
 
   <script>
     const container = document.getElementById('container');
-    const hint = document.getElementById('hint');
-    const finalText = document.getElementById('final-text');
     const music = document.getElementById('music');
     const wind = document.getElementById('wind');
 
     const texts = [
       "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
       "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
-      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession\u00a0of\u00a0something.",
-      "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
+      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence...",
+      `No name. No memory today of yesterday's name; of today's name tomorrow... vagabond.`,
       "NO\nLONGER\nMYSELF",
       "NO ONE"
     ];
 
-    const fonts = ["'PPRightGrotesk'", 'Helvetica', 'Georgia', 'Arial', 'Times New Roman', 'Verdana'];
     let index = 0;
-    let overlayMode = false;
-    let clickCount = 0;
 
-    function fixWidows() {
-      document.querySelectorAll('.text-block').forEach(block => {
-        block.innerHTML = block.innerHTML.replace(/ (\S+)\s*$/, '&nbsp;$1');
-      });
-    }
-
-    function updateText() {
+    function renderText(text) {
       container.innerHTML = '';
-      hint.classList.remove('hidden');
+      let block;
 
-      const current = texts[index];
-
-      // Array testi centrati con ragged-left mobile
-      const centeredTexts = [
-        "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
-        "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
-        "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession\u00a0of\u00a0something.",
-        "NO\nLONGER\nMYSELF",
-        "NO ONE"
-      ];
-
-      if (centeredTexts.includes(current)) {
-        container.style.alignItems = 'center';
-
-        const block = document.createElement('div');
-        block.className = 'centered-ragged-left-mobile fade-in';
-
-        const tag = (current === "NO\nLONGER\nMYSELF") ? 'huge' : 'small';
-        block.innerHTML = `<div id="text" class="${tag}">${current}</div>`;
+      if (text === "NO\nLONGER\nMYSELF") {
+        block = document.createElement('div');
+        block.className = 'centered-text';
+        block.innerHTML = `<div class='huge ragged-left-mobile'>${text}</div>`;
         container.appendChild(block);
+      } else if (text === "NO ONE") {
+        block = document.createElement('div');
+        block.className = 'centered-text';
+        block.innerHTML = `<div class='small'>${text}</div>`;
+        container.appendChild(block);
+      } else if (text === texts[3]) {
+        const scroll = document.createElement('div');
+        scroll.className = 'text-block fade-in';
+        scroll.innerHTML = text;
+        container.appendChild(scroll);
       } else {
-        container.style.alignItems = 'flex-start';
-        const textBlock = document.createElement('div');
-        textBlock.id = 'text';
-        textBlock.className = 'text-block fade-in';
-        textBlock.innerHTML = current;
-        textBlock.style.paddingBottom = '60px';
-        container.appendChild(textBlock);
+        block = document.createElement('div');
+        block.className = 'centered-text';
+        block.innerHTML = `<div class='text-block fade-in'>${text}</div>`;
+        container.appendChild(block);
       }
-
-      container.scrollTop = 0;
-      fixWidows();
     }
 
-    // Avvio musica appena possibile
-    function tryPlayMusic() {
-      music.play().catch(() => {});
-      wind.play().catch(() => {});
+    function playAudio() {
+      music.volume = 0.4;
+      wind.volume = 0.2;
+      Promise.all([music.play(), wind.play()]).catch(() => {});
     }
+    playAudio();
 
-    container.addEventListener('click', () => {
-      if (overlayMode) return;
+    renderText(texts[index]);
 
-      clickCount++;
-
-      // Cambia testo al click
+    document.body.addEventListener('click', () => {
       index++;
-      if (index >= texts.length) {
-        // Avvio overlay finale
-        hint.classList.add('hidden');
-        container.style.transition = 'background-color 3s ease-in-out';
-        container.style.backgroundColor = '#FFFFFF';
-
-        setTimeout(() => {
-          container.innerHTML = '';
-          finalText.style.display = 'block';
-          finalText.style.opacity = '1';
-          music.pause();
-          wind.pause();
-        }, 3000);
-
-        overlayMode = true;
-        return;
-      }
-
-      updateText();
+      if (index >= texts.length) index = 0;
+      renderText(texts[index]);
     });
-
-    window.onload = () => {
-      updateText();
-      tryPlayMusic();
-    };
   </script>
 </body>
 </html>
