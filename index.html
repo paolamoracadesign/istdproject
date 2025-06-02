@@ -68,6 +68,29 @@
       text-wrap: balance;
     }
 
+    /* Modifica: nuovo blocco per testi centrati con ragged-left solo mobile */
+    .centered-ragged-left-mobile {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 0 20px;
+      text-align: center;
+      user-select: none;
+    }
+    .centered-ragged-left-mobile > div {
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      .centered-ragged-left-mobile > div {
+        text-align: left !important;
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+      }
+    }
+
     .centered-content {
       display: flex;
       flex-direction: column;
@@ -279,18 +302,23 @@ UNTIL EVERYTHING FADES INTO THE WHITE CLOUD</div>
 
       const current = texts[index];
 
-      if (current === "NO\nLONGER\nMYSELF" || current === "NO ONE") {
+      // Array testi centrati con ragged-left mobile
+      const centeredTexts = [
+        "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
+        "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
+        "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession\u00a0of\u00a0something.",
+        "NO\nLONGER\nMYSELF",
+        "NO ONE"
+      ];
+
+      if (centeredTexts.includes(current)) {
         container.style.alignItems = 'center';
 
         const block = document.createElement('div');
-        block.className = 'centered-content fade-in';
+        block.className = 'centered-ragged-left-mobile fade-in';
 
-        if (current === "NO\nLONGER\nMYSELF") {
-          // testo ragged-left su mobile solo qui
-          block.innerHTML = `<div id="text" class="huge ragged-left-mobile">${current}</div>`;
-        } else {
-          block.innerHTML = `<div id="text" class="small">${current}</div>`;
-        }
+        const tag = (current === "NO\nLONGER\nMYSELF") ? 'huge' : 'small';
+        block.innerHTML = `<div id="text" class="${tag}">${current}</div>`;
         container.appendChild(block);
       } else {
         container.style.alignItems = 'flex-start';
@@ -306,93 +334,44 @@ UNTIL EVERYTHING FADES INTO THE WHITE CLOUD</div>
       fixWidows();
     }
 
-    function createOverlay(content, useMigra = false) {
-      const div = document.createElement('div');
-      div.className = 'overlay';
-
-      const isVertical = Math.random() < 0.4;
-      const font = useMigra ? 'Migra' : fonts[Math.floor(Math.random() * fonts.length)];
-
-      div.innerHTML = content;
-      div.style.top = `${Math.random() * 90}%`;
-      div.style.left = `${Math.random() * 90}%`;
-      div.style.transform = isVertical
-        ? 'translate(-50%, -50%) rotate(90deg)'
-        : `translate(-50%, -50%) rotate(${Math.random() * 20 - 10}deg)`;
-      div.style.fontSize = `${Math.random() * 18 + 18}px`;
-      div.style.fontFamily = font;
-
-      document.body.appendChild(div);
+    // Avvio musica appena possibile
+    function tryPlayMusic() {
+      music.play().catch(() => {});
+      wind.play().catch(() => {});
     }
 
-    function splitAndOverlay(text) {
-      const fragments = text.split(/[.,;!?]+/).filter(f => f.trim().length > 10);
-      const fragment = fragments[Math.floor(Math.random() * fragments.length)];
-      const useMigra = Math.random() < 0.3;
-      createOverlay(fragment.trim(), useMigra);
-    }
+    container.addEventListener('click', () => {
+      if (overlayMode) return;
 
-    updateText();
+      clickCount++;
 
-    // Audio play subito all'apertura - workaround per mobile: tenta play e catch error se proibito
-    function startAudio() {
-      music.volume = 0.4;
-      wind.volume = 0.2;
-      Promise.all([music.play(), wind.play()]).catch(() => {
-        // Se non permesso, si prova di nuovo al primo click
-      });
-    }
-    startAudio();
+      // Cambia testo al click
+      index++;
+      if (index >= texts.length) {
+        // Avvio overlay finale
+        hint.classList.add('hidden');
+        container.style.transition = 'background-color 3s ease-in-out';
+        container.style.backgroundColor = '#FFFFFF';
 
-    document.body.addEventListener('click', () => {
-      // Se audio non parte (es. mobile) prova a farlo partire al primo click
-      if (music.paused) {
-        music.play();
-      }
-      if (wind.paused) {
-        wind.play();
-      }
+        setTimeout(() => {
+          container.innerHTML = '';
+          finalText.style.display = 'block';
+          finalText.style.opacity = '1';
+          music.pause();
+          wind.pause();
+        }, 3000);
 
-      if (overlayMode) {
-        clickCount++;
-
-        let overlaysToAdd = Math.min(clickCount, 6);
-        for (let i = 0; i < overlaysToAdd; i++) {
-          const current = texts[Math.floor(Math.random() * texts.length)];
-          if (current.length < 80) {
-            createOverlay(current, Math.random() < 0.3);
-          } else {
-            splitAndOverlay(current);
-          }
-        }
-
-        if (clickCount > 20) {
-          document.body.classList.add('background-fade');
-          hint.classList.add('hidden');
-
-          setTimeout(() => {
-            finalText.style.display = 'block';
-            finalText.style.opacity = 1;
-          }, 2000);
-        }
-
+        overlayMode = true;
         return;
       }
 
-      const currentBlock = document.getElementById('text');
-      if (currentBlock) currentBlock.classList.add('fade-out');
-
-      setTimeout(() => {
-        index++;
-        if (index >= texts.length) {
-          overlayMode = true;
-          container.innerHTML = '';
-          hint.innerHTML = 'CLICK ANYWHERE TO FILL THE SCREEN WITH WORDS';
-          return;
-        }
-        updateText();
-      }, 600);
+      updateText();
     });
+
+    window.onload = () => {
+      updateText();
+      tryPlayMusic();
+    };
   </script>
 </body>
 </html>
