@@ -29,7 +29,7 @@
     }
 
     .scrollable {
-      padding: 40px 20px 100px 20px;
+      padding: 40px 20px 100px 20px; /* più padding in fondo per scrollare */
       display: block;
       height: 100vh;
       overflow-y: auto;
@@ -75,21 +75,8 @@
       align-items: center;
       height: 100vh;
       padding: 0 20px;
+      text-align: center;
       user-select: none;
-    }
-
-    .centered-ragged {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      width: 100%;
-      padding: 0 20px;
-    }
-
-    .centered-ragged .text-block {
-      text-align: left;
-      max-width: 800px;
     }
 
     .huge {
@@ -105,6 +92,14 @@
       font-size: 4vw;
       margin-top: 30px;
       text-align: center;
+    }
+
+    /* Classe per testo ragged-left solo su mobile */
+    .ragged-left-mobile {
+      text-align: left !important;
+      width: 100%;
+      max-width: 300px; /* mantiene blocco compatto */
+      margin: 0 auto;
     }
 
     .fade-out {
@@ -124,6 +119,7 @@
       }
     }
 
+    /* Nuovo fade-in */
     .fade-in {
       animation: appear 1s ease forwards;
     }
@@ -181,6 +177,7 @@
       background: rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(10px);
       line-height: 1.2;
+      white-space: pre-line;
       border-radius: 5px;
       white-space: pre-line;
     }
@@ -193,7 +190,7 @@
       .text-block {
         font-size: 16pt;
         margin: 20px auto;
-        padding-bottom: 80px;
+        padding-bottom: 80px; /* lascia più spazio per scorrere */
       }
       .huge {
         font-size: 12vw;
@@ -208,8 +205,12 @@
       }
       .hint {
         font-size: 16px;
-        top: 10px;
+        top: 10px; /* spostato in alto */
         width: 90%;
+      }
+      /* Applica ragged-left solo a NO LONGER MYSELF su mobile */
+      .ragged-left-mobile {
+        text-align: left !important;
       }
     }
 
@@ -241,6 +242,7 @@
 UNTIL EVERYTHING FADES INTO THE WHITE CLOUD</div>
   <div id="final-text" class="final-text">no one</div>
 
+  <!-- 🔊 Audio Elements -->
   <audio id="music" src="Ofer_Ronen_Silencio_a_Maria_instrumental.mp3" preload="auto" loop></audio>
   <audio id="wind" src="wind-blowing-sfx-12809.mp3" preload="auto" loop></audio>
 
@@ -255,19 +257,12 @@ UNTIL EVERYTHING FADES INTO THE WHITE CLOUD</div>
       "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
       "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
       "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession\u00a0of\u00a0something.",
-      "No name. No memory today of yesterday's name; of today's name tomorrow...",
+      "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
       "NO\nLONGER\nMYSELF",
       "NO ONE"
     ];
 
-    const centeredRaggedSet = new Set([
-      texts[0],
-      texts[1],
-      texts[2],
-      texts[4],
-      texts[5]
-    ]);
-
+    const fonts = ["'PPRightGrotesk'", 'Helvetica', 'Georgia', 'Arial', 'Times New Roman', 'Verdana'];
     let index = 0;
     let overlayMode = false;
     let clickCount = 0;
@@ -281,17 +276,24 @@ UNTIL EVERYTHING FADES INTO THE WHITE CLOUD</div>
     function updateText() {
       container.innerHTML = '';
       hint.classList.remove('hidden');
+
       const current = texts[index];
 
-      if (centeredRaggedSet.has(current)) {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'centered-ragged fade-in';
+      if (current === "NO\nLONGER\nMYSELF" || current === "NO ONE") {
+        container.style.alignItems = 'center';
+
         const block = document.createElement('div');
-        block.className = 'text-block';
-        block.innerHTML = current;
-        wrapper.appendChild(block);
-        container.appendChild(wrapper);
+        block.className = 'centered-content fade-in';
+
+        if (current === "NO\nLONGER\nMYSELF") {
+          // testo ragged-left su mobile solo qui
+          block.innerHTML = <div id="text" class="huge ragged-left-mobile">${current}</div>;
+        } else {
+          block.innerHTML = <div id="text" class="small">${current}</div>;
+        }
+        container.appendChild(block);
       } else {
+        container.style.alignItems = 'flex-start';
         const textBlock = document.createElement('div');
         textBlock.id = 'text';
         textBlock.className = 'text-block fade-in';
@@ -309,15 +311,15 @@ UNTIL EVERYTHING FADES INTO THE WHITE CLOUD</div>
       div.className = 'overlay';
 
       const isVertical = Math.random() < 0.4;
-      const font = useMigra ? 'Migra' : 'PPRightGrotesk';
+      const font = useMigra ? 'Migra' : fonts[Math.floor(Math.random() * fonts.length)];
 
       div.innerHTML = content;
-      div.style.top = `${Math.random() * 90}%`;
-      div.style.left = `${Math.random() * 90}%`;
+      div.style.top = ${Math.random() * 90}%;
+      div.style.left = ${Math.random() * 90}%;
       div.style.transform = isVertical
         ? 'translate(-50%, -50%) rotate(90deg)'
-        : `translate(-50%, -50%) rotate(${Math.random() * 20 - 10}deg)`;
-      div.style.fontSize = `${Math.random() * 18 + 18}px`;
+        : translate(-50%, -50%) rotate(${Math.random() * 20 - 10}deg);
+      div.style.fontSize = ${Math.random() * 18 + 18}px;
       div.style.fontFamily = font;
 
       document.body.appendChild(div);
@@ -332,20 +334,30 @@ UNTIL EVERYTHING FADES INTO THE WHITE CLOUD</div>
 
     updateText();
 
+    // Audio play subito all'apertura - workaround per mobile: tenta play e catch error se proibito
     function startAudio() {
       music.volume = 0.4;
       wind.volume = 0.2;
-      Promise.all([music.play(), wind.play()]).catch(() => {});
+      Promise.all([music.play(), wind.play()]).catch(() => {
+        // Se non permesso, si prova di nuovo al primo click
+      });
     }
     startAudio();
 
     document.body.addEventListener('click', () => {
-      if (music.paused) music.play();
-      if (wind.paused) wind.play();
+      // Se audio non parte (es. mobile) prova a farlo partire al primo click
+      if (music.paused) {
+        music.play();
+      }
+      if (wind.paused) {
+        wind.play();
+      }
 
       if (overlayMode) {
         clickCount++;
-        for (let i = 0; i < Math.min(clickCount, 6); i++) {
+
+        let overlaysToAdd = Math.min(clickCount, 6);
+        for (let i = 0; i < overlaysToAdd; i++) {
           const current = texts[Math.floor(Math.random() * texts.length)];
           if (current.length < 80) {
             createOverlay(current, Math.random() < 0.3);
@@ -353,14 +365,17 @@ UNTIL EVERYTHING FADES INTO THE WHITE CLOUD</div>
             splitAndOverlay(current);
           }
         }
+
         if (clickCount > 20) {
           document.body.classList.add('background-fade');
           hint.classList.add('hidden');
+
           setTimeout(() => {
             finalText.style.display = 'block';
             finalText.style.opacity = 1;
           }, 2000);
         }
+
         return;
       }
 
