@@ -74,7 +74,8 @@
       align-items: center;
       height: 100vh;
       padding: 0 20px;
-      text-align: left;
+      text-align: center; /* or left? default center */
+      user-select: none;
     }
 
     .huge {
@@ -82,7 +83,7 @@
       font-size: 8vw;
       white-space: pre-line;
       line-height: 1.1;
-      text-align: left;
+      text-align: center;
     }
 
     .small {
@@ -142,7 +143,6 @@
       overflow: visible;
       user-select: none;
       z-index: 1000;
-      /* limit overlay positioning within viewport */
       max-height: 100vh;
     }
 
@@ -168,9 +168,8 @@
       background: rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(10px);
       line-height: 1.2;
-      white-space: normal;
+      white-space: pre-line;
       border-radius: 5px;
-      /* testo diviso in due righe */
       white-space: pre-line;
     }
 
@@ -185,10 +184,10 @@
         padding-bottom: 80px; /* lascia più spazio per scorrere */
       }
       .huge {
-        font-size: 10vw;
+        font-size: 12vw;
       }
       .small {
-        font-size: 6vw;
+        font-size: 8vw;
       }
       .overlay {
         max-width: 100%;
@@ -197,7 +196,7 @@
       }
       .hint {
         font-size: 16px;
-        top: 40px; /* più in basso per non coprire testo */
+        top: 10px; /* spostato in alto */
         width: 90%;
       }
     }
@@ -267,17 +266,17 @@ UNTIL EVERYTHING FADES INTO THE WHITE CLOUD</div>
 
       const current = texts[index];
 
-      if (current === "NO\nLONGER\nMYSELF") {
+      if (current === "NO\nLONGER\nMYSELF" || current === "NO ONE") {
         container.style.alignItems = 'center';
+
         const block = document.createElement('div');
-        block.className = 'centered-content';
-        block.innerHTML = `<div id="text" class="huge fade-in">${current}</div>`;
-        container.appendChild(block);
-      } else if (current === "NO ONE") {
-        container.style.alignItems = 'center';
-        const block = document.createElement('div');
-        block.className = 'centered-content';
-        block.innerHTML = `<div id="text" class="small fade-in">NO ONE</div>`;
+        block.className = 'centered-content fade-in';
+
+        if (current === "NO\nLONGER\nMYSELF") {
+          block.innerHTML = `<div id="text" class="huge">${current}</div>`;
+        } else {
+          block.innerHTML = `<div id="text" class="small">NO ONE</div>`;
+        }
         container.appendChild(block);
       } else {
         container.style.alignItems = 'flex-start';
