@@ -285,23 +285,39 @@ UNTIL EVERYTHING FADES INTO THE WHITE CLOUD</div>
         const block = document.createElement('div');
         block.className = 'centered-content fade-in';
 
-        if (current === "NO\nLONGER\nMYSELF") {
-          // testo ragged-left su mobile solo qui
-          block.innerHTML = <div id="text" class="huge ragged-left-mobile">${current}</div>;
-        } else {
-          block.innerHTML = <div id="text" class="small">${current}</div>;
-        }
-        container.appendChild(block);
-      } else {
-        container.style.alignItems = 'flex-start';
-        const textBlock = document.createElement('div');
-        textBlock.id = 'text';
-        textBlock.className = 'text-block fade-in';
-        textBlock.innerHTML = current;
-        textBlock.style.paddingBottom = '60px';
-        container.appendChild(textBlock);
-      }
+        const centeredRaggedTexts = [
+  "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
+  "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
+  "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession\u00a0of\u00a0something.",
+  "NO\nLONGER\nMYSELF",
+  "NO ONE"
+];
 
+if (centeredRaggedTexts.includes(current)) {
+  container.style.display = 'flex';
+  container.style.flexDirection = 'column';
+  container.style.justifyContent = 'center';
+  container.style.alignItems = 'center';
+
+  const block = document.createElement('div');
+  block.className = 'fade-in';
+  block.style.maxWidth = '800px';
+  block.style.padding = '20px';
+  block.style.textAlign = 'left';
+  block.style.whiteSpace = 'pre-line';
+  block.style.fontSize = '2vw';
+  block.style.lineHeight = '1.6';
+  block.style.fontFamily = "'PPRightGrotesk', sans-serif";
+
+  if (current === "NO\nLONGER\nMYSELF" || current === "NO ONE") {
+    block.style.fontFamily = "'Migra', serif";
+    block.style.fontSize = '6vw';
+    block.style.textAlign = 'left';
+  }
+
+  block.textContent = current;
+  container.appendChild(block);
+}
       container.scrollTop = 0;
       fixWidows();
     }
