@@ -3,133 +3,381 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Text Reveal</title>
+  <title>NO ONE</title>
   <style>
     @font-face {
       font-family: 'Migra';
-      src: url('Migra-Extrabold.woff2') format('woff2');
+      src: url('Migra-Extrabold.otf') format('opentype');
     }
 
     @font-face {
       font-family: 'PPRightGrotesk';
-      src: url('PPRightGrotesk.woff2') format('woff2');
+      src: url('PPRightGroteskText-Regular.otf') format('opentype');
     }
 
-    html, body {
+    body {
       margin: 0;
       padding: 0;
-      background: black;
-      color: white;
+      background: #f39777;
       font-family: 'PPRightGrotesk', sans-serif;
-      height: 100%;
       overflow: hidden;
+      color: white;
+      transition: background 2s ease;
+      position: relative;
+      height: 100vh;
+      max-height: 100vh;
     }
 
-    #text-container {
-      position: absolute;
-      width: 100%;
-      height: 100%;
+    .scrollable {
+      padding: 40px 20px 100px 20px;
+      display: block;
+      height: 100vh;
+      overflow-y: auto;
+      box-sizing: border-box;
+    }
+
+    @media (min-width: 769px) {
+      .scrollable {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow-y: auto;
+        padding: 60px;
+      }
+
+      .text-block {
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+    }
+
+    .text-block {
+      font-size: 18pt;
+      line-height: 1.6;
+      width: 90%;
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: left;
+      user-select: none;
+      opacity: 1;
+      transition: opacity 0.6s ease;
+      word-break: break-word;
+      hyphens: auto;
+      letter-spacing: -0.01em;
+      text-wrap: balance;
+    }
+
+    .centered-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 0 20px;
+      user-select: none;
+    }
+
+    .centered-ragged {
       display: flex;
       justify-content: center;
       align-items: center;
+      height: 100vh;
+      width: 100%;
+      padding: 0 20px;
+    }
+
+    .centered-ragged .text-block {
+      text-align: left;
+      max-width: 800px;
+    }
+
+    .huge {
+      font-family: 'Migra', serif;
+      font-size: 8vw;
+      white-space: pre-line;
+      line-height: 1.1;
       text-align: center;
-      padding: 2rem;
+    }
+
+    .small {
+      font-family: 'Migra', serif;
+      font-size: 4vw;
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .fade-out {
+      animation: disintegrate 0.6s forwards;
+    }
+
+    @keyframes disintegrate {
+      0% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0.95) translateY(-40px);
+        filter: blur(10px);
+      }
     }
 
     .fade-in {
-      animation: fadeIn 1.5s ease-in-out;
+      animation: appear 1s ease forwards;
     }
 
-    @keyframes fadeIn {
-      from {
+    @keyframes appear {
+      0% {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(40px);
+        filter: blur(10px);
       }
-      to {
+      100% {
         opacity: 1;
         transform: translateY(0);
+        filter: blur(0);
       }
     }
 
-    .center-text {
-      font-family: 'Migra', serif;
-      font-size: 6vw;
-      white-space: pre-line;
-      line-height: 1.2;
+    .overlay {
+      position: fixed;
+      color: white;
+      pointer-events: none;
+      opacity: 0.9;
+      line-height: 1.4;
+      max-width: 40%;
+      word-break: break-word;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      overflow: visible;
+      user-select: none;
+      z-index: 1000;
+      max-height: 100vh;
     }
 
-    audio {
+    .overlay > div {
+      position: absolute;
+    }
+
+    .hint {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: fit-content;
+      max-width: 90%;
+      padding: 6px 12px;
+      font-size: 18px;
+      font-weight: bold;
+      text-align: center;
+      opacity: 0.9;
+      user-select: none;
+      pointer-events: none;
+      z-index: 1001;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      line-height: 1.2;
+      border-radius: 5px;
+      white-space: pre-line;
+    }
+
+    .hidden {
       display: none;
+    }
+
+    @media (max-width: 600px) {
+      .text-block {
+        font-size: 16pt;
+        margin: 20px auto;
+        padding-bottom: 80px;
+      }
+      .huge {
+        font-size: 12vw;
+      }
+      .small {
+        font-size: 8vw;
+      }
+      .overlay {
+        max-width: 100%;
+        max-height: 100vh;
+        position: fixed;
+      }
+      .hint {
+        font-size: 16px;
+        top: 10px;
+        width: 90%;
+      }
+    }
+
+    .background-fade {
+      background-color: white;
+      transition: background-color 3s ease-in-out;
+    }
+
+    .final-text {
+      display: none;
+      font-family: 'Migra', serif;
+      font-size: 6vw;
+      color: #1A1A1A;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      z-index: 1001;
+      transition: opacity 2s ease-in-out;
+      text-align: center;
+      white-space: nowrap;
     }
   </style>
 </head>
 <body>
-  <audio id="background-audio" src="audio.mp3" loop autoplay></audio>
-  <div id="text-container"></div>
+  <div id="container" class="scrollable"></div>
+  <div id="hint" class="hint">KEEP CLICKING ANYWHERE  
+UNTIL EVERYTHING FADES INTO THE WHITE CLOUD</div>
+  <div id="final-text" class="final-text">no one</div>
+
+  <audio id="music" src="Ofer_Ronen_Silencio_a_Maria_instrumental.mp3" preload="auto" loop></audio>
+  <audio id="wind" src="wind-blowing-sfx-12809.mp3" preload="auto" loop></audio>
 
   <script>
+    const container = document.getElementById('container');
+    const hint = document.getElementById('hint');
+    const finalText = document.getElementById('final-text');
+    const music = document.getElementById('music');
+    const wind = document.getElementById('wind');
+
     const texts = [
       "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
       "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
       "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession\u00a0of\u00a0something.",
+      "No name. No memory today of yesterday's name; of today's name tomorrow...",
       "NO\nLONGER\nMYSELF",
-      "NO ONE",
-      "Another quote here...",
-      "Something lighter here...",
-      "Last thought maybe..."
+      "NO ONE"
     ];
 
+    const centeredRaggedSet = new Set([
+      texts[0],
+      texts[1],
+      texts[2],
+      texts[4],
+      texts[5]
+    ]);
+
     let index = 0;
-    const container = document.getElementById('text-container');
+    let overlayMode = false;
+    let clickCount = 0;
+
+    function fixWidows() {
+      document.querySelectorAll('.text-block').forEach(block => {
+        block.innerHTML = block.innerHTML.replace(/ (\S+)\s*$/, '&nbsp;$1');
+      });
+    }
 
     function updateText() {
       container.innerHTML = '';
+      hint.classList.remove('hidden');
       const current = texts[index];
 
-      const centeredRaggedTexts = [
-        "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
-        "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
-        "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession\u00a0of\u00a0something.",
-        "NO\nLONGER\nMYSELF",
-        "NO ONE"
-      ];
-
-      if (centeredRaggedTexts.includes(current)) {
-        container.style.display = 'flex';
-        container.style.flexDirection = 'column';
-        container.style.justifyContent = 'center';
-        container.style.alignItems = 'center';
-
+      if (centeredRaggedSet.has(current)) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'centered-ragged fade-in';
         const block = document.createElement('div');
-        block.className = 'fade-in';
-        block.style.maxWidth = '800px';
-        block.style.padding = '20px';
-        block.style.textAlign = 'left';
-        block.style.whiteSpace = 'pre-line';
-        block.style.fontSize = '2vw';
-        block.style.lineHeight = '1.6';
-        block.style.fontFamily = "'PPRightGrotesk', sans-serif";
-
-        if (current === "NO\nLONGER\nMYSELF" || current === "NO ONE") {
-          block.style.fontFamily = "'Migra', serif";
-          block.style.fontSize = '6vw';
-          block.style.textAlign = 'left';
-        }
-
-        block.textContent = current;
-        container.appendChild(block);
+        block.className = 'text-block';
+        block.innerHTML = current;
+        wrapper.appendChild(block);
+        container.appendChild(wrapper);
       } else {
-        const textEl = document.createElement('div');
-        textEl.textContent = current;
-        textEl.className = 'fade-in';
-        container.appendChild(textEl);
+        const textBlock = document.createElement('div');
+        textBlock.id = 'text';
+        textBlock.className = 'text-block fade-in';
+        textBlock.innerHTML = current;
+        textBlock.style.paddingBottom = '60px';
+        container.appendChild(textBlock);
       }
 
-      index = (index + 1) % texts.length;
+      container.scrollTop = 0;
+      fixWidows();
+    }
+
+    function createOverlay(content, useMigra = false) {
+      const div = document.createElement('div');
+      div.className = 'overlay';
+
+      const isVertical = Math.random() < 0.4;
+      const font = useMigra ? 'Migra' : 'PPRightGrotesk';
+
+      div.innerHTML = content;
+      div.style.top = `${Math.random() * 90}%`;
+      div.style.left = `${Math.random() * 90}%`;
+      div.style.transform = isVertical
+        ? 'translate(-50%, -50%) rotate(90deg)'
+        : `translate(-50%, -50%) rotate(${Math.random() * 20 - 10}deg)`;
+      div.style.fontSize = `${Math.random() * 18 + 18}px`;
+      div.style.fontFamily = font;
+
+      document.body.appendChild(div);
+    }
+
+    function splitAndOverlay(text) {
+      const fragments = text.split(/[.,;!?]+/).filter(f => f.trim().length > 10);
+      const fragment = fragments[Math.floor(Math.random() * fragments.length)];
+      const useMigra = Math.random() < 0.3;
+      createOverlay(fragment.trim(), useMigra);
     }
 
     updateText();
-    setInterval(updateText, 8000); // Change every 8 seconds
+
+    function startAudio() {
+      music.volume = 0.4;
+      wind.volume = 0.2;
+      Promise.all([music.play(), wind.play()]).catch(() => {});
+    }
+    startAudio();
+
+    document.body.addEventListener('click', () => {
+      if (music.paused) music.play();
+      if (wind.paused) wind.play();
+
+      if (overlayMode) {
+        clickCount++;
+        for (let i = 0; i < Math.min(clickCount, 6); i++) {
+          const current = texts[Math.floor(Math.random() * texts.length)];
+          if (current.length < 80) {
+            createOverlay(current, Math.random() < 0.3);
+          } else {
+            splitAndOverlay(current);
+          }
+        }
+        if (clickCount > 20) {
+          document.body.classList.add('background-fade');
+          hint.classList.add('hidden');
+          setTimeout(() => {
+            finalText.style.display = 'block';
+            finalText.style.opacity = 1;
+          }, 2000);
+        }
+        return;
+      }
+
+      const currentBlock = document.getElementById('text');
+      if (currentBlock) currentBlock.classList.add('fade-out');
+
+      setTimeout(() => {
+        index++;
+        if (index >= texts.length) {
+          overlayMode = true;
+          container.innerHTML = '';
+          hint.innerHTML = 'CLICK ANYWHERE TO FILL THE SCREEN WITH WORDS';
+          return;
+        }
+        updateText();
+      }, 600);
+    });
   </script>
 </body>
 </html>
