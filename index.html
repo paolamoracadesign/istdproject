@@ -62,7 +62,7 @@
       hyphens: auto;
       letter-spacing: -0.01em;
       text-wrap: balance;
-      padding-bottom: 100px; /* per evitare taglio su mobile */
+      padding-bottom: 100px;
     }
 
     .centered-content {
@@ -108,13 +108,14 @@
     }
 
     .overlay {
-      position: absolute;
+      position: fixed;
       color: white;
       pointer-events: none;
       opacity: 0.9;
       line-height: 1.4;
-      max-width: 40%;
+      max-width: 90vw;
       word-break: break-word;
+      z-index: 999;
     }
 
     .hint {
@@ -132,6 +133,7 @@
       z-index: 1000;
       background: rgba(255, 255, 255, 0.2);
       backdrop-filter: blur(10px);
+      text-transform: uppercase;
     }
 
     .hidden {
@@ -142,7 +144,7 @@
       .text-block {
         font-size: 16pt;
         margin: 20px auto;
-        padding-bottom: 140px; /* ancora più spazio su mobile */
+        padding-bottom: 140px;
       }
 
       .huge {
@@ -154,7 +156,7 @@
       }
 
       .overlay {
-        max-width: 80%;
+        max-width: 90vw;
       }
 
       .hint {
@@ -186,10 +188,10 @@
 </head>
 <body>
   <div id="container" class="scrollable"></div>
-  <div id="hint" class="hint">Keep clicking until everything disappears into the white cloud.</div>
+  <div id="hint" class="hint">KEEP CLICKING UNTIL EVERYTHING DISAPPEARS INTO THE WHITE CLOUD</div>
   <div id="final-text" class="final-text">no one</div>
 
-  <!-- 🔊 Audio Elements -->
+  <!-- Audio -->
   <audio id="music" src="Ofer_Ronen_Silencio_a_Maria_instrumental.mp3" preload="auto" loop></audio>
   <audio id="wind" src="wind-blowing-sfx-12809.mp3" preload="auto" loop></audio>
 
@@ -213,6 +215,7 @@
     let index = 0;
     let overlayMode = false;
     let clickCount = 0;
+    let audioStarted = false;
 
     function fixWidows() {
       document.querySelectorAll('.text-block').forEach(block => {
@@ -254,7 +257,6 @@
     function createOverlay(content, useMigra = false) {
       const div = document.createElement('div');
       div.className = 'overlay';
-
       const isVertical = Math.random() < 0.4;
       const font = useMigra ? 'Migra' : fonts[Math.floor(Math.random() * fonts.length)];
 
@@ -279,18 +281,17 @@
 
     updateText();
 
-    // ▶️ Start audio immediately
-    window.addEventListener('load', () => {
-      music.volume = 0.4;
-      music.play().catch(() => {});
-      wind.volume = 0.2;
-      wind.play().catch(() => {});
-    });
-
     document.body.addEventListener('click', () => {
+      if (!audioStarted) {
+        music.volume = 0.4;
+        music.play().catch(() => {});
+        wind.volume = 0.2;
+        wind.play().catch(() => {});
+        audioStarted = true;
+      }
+
       if (overlayMode) {
         clickCount++;
-
         let overlaysToAdd = Math.min(clickCount, 6);
         for (let i = 0; i < overlaysToAdd; i++) {
           const current = texts[Math.floor(Math.random() * texts.length)];
@@ -322,8 +323,341 @@
         if (index >= texts.length) {
           overlayMode = true;
           container.innerHTML = '';
-          const next = texts[0];
-          splitAndOverlay(next);
+          splitAndOverlay(texts[0]);
+          return;
+        }
+        updateText();
+      }, 600);
+    });
+  </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NO ONE</title>
+  <style>
+    @font-face {
+      font-family: 'Migra';
+      src: url('Migra-Extrabold.otf') format('opentype');
+    }
+
+    @font-face {
+      font-family: 'PPRightGrotesk';
+      src: url('PPRightGroteskText-Regular.otf') format('opentype');
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f39777;
+      font-family: 'PPRightGrotesk', sans-serif;
+      overflow: hidden;
+      color: white;
+      transition: background 2s ease;
+    }
+
+    .scrollable {
+      padding: 40px 20px;
+      display: block;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    @media (min-width: 769px) {
+      .scrollable {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        overflow-y: auto;
+        padding: 60px;
+      }
+
+      .text-block {
+        max-height: 80vh;
+        overflow-y: auto;
+      }
+    }
+
+    .text-block {
+      font-size: 18pt;
+      line-height: 1.6;
+      width: 90%;
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: left;
+      user-select: none;
+      opacity: 1;
+      transition: opacity 0.6s ease;
+      word-break: break-word;
+      hyphens: auto;
+      letter-spacing: -0.01em;
+      text-wrap: balance;
+      padding-bottom: 100px;
+    }
+
+    .centered-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 0 20px;
+      text-align: left;
+    }
+
+    .huge {
+      font-family: 'Migra', serif;
+      font-size: 8vw;
+      white-space: pre-line;
+      line-height: 1.1;
+      text-align: left;
+    }
+
+    .small {
+      font-family: 'Migra', serif;
+      font-size: 4vw;
+      margin-top: 30px;
+      text-align: center;
+    }
+
+    .fade-out {
+      animation: disintegrate 0.6s forwards;
+    }
+
+    @keyframes disintegrate {
+      0% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+        filter: blur(0);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(0.95) translateY(-40px);
+        filter: blur(10px);
+      }
+    }
+
+    .overlay {
+      position: fixed;
+      color: white;
+      pointer-events: none;
+      opacity: 0.9;
+      line-height: 1.4;
+      max-width: 90vw;
+      word-break: break-word;
+      z-index: 999;
+    }
+
+    .hint {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 10px 0;
+      font-size: 16px;
+      font-weight: bold;
+      text-align: center;
+      opacity: 0.9;
+      user-select: none;
+      pointer-events: none;
+      z-index: 1000;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      text-transform: uppercase;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      .text-block {
+        font-size: 16pt;
+        margin: 20px auto;
+        padding-bottom: 140px;
+      }
+
+      .huge {
+        font-size: 10vw;
+      }
+
+      .small {
+        font-size: 6vw;
+      }
+
+      .overlay {
+        max-width: 90vw;
+      }
+
+      .hint {
+        font-size: 14px;
+      }
+    }
+
+    .background-fade {
+      background-color: white;
+      transition: background-color 3s ease-in-out;
+    }
+
+    .final-text {
+      display: none;
+      font-family: 'Migra', serif;
+      font-size: 6vw;
+      color: #1A1A1A;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      z-index: 1001;
+      transition: opacity 2s ease-in-out;
+      text-align: center;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <div id="container" class="scrollable"></div>
+  <div id="hint" class="hint">KEEP CLICKING UNTIL EVERYTHING DISAPPEARS INTO THE WHITE CLOUD</div>
+  <div id="final-text" class="final-text">no one</div>
+
+  <!-- Audio -->
+  <audio id="music" src="Ofer_Ronen_Silencio_a_Maria_instrumental.mp3" preload="auto" loop></audio>
+  <audio id="wind" src="wind-blowing-sfx-12809.mp3" preload="auto" loop></audio>
+
+  <script>
+    const container = document.getElementById('container');
+    const hint = document.getElementById('hint');
+    const finalText = document.getElementById('final-text');
+    const music = document.getElementById('music');
+    const wind = document.getElementById('wind');
+
+    const texts = [
+      "YOU WANT TOO MUCH TO KNOW YOURSELF; AND MEANWHILE, YOU ARE NOT LIVING.",
+      "One's aim should be never to see one's self. For the reason that, however much you may try, you can never know yourself as others see you.",
+      "What annoyed me more than anything else was that this total abnegation of mine was interpreted as being a true penitence; whereas, if I gave all and opposed nothing, it was because I was by now as far removed as could be from anything that might have a meaning or a value for others; I not only was absolutely alienated from myself and from everything, but I had a horror of remaining in any manner someone, in possession of something.",
+      "No name. No memory today of yesterday's name; of today's name tomorrow. If the name is the thing, if a name in us is the concept of everything that is situated without us, if without a name there is no concept, and the thing remains blindly indistinct and undefined within us, very well, then, let men take that name which I once bore and engrave it as an epitaph on the brow of that pictured me that they beheld; let them leave it there in peace, and let them not speak of it again. For a name is no more than that, an epitaph. Something befitting the dead. One who has reached a conclusion. I am alive, and I reach no conclusion. Life knows no conclusion. Nor does it know anything of names. This tree, tremulous breathing of new leaves. I am this tree. Tree, cloud; tomorrow, book or breeze; the book I read, the breeze I drink in. Living wholly without, a vagabond.",
+      "NO\nLONGER\nMYSELF",
+      "NO ONE"
+    ];
+
+    const fonts = ["'PPRightGrotesk'", 'Helvetica', 'Georgia', 'Arial', 'Times New Roman', 'Verdana'];
+    let index = 0;
+    let overlayMode = false;
+    let clickCount = 0;
+    let audioStarted = false;
+
+    function fixWidows() {
+      document.querySelectorAll('.text-block').forEach(block => {
+        block.innerHTML = block.innerHTML.replace(/ (\S+)\s*$/, '&nbsp;$1');
+      });
+    }
+
+    function updateText() {
+      container.innerHTML = '';
+      hint.classList.remove('hidden');
+
+      const current = texts[index];
+
+      if (current === "NO\nLONGER\nMYSELF") {
+        container.style.alignItems = 'center';
+        const block = document.createElement('div');
+        block.className = 'centered-content';
+        block.innerHTML = `<div id="text" class="huge">${current}</div>`;
+        container.appendChild(block);
+      } else if (current === "NO ONE") {
+        container.style.alignItems = 'center';
+        const block = document.createElement('div');
+        block.className = 'centered-content';
+        block.innerHTML = `<div id="text" class="small">NO ONE</div>`;
+        container.appendChild(block);
+      } else {
+        container.style.alignItems = 'flex-start';
+        const textBlock = document.createElement('div');
+        textBlock.id = 'text';
+        textBlock.className = 'text-block';
+        textBlock.innerHTML = current;
+        container.appendChild(textBlock);
+      }
+
+      container.scrollTop = 0;
+      fixWidows();
+    }
+
+    function createOverlay(content, useMigra = false) {
+      const div = document.createElement('div');
+      div.className = 'overlay';
+      const isVertical = Math.random() < 0.4;
+      const font = useMigra ? 'Migra' : fonts[Math.floor(Math.random() * fonts.length)];
+
+      div.innerHTML = content;
+      div.style.top = `${Math.random() * 90}%`;
+      div.style.left = `${Math.random() * 90}%`;
+      div.style.transform = isVertical
+        ? 'translate(-50%, -50%) rotate(90deg)'
+        : `translate(-50%, -50%) rotate(${Math.random() * 20 - 10}deg)`;
+      div.style.fontSize = `${Math.random() * 18 + 18}px`;
+      div.style.fontFamily = font;
+
+      document.body.appendChild(div);
+    }
+
+    function splitAndOverlay(text) {
+      const fragments = text.split(/[.,;!?]+/).filter(f => f.trim().length > 10);
+      const fragment = fragments[Math.floor(Math.random() * fragments.length)];
+      const useMigra = Math.random() < 0.3;
+      createOverlay(fragment.trim(), useMigra);
+    }
+
+    updateText();
+
+    document.body.addEventListener('click', () => {
+      if (!audioStarted) {
+        music.volume = 0.4;
+        music.play().catch(() => {});
+        wind.volume = 0.2;
+        wind.play().catch(() => {});
+        audioStarted = true;
+      }
+
+      if (overlayMode) {
+        clickCount++;
+        let overlaysToAdd = Math.min(clickCount, 6);
+        for (let i = 0; i < overlaysToAdd; i++) {
+          const current = texts[Math.floor(Math.random() * texts.length)];
+          if (current.length < 80) {
+            createOverlay(current, Math.random() < 0.3);
+          } else {
+            splitAndOverlay(current);
+          }
+        }
+
+        if (clickCount > 20) {
+          document.body.classList.add('background-fade');
+          hint.classList.add('hidden');
+
+          setTimeout(() => {
+            finalText.style.display = 'block';
+            finalText.style.opacity = 1;
+          }, 2000);
+        }
+
+        return;
+      }
+
+      const currentBlock = document.getElementById('text');
+      if (currentBlock) currentBlock.classList.add('fade-out');
+
+      setTimeout(() => {
+        index++;
+        if (index >= texts.length) {
+          overlayMode = true;
+          container.innerHTML = '';
+          splitAndOverlay(texts[0]);
           return;
         }
         updateText();
