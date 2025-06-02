@@ -29,10 +29,11 @@
     }
 
     .scrollable {
-      padding: 40px 20px;
+      padding: 40px 20px 100px 20px; /* più padding in fondo per scrollare */
       display: block;
       height: 100vh;
       overflow-y: auto;
+      box-sizing: border-box;
     }
 
     @media (min-width: 769px) {
@@ -74,7 +75,7 @@
       align-items: center;
       height: 100vh;
       padding: 0 20px;
-      text-align: center; /* or left? default center */
+      text-align: center;
       user-select: none;
     }
 
@@ -91,6 +92,14 @@
       font-size: 4vw;
       margin-top: 30px;
       text-align: center;
+    }
+
+    /* Classe per testo ragged-left solo su mobile */
+    .ragged-left-mobile {
+      text-align: left !important;
+      width: 100%;
+      max-width: 300px; /* mantiene blocco compatto */
+      margin: 0 auto;
     }
 
     .fade-out {
@@ -199,6 +208,10 @@
         top: 10px; /* spostato in alto */
         width: 90%;
       }
+      /* Applica ragged-left solo a NO LONGER MYSELF su mobile */
+      .ragged-left-mobile {
+        text-align: left !important;
+      }
     }
 
     .background-fade {
@@ -273,9 +286,10 @@ UNTIL EVERYTHING FADES INTO THE WHITE CLOUD</div>
         block.className = 'centered-content fade-in';
 
         if (current === "NO\nLONGER\nMYSELF") {
-          block.innerHTML = `<div id="text" class="huge">${current}</div>`;
+          // testo ragged-left su mobile solo qui
+          block.innerHTML = `<div id="text" class="huge ragged-left-mobile">${current}</div>`;
         } else {
-          block.innerHTML = `<div id="text" class="small">NO ONE</div>`;
+          block.innerHTML = `<div id="text" class="small">${current}</div>`;
         }
         container.appendChild(block);
       } else {
@@ -373,8 +387,7 @@ UNTIL EVERYTHING FADES INTO THE WHITE CLOUD</div>
         if (index >= texts.length) {
           overlayMode = true;
           container.innerHTML = '';
-          const next = texts[0];
-          splitAndOverlay(next);
+          hint.innerHTML = 'CLICK ANYWHERE TO FILL THE SCREEN WITH WORDS';
           return;
         }
         updateText();
