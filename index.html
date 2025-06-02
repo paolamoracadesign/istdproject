@@ -29,7 +29,7 @@
     }
 
     .scrollable {
-      padding: 40px 20px 100px 20px; /* più padding in fondo per scrollare */
+      padding: 40px 20px 100px 20px;
       display: block;
       height: 100vh;
       overflow-y: auto;
@@ -94,11 +94,10 @@
       text-align: center;
     }
 
-    /* Classe per testo ragged-left solo su mobile */
     .ragged-left-mobile {
       text-align: left !important;
       width: 100%;
-      max-width: 300px; /* mantiene blocco compatto */
+      max-width: 300px;
       margin: 0 auto;
     }
 
@@ -119,7 +118,6 @@
       }
     }
 
-    /* Nuovo fade-in */
     .fade-in {
       animation: appear 1s ease forwards;
     }
@@ -179,7 +177,6 @@
       line-height: 1.2;
       white-space: pre-line;
       border-radius: 5px;
-      white-space: pre-line;
     }
 
     .hidden {
@@ -190,7 +187,7 @@
       .text-block {
         font-size: 16pt;
         margin: 20px auto;
-        padding-bottom: 80px; /* lascia più spazio per scorrere */
+        padding-bottom: 80px;
       }
       .huge {
         font-size: 12vw;
@@ -205,10 +202,10 @@
       }
       .hint {
         font-size: 16px;
-        top: 10px; /* spostato in alto */
+        top: auto;
+        bottom: 20px; /* Spostato in basso */
         width: 90%;
       }
-      /* Applica ragged-left solo a NO LONGER MYSELF su mobile */
       .ragged-left-mobile {
         text-align: left !important;
       }
@@ -242,7 +239,6 @@
 UNTIL EVERYTHING FADES INTO THE WHITE CLOUD</div>
   <div id="final-text" class="final-text">no one</div>
 
-  <!-- 🔊 Audio Elements -->
   <audio id="music" src="Ofer_Ronen_Silencio_a_Maria_instrumental.mp3" preload="auto" loop></audio>
   <audio id="wind" src="wind-blowing-sfx-12809.mp3" preload="auto" loop></audio>
 
@@ -286,7 +282,6 @@ UNTIL EVERYTHING FADES INTO THE WHITE CLOUD</div>
         block.className = 'centered-content fade-in';
 
         if (current === "NO\nLONGER\nMYSELF") {
-          // testo ragged-left su mobile solo qui
           block.innerHTML = `<div id="text" class="huge ragged-left-mobile">${current}</div>`;
         } else {
           block.innerHTML = `<div id="text" class="small">${current}</div>`;
@@ -334,28 +329,19 @@ UNTIL EVERYTHING FADES INTO THE WHITE CLOUD</div>
 
     updateText();
 
-    // Audio play subito all'apertura - workaround per mobile: tenta play e catch error se proibito
     function startAudio() {
       music.volume = 0.4;
       wind.volume = 0.2;
-      Promise.all([music.play(), wind.play()]).catch(() => {
-        // Se non permesso, si prova di nuovo al primo click
-      });
+      Promise.all([music.play(), wind.play()]).catch(() => {});
     }
     startAudio();
 
     document.body.addEventListener('click', () => {
-      // Se audio non parte (es. mobile) prova a farlo partire al primo click
-      if (music.paused) {
-        music.play();
-      }
-      if (wind.paused) {
-        wind.play();
-      }
+      if (music.paused) music.play();
+      if (wind.paused) wind.play();
 
       if (overlayMode) {
         clickCount++;
-
         let overlaysToAdd = Math.min(clickCount, 6);
         for (let i = 0; i < overlaysToAdd; i++) {
           const current = texts[Math.floor(Math.random() * texts.length)];
